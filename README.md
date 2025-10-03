@@ -1,5 +1,6 @@
 # yield-reduction-calculator-hackathon-sdda
 
-# Notes
+## Notes
+#### Kubernetes on AWS
 
-# Tech Stack
+## Tech Stack
