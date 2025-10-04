@@ -1,25 +1,57 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import {Input, Option, Select, Box, Typography, Textarea, Button} from "@mui/joy";
-
+import html2pdf from 'html2pdf.js';
+import { CssVarsProvider, useColorScheme } from '@mui/joy/styles';
 import "./App.css";
+
+function ThemeToggle() {
+    const { mode, setMode } = useColorScheme();
+
+  return (
+    <Button onClick={() => setMode(mode === 'dark' ? 'light' : 'dark')}>
+      Toggle {mode === 'dark' ? 'Light' : 'Dark'} Mode
+    </Button>
+  );
+}
 
 function App() {
   const [selectedRA, setSelectedRA] = useState("");
+  const contentRef = useRef();
+
+  const handleDownload = () => {
+    const element = contentRef.current;
+    if (!element) return;
+
+    const options = {
+      margin: 1,
+      filename: 'test.pdf',
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { scale: 2 },
+      jsPDF: { unit: 'in', format: 'letter', orientation: 'landscape' }
+    };
+
+    html2pdf().set(options).from(element).save();
+  };
 
   return (
-    <>
-      <div class="header">
+    <CssVarsProvider>
+      <Box class="header">
         <img src="./image.png" alt=""></img>
-      </div>
-      <div class="container">
-        <div class="box">
+    <ThemeToggle/>
+      </Box>
+
+      <Box class="container">
+        <Box class="box">
+          <Box>
           <h1 class="first-heading">Calculate your Yield Reduction</h1>
           <h1 class="second-heading">Yield Reduction Calculator</h1>
-          <div class="underline"></div>
+          <Box class="underline"></Box>
           <p class="description">
             Calculate the Yield Reduction by entering the relevant information
             on the left
           </p>
+          </Box>
+          <Box ref={contentRef} id="content">
           <table cellpadding="10" cellspacing="0">
             <tbody>
               <tr>
@@ -259,7 +291,9 @@ function App() {
               </tr>
             </tbody>
           </table>
-        </div>
+          </Box>
+          <button onClick={handleDownload}>Download PDF</button>
+        </Box>
         <Box className="output-box">
           <Box>
             <Box className="client-details">
@@ -535,8 +569,8 @@ function App() {
             </Button>
           </Box>
         </Box>
-      </div>
-    </>
+      </Box>
+      </CssVarsProvider>
   );
 }
 

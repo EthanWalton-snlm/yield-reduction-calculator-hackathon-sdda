@@ -1,5 +1,7 @@
  body{
     font-family: "Roboto", Helvetica, Arial, Verdana, Tahoma, sans-serif;
+     background-color: var(--joy-palette-background-body);
+    color: var(--joy-palette-text-primary);
   }
   .client-details {
     border: 1px solid #e0e4e9;
@@ -21,7 +23,7 @@
 .age-blocks{
   cursor: pointer;
     color: #464e58;
-    background: #fff;
+    /* background: #fff; */
     border: 1px solid #d5dae1;
     border-radius: 4px;
     justify-content: center;
@@ -34,7 +36,7 @@
 
 .options{
     color: #464e58;
-    background: #fff;
+    /* background: #fff; */
     border: 1px solid #d5dae1;
     border-radius: 4px;
     justify-content: center;
@@ -69,7 +71,7 @@
     position: absolute;
     overflow: hidden;
     transform: translate(16px, 16px); */
-    background: #fff;
+    /* background: #fff; */
     border: 1px solid #d5dae1;
     position: relative;
     border-radius: 4px;
@@ -196,7 +198,7 @@ letter-spacing: -.1px;
   left: 0;
   width: 100%;
   height: 80px;
-  background-color: white;
+  /* background-color: white; */
   z-index: 1000;
   display: flex;
   align-items: center;
