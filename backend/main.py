@@ -24,22 +24,47 @@ def table_lookup(value, table, col_index):
 
 @app.route("/calculate")
 def get_calculation():
+    # e.g http://127.0.0.1:5000/calculate?client_age=55&total_investment_value=20000000
     return calculate(
         DEBUG=False,
-        client_age=55,
-        total_annual_taxable_income=5000000,
-        total_investment_value=20000000,
-        gross_annual_portfolio_return=0.1,
-        return_from_sa_interest=0,
-        return_from_sa_local_dividends=0.05,  # (non-REIT)
-        return_from_local_sa_reit_dividends=0.02,
-        return_from_foreign_dividends=0.05,
-        return_from_local_capital_growth=0.78,
-        average_portfolio_turnover=0.3,
-        assumed_realised_gain_on_turnover=0.1,
-        wrapper_type_to_analyse="Local or Foreign Note",  # TODO: enum
-        wrapper_annual_cost_eac=0.0035,
-        annual_ra_contribution=350000,  # (if RA is selected)
+        client_age=float(request.args.get("client_age", 55)),
+        total_annual_taxable_income=float(
+            request.args.get("total_annual_taxable_income", 5000000)
+        ),
+        total_investment_value=float(
+            request.args.get("total_investment_value", 20000000)
+        ),
+        gross_annual_portfolio_return=float(
+            request.args.get("gross_annual_portfolio_return", 0.1)
+        ),
+        return_from_sa_interest=float(request.args.get("return_from_sa_interest", 0)),
+        return_from_sa_local_dividends=float(
+            request.args.get("return_from_sa_local_dividends", 0.05)
+        ),
+        return_from_local_sa_reit_dividends=float(
+            request.args.get("return_from_local_sa_reit_dividends", 0.02)
+        ),
+        return_from_foreign_dividends=float(
+            request.args.get("return_from_foreign_dividends", 0.05)
+        ),
+        return_from_local_capital_growth=float(
+            request.args.get("return_from_local_capital_growth", 0.78)
+        ),
+        average_portfolio_turnover=float(
+            request.args.get("average_portfolio_turnover", 0.3)
+        ),
+        assumed_realised_gain_on_turnover=float(
+            request.args.get("assumed_realised_gain_on_turnover", 0.1)
+        ),
+        wrapper_type_to_analyse=request.args.get(
+            "wrapper_type_to_analyse", "Local or Foreign Note"
+        ),
+        wrapper_annual_cost_eac=float(
+            request.args.get("wrapper_annual_cost_eac", 0.0035)
+        ),
+        annual_ra_contribution=float(
+            request.args.get("annual_ra_contribution", 350000)
+        ),
     )
 
 
