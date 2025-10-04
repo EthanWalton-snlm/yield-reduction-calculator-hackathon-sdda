@@ -1,235 +1,24 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
- <style>
-  body{
-    font-family: "Roboto", Helvetica, Arial, Verdana, Tahoma, sans-serif;
-  }
-  .client-details {
-    border: 1px solid #e0e4e9;
-    border-radius: 24px;
-    width: 600px;
-    margin-bottom: 20px;
-    padding: 25px;
-}
-.age{
-  line-height: 20px;
-  letter-spacing: 0;
-  font-size: 16px;
-  color: #000;
-  font-weight: 500;
-  display: block;
-  margin-bottom: 20px;
+import { useState } from 'react'
+import reactLogo from './assets/react.svg'
+import viteLogo from '/vite.svg'
+import './App.css'
 
-}
-.age-blocks{
-  cursor: pointer;
-    color: #464e58;
-    background: #fff;
-    border: 1px solid #d5dae1;
-    border-radius: 4px;
-    justify-content: center;
-    align-items: center;
-    gap: 8px;
-    height: 18px;
-    display: flex;
-    padding: 14px 18px;
-}
+function App() {
+  const [selectedRA, setSelectedRA] = useState('');
 
-.options{
-    color: #464e58;
-    background: #fff;
-    border: 1px solid #d5dae1;
-    border-radius: 4px;
-    justify-content: center;
-    align-items: center;
-    gap: 8px;
-    height: 40px;
-    font-size: 16px;
-    display: flex;
-
-}
-
-.age-group{
-  gap: 8px;
-  display: flex;
-  flex-flow: wrap;
-  margin-bottom: 20px;
-}
-
-.textfield{
-     color: #464e58;
-    /* pointer-events: none;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    z-index: 2; */
-    width: 90%;
-    font-size: 16px;
-    line-height: 24px;
-    /* transition-property: font-size, transform;
-    transition-duration: .3s;
-    transition-timing-function:
-    cubic-bezier(.23, 1, .32, 1);
-    position: absolute;
-    overflow: hidden;
-    transform: translate(16px, 16px); */
-    background: #fff;
-    border: 1px solid #d5dae1;
-    position: relative;
-    border-radius: 4px;
-    border-radius: inherit;
-    flex-direction: row;
-    flex: 1;
-    /* align-items: center; */
-    gap: 8px;
-    display: flex;
-    padding: 16px;
-
-}
-.textfield-container{
-  border-radius: inherit;
-  flex-direction: column;
-  flex: 1;
-  display: flex;
-}
-.textfield-wrapper{
-      flex-direction: column;
-    width: 100%;
-    font-family: Roboto, Helvetica, Arial, Verdana, Tahoma, sans-serif;
-    display: flex
-;
-    position: relative;
-}
-.info-text-container{
-      color: #717983;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: flex-start;
-    padding-top: 4px;
-    display: flex;
-    margin-top: 5px;
-}
-
-.space{
-  margin-bottom: 20px;
-}
-
-.calculate{
-    background-color: #0075c9;
-    border: 1px solid #0075c9;
-    border-radius: 4px;
-letter-spacing: -.1px;
-    height: 48px;
-    padding: 16px 24px;
-    font-size: 14px;
-    line-height: 1.14;
-    color: #fff;
-    -webkit-user-select: none;
-    user-select: none;
-    cursor: pointer;
-    border: 1px solid #0075c9;
-    border-radius: 4px;
-    outline: none;
-    justify-content: center;
-    align-items: center;
-    height: auto;
-    font-family: Roboto, Helvetica, Arial, Verdana, Tahoma, sans-serif;
-    font-weight: 500;
-    text-decoration: none;
-    transition: background-color .25s, border .25s;
-    display: inline-flex
-;
-    position: relative;
-    font-size: 16px;
-}
-
-.container{
-  display: flex;
-  padding-left: 120px;
-  padding-right: 120px;
-  margin-top: 100px;
-  margin-left: 200px;
-}
-
- .box {
-      flex: 1;
-      padding: 10px;
-}
-
-.output-box{
-  flex: 1;
-}
-
-.first-heading{
-    align-items: center;
-    gap: 4px;
-    margin-bottom: 8px;
-    display: flex;
-    color: #0075c9;
-    line-height: 1px;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    font-size: 12px;
-    font-weight: 600;
-}
-
-.second-heading{
-    line-height: 40px;
-    letter-spacing: .5px;
-    font-size: 32px;
-    font-weight: 300;
-    margin-bottom: 8px;
-}
-
-.underline{
-  background-color: #0075c9;
-    width: 32px;
-    height: 2px;
-    margin-bottom: 8px;
-}
-
-.description{
-  line-height: 20px;
-  letter-spacing: -.25px;
-  font-size: 14px;
-}
-
-.header{
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 80px;
-  background-color: white;
-  z-index: 1000;
-  display: flex;
-  align-items: center;
-  padding: 10px 120px;
-}
-
-.RA-section{
-  display: none;
-}
-
-</style>
-</head>
-
-<body>
-  <div class="header">
-<img src="./images/image.png" alt="">
-</div>
-  <div class="container">
+  return (
+    <>
+     <div class="header">
+      <img src="./image.png" alt=""></img>
+      </div>
+    <div class="container">
     <div class="box">
       <h1 class="first-heading">Calculate your Yield Reduction</h1>
       <h1 class="second-heading">Yield Reduction Calculator</h1>
       <div class="underline"></div>
       <p class="description">Calculate the Yield Reduction by entering the relevant information on the left</p>
-      <table cellpadding="10" cellspacing="0">
-  <tbody>
+        <table cellpadding="10" cellspacing="0">
+    <tbody>
     <tr>
       <td>Gross Portfolio Return</td>
       <td>2000000</td>
@@ -410,26 +199,25 @@ letter-spacing: -.1px;
       <td>Annual Yield Reduction/Enhancement - % of Investment Value</td>
       <td>0.18%</td>
     </tr>
-
-</table>
-
-    </div>
-    <div class="output-box">
+    </tbody>
+      </table>
+      </div>
+       <div class="output-box">
        <div>
   <div class="client-details">
     <span class="age">How old will you be on 28 February 2025?</span>
     <div class="age-group">
       <div>
-        <label class="age-blocks">< 65</label>
+        <label class="age-blocks">65</label>
       </div>
       <div>
         <label class="age-blocks">65-74</label>
       </div>
       <div>
-        <label class="age-blocks">> 74</label>
+        <label class="age-blocks">74</label>
       </div>
     </div>
-    <span class="age">What is your total annual taxable income?</span>
+     <span class="age">What is your total annual taxable income?</span>
     <div class="textfield-wrapper">
     <div class="textfield-container">
       <label class="textfield">Enter your total annual taxable income</label>
@@ -439,91 +227,89 @@ letter-spacing: -.1px;
       </div>
     </div>
     </div>
-
-    <div class="client-details">
+      <div class="client-details">
     <span class="age">Total Investment Value</span>
     <div class="textfield-wrapper">
     <div class="textfield-container space">
       <label class="textfield">R</label>
       </div>
       </div>
-
-    <span class="age">Gross Annual Portfolio Return (%)</span>
+        <span class="age">Gross Annual Portfolio Return (%)</span>
     <div class="textfield-wrapper space">
     <div class="textfield-container">
-      <input class="textfield" type="number" min="0" step="0.1" value="0">
+      <input class="textfield" type="number" min="0" step="0.1" value="0"></input>
       </div>
     </div>
 
-     <span class="age">Return From SA Interest (%)</span>
+    <span class="age">Return From SA Interest (%)</span>
     <div class="textfield-wrapper space">
     <div class="textfield-container">
-      <input class="textfield" type="number" min="0" step="0.1" value="0">
+      <input class="textfield" type="number" min="0" step="0.1" value="0"></input>
       </div>
     </div>
 
-      <span class="age">Return From SA Local Interest (Non-REIT) (%)</span>
+        <span class="age">Return From SA Local Interest (Non-REIT) (%)</span>
     <div class="textfield-wrapper space">
     <div class="textfield-container">
-      <input class="textfield" type="number" min="0" step="0.1" value="0">
+      <input class="textfield" type="number" min="0" step="0.1" value="0"></input>
       </div>
     </div>
 
      <span class="age">Return From SA REIT Dividends (%)</span>
     <div class="textfield-wrapper space">
     <div class="textfield-container">
-      <input class="textfield" type="number" min="0" step="0.1" value="0">
+      <input class="textfield" type="number" min="0" step="0.1" value="0"></input>
       </div>
     </div>
 
      <span class="age">Return From Foreign Dividends (%)</span>
     <div class="textfield-wrapper space">
     <div class="textfield-container">
-      <input class="textfield" type="number" min="0" step="0.1" value="0">
+      <input class="textfield" type="number" min="0" step="0.1" value="0"></input>
       </div>
     </div>
 
      <span class="age">Return From Capital Growth (%)</span>
     <div class="textfield-wrapper space">
     <div class="textfield-container">
-      <input class="textfield" type="number" min="0" step="0.1" value="0">
+      <input class="textfield" type="number" min="0" step="0.1" value="0"></input>
       </div>
     </div>
 
      <span class="age">Average Portfolio Turnover (%)</span>
     <div class="textfield-wrapper space">
     <div class="textfield-container">
-      <input class="textfield" type="number" min="0" step="0.1" value="0">
+      <input class="textfield" type="number" min="0" step="0.1" value="0"></input>
       </div>
     </div>
 
      <span class="age">Assumed Realised Gain On Turnover (%)</span>
     <div class="textfield-wrapper space">
     <div class="textfield-container">
-      <input class="textfield" type="number" min="0" step="0.1" value="0">
+      <input class="textfield" type="number" min="0" step="0.1" value="0"></input>
       </div>
     </div>
 
-    </div>
+      </div>
 
-    <div class="client-details">
+        <div class="client-details">
     <span class="age">Wrapper Type</span>
-    <select class="options space" onchange="showRABlock(this.value)">
+    <select class="options space" id="wrapperType" value={selectedRA} onChange={(e) => setSelectedRA(e.target.value)}>
       <option selected>Endowment</option>
       <option value="RA">RA</option>
       <option>TFSA</option>
       <option>Offshore Endowment</option>
       <option>Local or Foreign Note</option>
     </select>
-
     <span class="age">Wrapper Annual Cost (EAC %) </span>
-    <div class="textfield-wrapper space">
+      <div class="textfield-wrapper space">
     <div class="textfield-container">
-      <input class="textfield" type="number" min="0" step="0.1" value="0">
+      <input class="textfield" type="number" min="0" step="0.1" value="0"></input>
       </div>
     </div>
 
-    <div id="RA-block" class="RA-section">
+{selectedRA == 'RA' && (
+     <div>
     <span class="age">Annual RA Contribution</span>
     <div class="textfield-wrapper">
     <div class="textfield-container">
@@ -534,20 +320,16 @@ letter-spacing: -.1px;
       </div>
     </div>
     </div>
+)}
+
+</div>
+  <button class="calculate"><span><span>Calculate</span></span></button>
+    </div>
+    </div>
     </div>
 
-     <button class="calculate"><span><span>Calculate</span></span></button>
+    </>
+  )
+}
 
-    </div>
-    </div>
-  </div>
-</body>
-<script>
-  function showRABlock(value){
-    document.getElementById('RA-block').style.display = 'none';
-    if (value === 'RA'){
-      document.getElementById('RA-block').style.display = 'block';
-    }
-  }
-</script>
-</html>
+export default App
