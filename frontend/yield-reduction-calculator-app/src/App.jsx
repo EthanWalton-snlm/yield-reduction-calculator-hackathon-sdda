@@ -36,7 +36,7 @@ function App() {
   return (
     <CssVarsProvider>
       <Box class="header">
-        <img src="./image.png" alt=""></img>
+        <img src="https://sanlamprivatewealth.mu/wp-content/uploads/2021/11/Sanlam-Private-wealth-50px-height.png" alt="" className="logo"></img>
     <ThemeToggle/>
       </Box>
 
@@ -292,7 +292,7 @@ function App() {
             </tbody>
           </table>
           </Box>
-          <button onClick={handleDownload}>Download PDF</button>
+          <Button onClick={handleDownload}>Download PDF</Button>
         </Box>
         <Box className="output-box">
           <Box>

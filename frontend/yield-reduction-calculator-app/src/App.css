@@ -193,14 +193,18 @@ letter-spacing: -.1px;
 }
 
 .header{
-  position: fixed;
+  /* position: fixed; */
   top: 0;
   left: 0;
-  width: 100%;
+  right: 0;
   height: 80px;
-  /* background-color: white; */
   z-index: 1000;
   display: flex;
+  justify-content: space-between;
   align-items: center;
   padding: 10px 120px;
+}
+
+.logo{
+  height: 30px;
 }
