@@ -20,9 +20,7 @@ function App() {
 
   const handleDownload = () => {
     const element = contentRef.current;
-    if (!element) return;
-
-    const options = {
+      const options = {
       margin: 1,
       filename: 'test.pdf',
       image: { type: 'jpeg', quality: 0.98 },
@@ -35,7 +33,7 @@ function App() {
 
   return (
     <CssVarsProvider>
-      <Box class="header">
+      <Box className="header">
         <img src="https://sanlamprivatewealth.mu/wp-content/uploads/2021/11/Sanlam-Private-wealth-50px-height.png" alt="" className="logo"></img>
     <ThemeToggle/>
       </Box>
@@ -52,7 +50,7 @@ function App() {
           </p>
           </Box>
           <Box ref={contentRef} id="content">
-          <table cellpadding="10" cellspacing="0">
+          <table cellPadding="10" cellSpacing="0">
             <tbody>
               <tr>
                 <td>Gross Portfolio Return</td>
