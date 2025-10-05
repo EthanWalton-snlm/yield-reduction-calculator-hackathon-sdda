@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import {Input, Option, Select, Box, Typography, Textarea, Button} from "@mui/joy";
+import {Input, Option, Select, Box, Typography, Textarea, Button, IconButton} from "@mui/joy";
 import html2pdf from 'html2pdf.js';
 import { CssVarsProvider, useColorScheme } from '@mui/joy/styles';
 import "./App.css";
@@ -570,6 +570,11 @@ function App() {
           </Box>
         </Box>
       </Box>
+      <Box className="chatbot-icon">
+      <IconButton variant="solid" color="primary" sx={{ fontSize: '24px' }}>
+      💬
+    </IconButton>
+    </Box>
       </CssVarsProvider>
   );
 }
