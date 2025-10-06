@@ -13,7 +13,6 @@ import {
 } from "@mui/joy";
 import PictureAsPdfSharpIcon from "@mui/icons-material/PictureAsPdfSharp";
 import { CssVarsProvider, useColorScheme } from "@mui/joy/styles";
-import { useState, useRef } from "react";
 import html2pdf from "html2pdf.js";
 
 export function SummaryTable({ contentRef, data }) {
@@ -39,19 +38,20 @@ export function SummaryTable({ contentRef, data }) {
 
   return (
     <Box ref={contentRef} id="content">
-      <table cellPadding="10" cellSpacing="0">
-        <tbody>
-          {Object.entries(data).map(([key, value], index) => (
-            <tr key={index}>
-              <td>{formatKey(key)}</td>
-              <td>{value}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
       <Button onClick={handleDownload} endDecorator={<PictureAsPdfSharpIcon />}>
         Download{" "}
       </Button>
+      <table cellPadding="10" cellSpacing="0">
+        <tbody>
+          {data &&
+            Object.entries(data).map(([key, value], index) => (
+              <tr key={index}>
+                <td>{formatKey(key)}</td>
+                <td>{value}</td>
+              </tr>
+            ))}
+        </tbody>
+      </table>
     </Box>
   );
 }

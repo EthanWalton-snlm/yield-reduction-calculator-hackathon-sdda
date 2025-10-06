@@ -53,6 +53,7 @@ function App() {
   const [clientAge, setClientAge] = useState(55);
   const [calculationModalOpen, setCalculationModalOpen] = useState(false);
   const [showSummaryTable, setShowSummaryTable] = useState(false);
+  const [calculated, setCalculated] = useState(false);
 
   const contentRef = useRef();
   const calculationResultRef = useRef(null);
@@ -99,6 +100,7 @@ function App() {
     });
 
     calculationResultRef.current = response.data;
+    setCalculated(true);
     setCalculationModalOpen(true);
     console.log("API response:", calculationResultRef.current);
     // console.log(calculationResultRef.current?.yieldReductionEnhancement);
@@ -133,11 +135,42 @@ function App() {
               on the right
             </p>
           </Box>
-          <IconButton onClick={() => setShowSummaryTable(!showSummaryTable)}>
-            {" "}
-            {showSummaryTable ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-          </IconButton>
-          {showSummaryTable && <SummaryTable contentRef={contentRef} />}
+          {calculated && (
+            <>
+              <Typography
+                component="h3"
+                level="h5"
+                textColor="inherit"
+                sx={{ fontWeight: "md", mb: 1 }}
+              >
+                Monetary: R
+                {calculationResultRef.current?.yieldReductionEnhancement}
+              </Typography>
+              <Typography
+                component="h3"
+                level="h5"
+                textColor="inherit"
+                sx={{ fontWeight: "md", mb: 1 }}
+              >
+                Percentage:{" "}
+                {calculationResultRef.current
+                  ?.yieldReductionEnhancementPercent * 100}
+                %
+              </Typography>
+              <IconButton
+                onClick={() => setShowSummaryTable(!showSummaryTable)}
+              >
+                {" "}
+                {showSummaryTable ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+              </IconButton>
+            </>
+          )}
+          {showSummaryTable && (
+            <SummaryTable
+              contentRef={contentRef}
+              data={calculationResultRef.current}
+            />
+          )}
         </Box>
         <Box className="output-box">
           <Box>
