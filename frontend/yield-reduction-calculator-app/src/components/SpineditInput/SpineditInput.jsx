@@ -7,17 +7,20 @@ import {
   Textarea,
   Input
 } from "@mui/joy";
+import { useState } from "react";
 
 export function SpineditInput({ title, value, setValue }) {
+
     return(
     <>
       <Typography className="age">{title}</Typography>
       <Box className="textfield-wrapper">
         <Box className="textfield-container space">
           <Input
+          endDecorator="%"
              type="number"
              variant="soft"
-             defaultValue={0}
+             defaultValue={value * 100}
              slotProps={{
                 input: {
                 min: 0,
@@ -25,8 +28,7 @@ export function SpineditInput({ title, value, setValue }) {
                 step: 0.001,
                 },
             }}
-            value={value}
-            onChange={(e) => setValue(e.target.value)}
+            onChange={(e) => setValue(e.target.value / 100)}
             sx={{
               minHeight: 20,
               paddingY: 1,

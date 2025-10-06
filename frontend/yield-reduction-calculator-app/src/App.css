@@ -11,8 +11,7 @@ body {
   padding: 25px;
 }
 .client-details-fw {
-  display: flex;
-  flex-direction: column;
+  display: grid;
   border: 1px solid #e0e4e9;
   border-radius: 24px;
   margin-bottom: 20px;
@@ -67,7 +66,7 @@ body {
     text-overflow: ellipsis;
     white-space: nowrap;
     z-index: 2; */
-  width: 90%;
+  /* width: 90%; */
   font-size: 16px;
   line-height: 24px;
   /* transition-property: font-size, transform;
