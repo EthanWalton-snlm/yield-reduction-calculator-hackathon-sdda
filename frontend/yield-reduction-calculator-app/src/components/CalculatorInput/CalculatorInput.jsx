@@ -9,6 +9,12 @@ import {
 } from "@mui/joy";
 
 export function CalculatorInput({ title, value, setValue }) {
+
+  const handleChange = (e) => {
+    const inputValue = e.target.value;
+    const initialValue = inputValue.replace(/\D/g, '');
+    setValue(initialValue);
+  };
   return (
     <>
       <Typography className="age">{title}</Typography>
@@ -19,10 +25,10 @@ export function CalculatorInput({ title, value, setValue }) {
             startDecorator="R"
             color="neutral"
             disabled={false}
-            placeholder="R"
+            placeholder="0"
             className="textfield"
-            value={value}
-            onChange={(e) => setValue(e.target.value)}
+            value={(value || '').toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+            onChange={handleChange}
             sx={{
               minHeight: 20,
               paddingY: 1,
