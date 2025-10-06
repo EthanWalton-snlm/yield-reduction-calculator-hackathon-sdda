@@ -13,6 +13,8 @@ import LightModeSharpIcon from "@mui/icons-material/LightModeSharp";
 // import PictureAsPdfSharpIcon from '@mui/icons-material/PictureAsPdfSharp';
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { AgeSpineditInput } from "./components/AgeSpineditInput/AgeSpineditInput";
+import { SpineditInput } from "./components/SpineditInput/SpineditInput";
 
 function ThemeToggle() {
   const { mode, setMode } = useColorScheme();
@@ -175,7 +177,7 @@ function App() {
         <Box className="output-box">
           <Box>
             <Box className="client-details">
-              <CalculatorInput
+              <AgeSpineditInput
                 title={"How old will you be on 28 February 2025?"}
                 value={clientAge}
                 setValue={setClientAge}
@@ -192,42 +194,42 @@ function App() {
                 value={totalInvestmentValue}
                 setValue={setTotalInvestmentValue}
               />
-              <CalculatorInput
+              <SpineditInput
                 title={"Gross Annual Portfolio Return (%)"}
                 value={grossAnnualPortfolioReturn}
                 setValue={setGrossAnnualPortfolioReturn}
               />
-              <CalculatorInput
+              <SpineditInput
                 title={"Return From SA Interest (%)"}
                 value={returnFromSaInterest}
                 setValue={setReturnFromSaInterest}
               />
-              <CalculatorInput
+              <SpineditInput
                 title={"Return From SA Local Dividends (Non-REIT) (%)"}
                 value={returnFromSaLocalDividends}
                 setValue={setReturnFromSaLocalDividends}
               />
-              <CalculatorInput
+              <SpineditInput
                 title={"Return From Local SA REIT Dividends (%)"}
                 value={returnFromLocalSaReitDividends}
                 setValue={setReturnFromLocalSaReitDividends}
               />
-              <CalculatorInput
+              <SpineditInput
                 title={"Return From Foreign Dividends (%)"}
                 value={returnFromForeignDividends}
                 setValue={setReturnFromForeignDividends}
               />
-              <CalculatorInput
+              <SpineditInput
                 title={"Return From Capital Growth (%)"}
                 value={returnFromLocalCapitalGrowth}
                 setValue={setReturnFromLocalCapitalGrowth}
               />
-              <CalculatorInput
+              <SpineditInput
                 title={"Average Portfolio Turnover (%)"}
                 value={averagePortfolioTurnover}
                 setValue={setAveragePortfolioTurnover}
               />
-              <CalculatorInput
+              <SpineditInput
                 title={"Assumed Realised Gain On Turnover (%)"}
                 value={assumedRealisedGainOnTurnover}
                 setValue={setAssumedRealisedGainOnTurnover}
@@ -239,7 +241,7 @@ function App() {
                 value={wrapperTypeToAnalyse}
                 setValue={setWrapperTypeToAnalyse}
               />
-              <CalculatorInput
+              <SpineditInput
                 title={"Wrapper Annual Cost (EAC %)"}
                 value={wrapperAnnualCostEac}
                 setValue={setWrapperAnnualCostEac}
