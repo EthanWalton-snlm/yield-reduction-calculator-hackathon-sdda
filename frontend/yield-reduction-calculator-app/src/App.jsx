@@ -109,11 +109,11 @@ function App() {
 
   return (
     <CssVarsProvider>
-      <ResultsModal
+      {/* <ResultsModal
         open={calculationModalOpen}
         setOpen={setCalculationModalOpen}
         calculationResultRef={calculationResultRef}
-      />
+      /> */}
 
       <Box className="header">
         <img
