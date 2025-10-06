@@ -8,19 +8,23 @@ import {
   Input
 } from "@mui/joy";
 
-export function CalculatorInput({ title, value, setValue }) {
-  return (
+export function SpineditInput({ title, value, setValue }) {
+    return(
     <>
       <Typography className="age">{title}</Typography>
       <Box className="textfield-wrapper">
         <Box className="textfield-container space">
           <Input
-            type="text"
-            startDecorator="R"
-            color="neutral"
-            disabled={false}
-            placeholder="R"
-            className="textfield"
+             type="number"
+             variant="soft"
+             defaultValue={0}
+             slotProps={{
+                input: {
+                min: 0,
+                max: 100,
+                step: 0.001,
+                },
+            }}
             value={value}
             onChange={(e) => setValue(e.target.value)}
             sx={{
@@ -35,5 +39,5 @@ export function CalculatorInput({ title, value, setValue }) {
         </Box>
       </Box>
     </>
-  );
+    )
 }
