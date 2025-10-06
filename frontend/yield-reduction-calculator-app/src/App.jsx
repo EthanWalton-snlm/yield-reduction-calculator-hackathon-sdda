@@ -174,19 +174,41 @@ function App() {
         </Box>
         <Box className="output-box">
           <Box>
-            <Box className="client-details">
-              <CalculatorInput
-                title={"How old will you be on 28 February 2025?"}
-                value={clientAge}
-                setValue={setClientAge}
-              />
-              <CalculatorInput
-                title={"What is your total annual taxable income?"}
-                value={totalAnnualTaxableIncome}
-                setValue={setTotalAnnualTaxableIncome}
-              />
+            <Box className="flex-row">
+              <Box className="client-details">
+                <CalculatorInput
+                  title={"How old will you be on 28 February 2025?"}
+                  value={clientAge}
+                  setValue={setClientAge}
+                />
+                <CalculatorInput
+                  title={"What is your total annual taxable income?"}
+                  value={totalAnnualTaxableIncome}
+                  setValue={setTotalAnnualTaxableIncome}
+                />
+              </Box>
+
+              <Box className="client-details">
+                <WrapperTypeDropdown
+                  value={wrapperTypeToAnalyse}
+                  setValue={setWrapperTypeToAnalyse}
+                />
+                <CalculatorInput
+                  title={"Wrapper Annual Cost (EAC %)"}
+                  value={wrapperAnnualCostEac}
+                  setValue={setWrapperAnnualCostEac}
+                />
+
+                {wrapperTypeToAnalyse == "RA" && (
+                  <CalculatorInput
+                    title={"Annual RA Contribution"}
+                    value={annualRaContribution}
+                    setValue={setAnnualRaContribution}
+                  />
+                )}
+              </Box>
             </Box>
-            <Box className="client-details">
+            <Box className="client-details-fw">
               <CalculatorInput
                 title={"Total Investment Value"}
                 value={totalInvestmentValue}
@@ -232,26 +254,6 @@ function App() {
                 value={assumedRealisedGainOnTurnover}
                 setValue={setAssumedRealisedGainOnTurnover}
               />
-            </Box>
-
-            <Box className="client-details">
-              <WrapperTypeDropdown
-                value={wrapperTypeToAnalyse}
-                setValue={setWrapperTypeToAnalyse}
-              />
-              <CalculatorInput
-                title={"Wrapper Annual Cost (EAC %)"}
-                value={wrapperAnnualCostEac}
-                setValue={setWrapperAnnualCostEac}
-              />
-
-              {wrapperTypeToAnalyse == "RA" && (
-                <CalculatorInput
-                  title={"Annual RA Contribution"}
-                  value={annualRaContribution}
-                  setValue={setAnnualRaContribution}
-                />
-              )}
             </Box>
             <Button
               onClick={handleCalculation}
