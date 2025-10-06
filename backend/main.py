@@ -15,6 +15,8 @@ app = Flask(__name__)
 
 CORS(app, resources={r"/*": {"origins": "*"}})
 
+ENABLE_AI = False
+
 
 def table_lookup(value, table, col_index):
     """
@@ -514,6 +516,8 @@ def calculate(
             if not k.startswith("__") and not callable(v):
                 print(f"{k} = {v}")
 
+    ai_response = get_ai_response(test_payload) if ENABLE_AI else "AI OVERVIEW DISABLED"
+
     return jsonify(
         {
             "yieldReductionEnhancement": annual_yield_enhancement_monetary,
@@ -553,7 +557,7 @@ def calculate(
             "netReturnUnwrappedPercentage": net_return_unwrapped_percentage,
             "netReturnWrapped": net_return_wrapped,
             "netReturnWrappedPercentage": net_return_wrapped_percentage,
-            "aiResponse": get_ai_response(test_payload),
+            "aiResponse": ai_response,
         }
     )
 
