@@ -10,6 +10,7 @@ import {
   Modal,
   ModalDialog,
   ModalClose,
+  Table,
 } from "@mui/joy";
 import PictureAsPdfSharpIcon from "@mui/icons-material/PictureAsPdfSharp";
 import { CssVarsProvider, useColorScheme } from "@mui/joy/styles";
@@ -41,7 +42,13 @@ export function SummaryTable({ contentRef, data }) {
       <Button onClick={handleDownload} endDecorator={<PictureAsPdfSharpIcon />}>
         Download{" "}
       </Button>
-      <table cellPadding="10" cellSpacing="0">
+      <Table cellPadding="10" cellSpacing="0">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Value</th>
+          </tr>
+        </thead>
         <tbody>
           {data &&
             Object.entries(data).map(([key, value], index) => (
@@ -51,7 +58,7 @@ export function SummaryTable({ contentRef, data }) {
               </tr>
             ))}
         </tbody>
-      </table>
+      </Table>
     </Box>
   );
 }
