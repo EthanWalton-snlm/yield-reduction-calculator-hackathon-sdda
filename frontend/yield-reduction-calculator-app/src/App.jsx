@@ -16,6 +16,7 @@ import html2pdf from "html2pdf.js";
 import { CssVarsProvider, useColorScheme } from "@mui/joy/styles";
 import "./App.css";
 import axios from "axios";
+import { ResultsModal } from "./components/ResultsModal";
 
 function ThemeToggle() {
   const { mode, setMode } = useColorScheme();
@@ -111,43 +112,11 @@ function App() {
 
   return (
     <CssVarsProvider>
-      <Modal
-        aria-labelledby="modal-title"
+      <ResultsModal
         open={calculationModalOpen}
-        onClose={() => setCalculationModalOpen(false)}
-      >
-        <ModalDialog>
-          <ModalClose />
-          <Typography
-            component="h2"
-            id="modal-title"
-            level="h4"
-            textColor="inherit"
-            sx={{ fontWeight: "lg", mb: 1 }}
-          >
-            Results
-          </Typography>
-          <Typography
-            component="h3"
-            level="h5"
-            textColor="inherit"
-            sx={{ fontWeight: "md", mb: 1 }}
-          >
-            Monetary: R{calculationResultRef.current?.yieldReductionEnhancement}
-          </Typography>
-          <Typography
-            component="h3"
-            level="h5"
-            textColor="inherit"
-            sx={{ fontWeight: "md", mb: 1 }}
-          >
-            Percentage:{" "}
-            {calculationResultRef.current?.yieldReductionEnhancementPercent *
-              100}
-            %
-          </Typography>
-        </ModalDialog>
-      </Modal>
+        setOpen={setCalculationModalOpen}
+        calculationResultRef={calculationResultRef}
+      />
 
       <Box className="header">
         <img
