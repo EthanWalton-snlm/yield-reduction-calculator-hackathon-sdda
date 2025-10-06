@@ -133,7 +133,7 @@ function App() {
             textColor="inherit"
             sx={{ fontWeight: "md", mb: 1 }}
           >
-            Monetary: R{calculationResultRef.current.yieldReductionEnhancement}
+            Monetary: R{calculationResultRef.current?.yieldReductionEnhancement}
           </Typography>
           <Typography
             component="h3"
@@ -142,7 +142,7 @@ function App() {
             sx={{ fontWeight: "md", mb: 1 }}
           >
             Percentage:{" "}
-            {calculationResultRef.current.yieldReductionEnhancementPercent *
+            {calculationResultRef.current?.yieldReductionEnhancementPercent *
               100}
             %
           </Typography>
