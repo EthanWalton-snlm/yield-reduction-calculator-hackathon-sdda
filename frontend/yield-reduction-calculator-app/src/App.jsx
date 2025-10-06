@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import {Input, Option, Select, Box, Typography, Textarea, Button} from "@mui/joy";
+import {Input, Option, Select, Box, Typography, Textarea, Button, IconButton} from "@mui/joy";
 import html2pdf from 'html2pdf.js';
 import { CssVarsProvider, useColorScheme } from '@mui/joy/styles';
 import "./App.css";
@@ -73,7 +73,7 @@ function App() {
     }
 
     const options = {
-      margin: 0.5,
+      margin: 1,
       filename: 'yield-calculator-report.pdf',
       image: { type: 'jpeg', quality: 0.98 },
       html2canvas: {
@@ -101,8 +101,8 @@ function App() {
 
   return (
     <CssVarsProvider>
-      <Box class="header">
-        <img src="./image.png" alt=""></img>
+      <Box className="header">
+        <img src="https://sanlamprivatewealth.mu/wp-content/uploads/2021/11/Sanlam-Private-wealth-50px-height.png" alt="" className="logo"></img>
     <ThemeToggle/>
       </Box>
 
@@ -431,6 +431,11 @@ function App() {
           </Box>
         </Box>
       </Box>
+      <Box className="chatbot-icon">
+      <IconButton variant="solid" color="primary" sx={{ fontSize: '24px' }}>
+      💬
+    </IconButton>
+    </Box>
       </CssVarsProvider>
   );
 }
