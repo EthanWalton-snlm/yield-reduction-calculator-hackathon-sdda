@@ -8,13 +8,21 @@ import { ResultsModal } from "./components/ResultsModal/ResultsModal";
 import { CalculatorInput } from "./components/CalculatorInput/CalculatorInput";
 import { WrapperTypeDropdown } from "./components/WrapperTypeDropdown/WrapperTypeDropdown";
 import { SummaryTable } from "./components/SummaryTable/SummaryTable";
+import DarkModeSharpIcon from "@mui/icons-material/DarkModeSharp";
+import LightModeSharpIcon from "@mui/icons-material/LightModeSharp";
+// import PictureAsPdfSharpIcon from '@mui/icons-material/PictureAsPdfSharp';
+import ExpandLessIcon from "@mui/icons-material/ExpandLess";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 function ThemeToggle() {
   const { mode, setMode } = useColorScheme();
 
   return (
-    <Button onClick={() => setMode(mode === "dark" ? "light" : "dark")}>
-      Toggle {mode === "dark" ? "Light" : "Dark"} Mode
+    <Button
+      onClick={() => setMode(mode === "dark" ? "light" : "dark")}
+      variant="plain"
+    >
+      {mode === "dark" ? <LightModeSharpIcon /> : <DarkModeSharpIcon />}
     </Button>
   );
 }
@@ -47,27 +55,26 @@ function App() {
   const [showSummaryTable, setShowSummaryTable] = useState(false);
 
   const contentRef = useRef();
-  const { mode, setMode } = useColorScheme();
   const calculationResultRef = useRef(null);
 
-  const handleDownload = async () => {
-    const element = contentRef.current;
+  // const handleDownload = async () => {
+  //   const element = contentRef.current;
 
-    const isDark = mode === "dark";
-    if (isDark) setMode("light");
+  //   const isDark = mode === "dark";
+  //   if (isDark) setMode("light");
 
-    const options = {
-      margin: 1,
-      filename: "test.pdf",
-      image: { type: "jpeg", quality: 0.98 },
-      html2canvas: { scale: 2 },
-      jsPDF: { unit: "in", format: "letter", orientation: "landscape" },
-    };
+  //   const options = {
+  //     margin: 1,
+  //     filename: "test.pdf",
+  //     image: { type: "jpeg", quality: 0.98 },
+  //     html2canvas: { scale: 2 },
+  //     jsPDF: { unit: "in", format: "letter", orientation: "landscape" },
+  //   };
 
-    await html2pdf().set(options).from(element).save();
+  //   await html2pdf().set(options).from(element).save();
 
-    if (isDark) setMode("dark");
-  };
+  //   if (isDark) setMode("dark");
+  // };
 
   const handleCalculation = async () => {
     const params = {
@@ -126,17 +133,11 @@ function App() {
               on the right
             </p>
           </Box>
-          <Button onClick={() => setShowSummaryTable(!showSummaryTable)}>
-            Toggle Summary
-          </Button>
-          {showSummaryTable && (
-            <SummaryTable
-              contentRef={contentRef}
-              data={calculationResultRef.current}
-            />
-          )}
-
-          <Button onClick={handleDownload}>Download PDF</Button>
+          <IconButton onClick={() => setShowSummaryTable(!showSummaryTable)}>
+            {" "}
+            {showSummaryTable ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+          </IconButton>
+          {showSummaryTable && <SummaryTable contentRef={contentRef} />}
         </Box>
         <Box className="output-box">
           <Box>
