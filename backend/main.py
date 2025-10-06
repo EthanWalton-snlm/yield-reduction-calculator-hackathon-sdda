@@ -2,6 +2,11 @@
 # Typing
 # Use best practice
 # Create functions
+import json
+import os
+
+import boto3
+from dotenv import load_dotenv
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 
@@ -24,6 +29,85 @@ def table_lookup(value, table, col_index):
             continue
         break
     return result
+
+
+def get_ai_response(test_payload):
+    # Load environment variables from .env
+    load_dotenv()
+
+    AWS_REGION = os.getenv("AWS_REGION")
+    MODEL_ID = os.getenv("BEDROCK_MODEL_ID")
+
+    # Create Boto3 client for Bedrock
+    client = boto3.client(
+        "bedrock-runtime",
+        region_name=AWS_REGION,
+        aws_access_key_id=os.getenv("AWS_ACCESS_KEY_ID"),
+        aws_secret_access_key=os.getenv("AWS_SECRET_ACCESS_KEY"),
+    )
+
+    # Create a prompt asking Claude to summarize
+    prompt = f"""
+    You are a Sanlam Financial Markets tax efficiency advisor AI. Your role is to analyze yield reduction calculations and explain the results in clear, client-friendly terms that portfolio managers can use when presenting investment options.
+
+    Based on the following investment scenario data, provide a comprehensive analysis:
+
+    **Client Profile:**
+    - Age: {test_payload["client"]["age"]} years
+    - Annual taxable income: R{test_payload["client"]["annual_taxable_income_before_RA"]:,}
+    - RA contribution: R{test_payload["client"]["RA_contribution"]:,}
+
+    **Investment Details:**
+    - Total investment value: R{test_payload["investment"]["total_value"]:,}
+    - Expected gross annual return: {test_payload["investment"]["gross_annual_return"] * 100:.1f}%
+    - Wrapper type: {test_payload["wrapper"]["type"]}
+
+    **Key Results:**
+    - Net return without wrapper: R{test_payload["yield"]["net_return_unwrapped"]:,}
+    - Net return with wrapper: R{test_payload["yield"]["net_return_wrapped"]:,}
+    - Annual benefit: R{test_payload["yield"]["yield_difference_monetary"]:,}
+    - Yield improvement: {test_payload["yield"]["yield_difference_percent"] * 100:.3f}%
+
+    Please provide:
+
+    1. **Executive Summary** (2-3 sentences): The key benefit and yield improvement in simple terms
+
+    2. **Tax Impact Breakdown**: Explain how different taxes affect this client's returns (use the detailed tax data provided)
+
+    3. **Wrapper Benefits**: Clearly explain why the {test_payload["wrapper"]["type"]} wrapper is beneficial for this client
+
+    4. **Client-Friendly Explanation**: Translate into language a client would understand, focusing on:
+       - Annual rand value of tax savings
+       - What this means for their wealth over time
+       - Key advantages of using the wrapper
+
+    5. **Portfolio Manager Talking Points**: 3-4 key phrases the PM can use to highlight the product's tax efficiency advantage
+
+    Keep explanations concise, use South African tax context, and focus on demonstrating clear value proposition in rand terms.
+
+    Full calculation data:
+    {json.dumps(test_payload, indent=2)}
+    """
+
+    print("Sending payload to Claude...")
+    return invoke_model(prompt=prompt, model_id=MODEL_ID, client=client)
+
+
+def invoke_model(prompt: str, model_id, client):
+    payload = {
+        "anthropic_version": "bedrock-2023-05-31",
+        "max_tokens": 4000,
+        "messages": [{"role": "user", "content": prompt}],
+    }
+
+    response = client.invoke_model(
+        modelId=model_id,
+        contentType="application/json",
+        body=json.dumps(payload).encode("utf-8"),
+    )
+
+    result = json.loads(response["body"].read().decode("utf-8"))
+    return result["content"][0]["text"]
 
 
 @app.route("/calculate")
@@ -359,6 +443,63 @@ def calculate(
     annual_yield_enhancement_percentage = (
         annual_yield_enhancement_monetary / total_investment_value
     )
+
+    test_payload = {
+        "client": {
+            "age": client_age,
+            "annual_taxable_income_before_RA": total_annual_taxable_income,
+            "RA_contribution": annual_ra_contribution,
+        },
+        "investment": {
+            "total_value": total_investment_value,
+            "gross_annual_return": gross_annual_portfolio_return,
+            "return_breakdown": {
+                "SA_interest": sa_interest,
+                "SA_local_dividends": sa_local_dividends,
+                "SA_REIT_dividends": sa_reit_dividends,
+                "foreign_dividends": foreign_dividends,
+                "capital_growth": return_from_local_capital_growth,
+            },
+            "portfolio_turnover": gross_portfolio_return,
+            "realised_gain_on_turnover": net_realised_capital_gains_after_annual_exclusion,  # ?
+        },
+        "wrapper": {
+            "type": wrapper_type_to_analyse,
+            "EAC": wrapper_annual_cost_eac,
+            "internal_tax": {
+                "interest": internal_tax_on_interest,
+                "local_dividends": internal_tax_on_local_dividends,
+                "REIT_dividends": internal_tax_on_reit_dividends,
+                "foreign_dividends": internal_tax_on_foreign_dividends,
+                "capital_gains": internal_tax_on_capital_gains,
+            },
+            "wrapper_cost": wrapper_annual_cost_eac,  # ?
+            "total_cost_and_tax": total_cost_and_internal_tax,
+        },
+        "tax": {
+            "gross_income_tax": gross_income_tax_payable,
+            "rebate": applicable_rate,
+            "marginal_rate": clients_marginal_income_tax_rate,
+            "interest_exemption": interest_exemption,
+            "tax_on_interest": tax_on_interest,
+            "tax_on_local_dividends": tax_on_local_dividends_dwt,
+            "tax_on_REIT_dividends": tax_on_reit_dividends,
+            "tax_on_foreign_dividends": tax_on_foreign_dividends,
+            "capital_gains": {
+                "net_realised": net_realised_capital_gains_after_annual_exclusion,
+                "taxable_portion": taxable_portion_of_capital_gains,
+                "tax_due": tax_on_capital_gains,
+            },
+            "total_tax_unwrapped": total_tax_unwrapped,
+            "total_tax_wrapped": total_tax_within_selected_wrapper,
+        },
+        "yield": {
+            "net_return_unwrapped": net_return_unwrapped,
+            "net_return_wrapped": net_return_wrapped,
+            "yield_difference_monetary": annual_yield_enhancement_monetary,
+            "yield_difference_percent": annual_yield_enhancement_percentage,
+        },
+    }
     ################################
     ############ OUTPUT ############
     ################################
@@ -412,6 +553,7 @@ def calculate(
             "netReturnUnwrappedPercentage": net_return_unwrapped_percentage,
             "netReturnWrapped": net_return_wrapped,
             "netReturnWrappedPercentage": net_return_wrapped_percentage,
+            "aiResponse": get_ai_response(test_payload),
         }
     )
 
