@@ -90,16 +90,12 @@ function App() {
     const response = await axios.get("http://localhost:5000/calculate", {
       params,
     });
-    const [yieldReductionEnhancement, yieldReductionEnhancementPercent] =
-      response.data.message.split(",").map((v) => parseFloat(v.trim()));
-    calculationResultRef.current = {
-      yieldReductionEnhancement,
-      yieldReductionEnhancementPercent,
-    };
+
+    calculationResultRef.current = response.data;
     setCalculationModalOpen(true);
-    console.log("Flask response:", calculationResultRef.current);
-    console.log(calculationResultRef.current.yieldReductionEnhancement);
-    console.log(calculationResultRef.current.yieldReductionEnhancementPercent);
+    console.log("API response:", calculationResultRef.current);
+    // console.log(calculationResultRef.current?.yieldReductionEnhancement);
+    // console.log(calculationResultRef.current?.yieldReductionEnhancementPercent);
   };
 
   return (
@@ -133,7 +129,12 @@ function App() {
           <Button onClick={() => setShowSummaryTable(!showSummaryTable)}>
             Toggle Summary
           </Button>
-          {showSummaryTable && <SummaryTable contentRef={contentRef} />}
+          {showSummaryTable && (
+            <SummaryTable
+              contentRef={contentRef}
+              data={calculationResultRef.current}
+            />
+          )}
 
           <Button onClick={handleDownload}>Download PDF</Button>
         </Box>
