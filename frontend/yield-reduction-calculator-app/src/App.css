@@ -240,4 +240,8 @@ body {
   .calculate{
     width: 84%;
   }
+
+  .container{
+    margin-left: 150px;
+  }
 }
