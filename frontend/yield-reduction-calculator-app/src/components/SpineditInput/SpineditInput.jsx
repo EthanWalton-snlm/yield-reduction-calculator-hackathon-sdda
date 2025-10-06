@@ -20,7 +20,7 @@ export function SpineditInput({ title, value, setValue }) {
             endDecorator="%"
              type="number"
              variant="soft"
-             defaultValue={(value * 100).toFixed(4)}
+             defaultValue={value * 100}
              slotProps={{
                 input: {
                 min: 0,
