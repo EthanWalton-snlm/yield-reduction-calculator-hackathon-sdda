@@ -60,25 +60,6 @@ function App() {
   const contentRef = useRef();
   const calculationResultRef = useRef(null);
 
-  // const handleDownload = async () => {
-  //   const element = contentRef.current;
-
-  //   const isDark = mode === "dark";
-  //   if (isDark) setMode("light");
-
-  //   const options = {
-  //     margin: 1,
-  //     filename: "test.pdf",
-  //     image: { type: "jpeg", quality: 0.98 },
-  //     html2canvas: { scale: 2 },
-  //     jsPDF: { unit: "in", format: "letter", orientation: "landscape" },
-  //   };
-
-  //   await html2pdf().set(options).from(element).save();
-
-  //   if (isDark) setMode("dark");
-  // };
-
   const handleCalculation = async () => {
     const params = {
       clientAge,
@@ -105,17 +86,10 @@ function App() {
     setCalculated(true);
     setCalculationModalOpen(true);
     console.log("API response:", calculationResultRef.current);
-    // console.log(calculationResultRef.current?.yieldReductionEnhancement);
-    // console.log(calculationResultRef.current?.yieldReductionEnhancementPercent);
   };
 
   return (
     <CssVarsProvider>
-      {/* <ResultsModal
-        open={calculationModalOpen}
-        setOpen={setCalculationModalOpen}
-        calculationResultRef={calculationResultRef}
-      /> */}
 
       <Box className="header">
         <img
