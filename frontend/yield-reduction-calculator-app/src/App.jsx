@@ -16,13 +16,17 @@ import html2pdf from "html2pdf.js";
 import { CssVarsProvider, useColorScheme } from "@mui/joy/styles";
 import "./App.css";
 import axios from "axios";
+import DarkModeSharpIcon from '@mui/icons-material/DarkModeSharp';
+import LightModeSharpIcon from '@mui/icons-material/LightModeSharp';
+import PictureAsPdfSharpIcon from '@mui/icons-material/PictureAsPdfSharp';
+
 
 function ThemeToggle() {
   const { mode, setMode } = useColorScheme();
 
   return (
-    <Button onClick={() => setMode(mode === "dark" ? "light" : "dark")}>
-      Toggle {mode === "dark" ? "Light" : "Dark"} Mode
+    <Button onClick={() => setMode(mode === "dark" ? "light" : "dark")} variant="plain">
+      {mode === "dark" ? <LightModeSharpIcon/> : <DarkModeSharpIcon/>}
     </Button>
   );
 }
@@ -410,7 +414,7 @@ function App() {
               </tbody>
             </table>
           </Box>
-          <Button onClick={handleDownload}>Download PDF</Button>
+          <Button onClick={handleDownload} endDecorator={<PictureAsPdfSharpIcon />}>Download </Button>
         </Box>
         <Box className="output-box">
           <Box>
