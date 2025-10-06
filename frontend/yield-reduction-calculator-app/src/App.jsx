@@ -73,7 +73,7 @@ function App() {
     }
 
     const options = {
-      margin: 1,
+      margin: 0.5,
       filename: 'yield-calculator-report.pdf',
       image: { type: 'jpeg', quality: 0.98 },
       html2canvas: {
@@ -106,8 +106,8 @@ function App() {
     <ThemeToggle/>
       </Box>
 
-      <Box class="container">
-        <Box class="box" >
+      <Box className="container">
+        <Box className="box" >
           {/* Inline YieldCalculator */}
           <div className="yield-calculator-container">
             <div className="yield-calculator-card">
@@ -431,12 +431,14 @@ function App() {
           </Box>
         </Box>
       </Box>
+
       <Box className="chatbot-icon">
-      <IconButton variant="solid" color="primary" sx={{ fontSize: '24px' }}>
-      💬
-    </IconButton>
-    </Box>
-      </CssVarsProvider>
+        <IconButton variant="solid" color="primary" sx={{ fontSize: '24px' }}>
+          💬
+        </IconButton>
+      </Box>
+
+    </CssVarsProvider>
   );
 }
 
