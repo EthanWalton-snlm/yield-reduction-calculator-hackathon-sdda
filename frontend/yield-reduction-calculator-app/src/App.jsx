@@ -17,10 +17,15 @@ function ThemeToggle() {
 function App() {
   const [selectedRA, setSelectedRA] = useState("");
   const contentRef = useRef();
+  const { mode, setMode } = useColorScheme();
 
-  const handleDownload = () => {
+  const handleDownload = async () => {
     const element = contentRef.current;
-      const options = {
+
+    const isDark = mode === 'dark';
+    if (isDark) setMode('light');
+
+    const options = {
       margin: 1,
       filename: 'test.pdf',
       image: { type: 'jpeg', quality: 0.98 },
@@ -28,7 +33,9 @@ function App() {
       jsPDF: { unit: 'in', format: 'letter', orientation: 'landscape' }
     };
 
-    html2pdf().set(options).from(element).save();
+    await html2pdf().set(options).from(element).save();
+
+    if (isDark) setMode('dark');
   };
 
   return (
