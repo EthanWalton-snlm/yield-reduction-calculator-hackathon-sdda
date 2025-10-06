@@ -54,10 +54,15 @@ function App() {
   const [calculationModalOpen, setCalculationModalOpen] = useState(false);
 
   const contentRef = useRef();
+  const { mode, setMode } = useColorScheme();
   const calculationResultRef = useRef(null);
 
-  const handleDownload = () => {
+  const handleDownload = async () => {
     const element = contentRef.current;
+
+    const isDark = mode === "dark";
+    if (isDark) setMode("light");
+
     const options = {
       margin: 1,
       filename: "test.pdf",
@@ -66,7 +71,9 @@ function App() {
       jsPDF: { unit: "in", format: "letter", orientation: "landscape" },
     };
 
-    html2pdf().set(options).from(element).save();
+    await html2pdf().set(options).from(element).save();
+
+    if (isDark) setMode("dark");
   };
 
   const handleCalculation = async () => {
