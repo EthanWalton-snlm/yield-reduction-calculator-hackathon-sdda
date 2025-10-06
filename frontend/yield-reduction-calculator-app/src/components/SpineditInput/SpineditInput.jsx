@@ -7,7 +7,6 @@ import {
   Textarea,
   Input
 } from "@mui/joy";
-import { useState } from "react";
 
 export function SpineditInput({ title, value, setValue }) {
 
@@ -20,7 +19,7 @@ export function SpineditInput({ title, value, setValue }) {
             endDecorator="%"
              type="number"
              variant="soft"
-             defaultValue={value * 100}
+             defaultValue={(value * 100).toFixed(4)}
              slotProps={{
                 input: {
                 min: 0,
