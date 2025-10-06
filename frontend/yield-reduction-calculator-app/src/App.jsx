@@ -195,7 +195,7 @@ function App() {
                   value={wrapperTypeToAnalyse}
                   setValue={setWrapperTypeToAnalyse}
                 />
-                <CalculatorInput
+                <SpineditInput
                   title={"Wrapper Annual Cost (EAC %)"}
                   value={wrapperAnnualCostEac}
                   setValue={setWrapperAnnualCostEac}
@@ -256,26 +256,6 @@ function App() {
                 value={assumedRealisedGainOnTurnover}
                 setValue={setAssumedRealisedGainOnTurnover}
               />
-            </Box>
-
-            <Box className="client-details">
-              <WrapperTypeDropdown
-                value={wrapperTypeToAnalyse}
-                setValue={setWrapperTypeToAnalyse}
-              />
-              <SpineditInput
-                title={"Wrapper Annual Cost (EAC %)"}
-                value={wrapperAnnualCostEac}
-                setValue={setWrapperAnnualCostEac}
-              />
-
-              {wrapperTypeToAnalyse == "RA" && (
-                <CalculatorInput
-                  title={"Annual RA Contribution"}
-                  value={annualRaContribution}
-                  setValue={setAnnualRaContribution}
-                />
-              )}
             </Box>
             <Button
               onClick={handleCalculation}
