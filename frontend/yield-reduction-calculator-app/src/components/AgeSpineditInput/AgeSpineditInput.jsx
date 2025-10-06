@@ -15,6 +15,7 @@ export function AgeSpineditInput({ title, value, setValue }) {
       <Box className="textfield-wrapper">
         <Box className="textfield-container space">
           <Input
+          className="textfield"
              type="number"
              variant="soft"
              defaultValue={0}

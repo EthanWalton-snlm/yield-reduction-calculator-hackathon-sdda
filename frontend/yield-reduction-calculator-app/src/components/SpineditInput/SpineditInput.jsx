@@ -16,6 +16,7 @@ export function SpineditInput({ title, value, setValue }) {
       <Box className="textfield-wrapper">
         <Box className="textfield-container space">
           <Input
+          className="textfield"
             endDecorator="%"
              type="number"
              variant="soft"
