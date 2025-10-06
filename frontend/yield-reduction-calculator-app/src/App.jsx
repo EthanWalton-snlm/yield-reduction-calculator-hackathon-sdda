@@ -1,23 +1,13 @@
 import { useState, useRef } from "react";
-import {
-  Input,
-  Option,
-  Select,
-  Box,
-  Typography,
-  Textarea,
-  Button,
-  IconButton,
-  Modal,
-  ModalDialog,
-  ModalClose,
-  Table,
-  Sheet,
-} from "@mui/joy";
+import { Box, Button, IconButton, Typography } from "@mui/joy";
 import html2pdf from "html2pdf.js";
 import { CssVarsProvider, useColorScheme } from "@mui/joy/styles";
 import "./App.css";
 import axios from "axios";
+import { ResultsModal } from "./components/ResultsModal/ResultsModal";
+import { CalculatorInput } from "./components/CalculatorInput/CalculatorInput";
+import { WrapperTypeDropdown } from "./components/WrapperTypeDropdown/WrapperTypeDropdown";
+import { SummaryTable } from "./components/SummaryTable/SummaryTable";
 
 function ThemeToggle() {
   const { mode, setMode } = useColorScheme();
@@ -54,6 +44,7 @@ function App() {
   const [annualRaContribution, setAnnualRaContribution] = useState(350000);
   const [clientAge, setClientAge] = useState(55);
   const [calculationModalOpen, setCalculationModalOpen] = useState(false);
+  const [showSummaryTable, setShowSummaryTable] = useState(false);
 
   const contentRef = useRef();
 
@@ -171,43 +162,11 @@ function App() {
 
   return (
     <CssVarsProvider>
-      <Modal
-        aria-labelledby="modal-title"
+      <ResultsModal
         open={calculationModalOpen}
-        onClose={() => setCalculationModalOpen(false)}
-      >
-        <ModalDialog>
-          <ModalClose />
-          <Typography
-            component="h2"
-            id="modal-title"
-            level="h4"
-            textColor="inherit"
-            sx={{ fontWeight: "lg", mb: 1 }}
-          >
-            Results
-          </Typography>
-          <Typography
-            component="h3"
-            level="h5"
-            textColor="inherit"
-            sx={{ fontWeight: "md", mb: 1 }}
-          >
-            Monetary: R{calculationResultRef.current?.yieldReductionEnhancement}
-          </Typography>
-          <Typography
-            component="h3"
-            level="h5"
-            textColor="inherit"
-            sx={{ fontWeight: "md", mb: 1 }}
-          >
-            Percentage:{" "}
-            {calculationResultRef.current?.yieldReductionEnhancementPercent *
-              100}
-            %
-          </Typography>
-        </ModalDialog>
-      </Modal>
+        setOpen={setCalculationModalOpen}
+        calculationResultRef={calculationResultRef}
+      />
 
       <Box className="header">
         <img
@@ -219,446 +178,104 @@ function App() {
       </Box>
 
       <Box className="container">
-        <Box className="box" ref={contentRef}>
-          {/* Inline YieldCalculator */}
-          <div className="yield-calculator-container">
-            <div className="yield-calculator-card">
-              {/* Header Section */}
-              <div className="yield-header-section">
-                <Typography level="h2" sx={{ mb: 2, textAlign: 'center' }}>
-                  Yield Reduction Calculator
-                </Typography>
-                <div className="yield-underline"></div>
-                <Typography level="body-md" sx={{ textAlign: 'center', mb: 3 }}>
-                  Calculate the Yield Reduction by entering the relevant information
-                  on the right.
-                </Typography>
-              </div>
+        <Box className="box">
+          <Box>
+            <h1 className="first-heading">Calculate your Yield Reduction</h1>
+            <h1 className="second-heading">Yield Reduction Calculator</h1>
+            <Box className="underline"></Box>
+            <p className="description">
+              Calculate the Yield Reduction by entering the relevant information
+              on the right
+            </p>
+          </Box>
+          <Button onClick={() => setShowSummaryTable(!showSummaryTable)}>
+            Toggle Summary
+          </Button>
+          {showSummaryTable && <SummaryTable contentRef={contentRef} />}
 
-              {/* Table Section */}
-              <div className="yield-content-section">
-                <div className="yield-table-container">
-                  <Sheet variant="outlined" sx={{ borderRadius: 'sm', overflow: 'auto' }}>
-                    <Table
-                      variant="soft"
-                      stripe="even"
-                      hoverRow
-                      sx={{
-                        '& th': {
-                          borderRight: '1px solid',
-                          borderRightColor: 'divider',
-                          '&:last-child': {
-                            borderRight: 'none'
-                          }
-                        },
-                        '& td': {
-                          borderRight: '1px solid',
-                          borderRightColor: 'divider',
-                          '&:last-child': {
-                            borderRight: 'none'
-                          }
-                        }
-                      }}
-                    >
-                      <thead>
-                        <tr>
-                          <th style={{ width: '60%' }}>
-                            <Typography level="title-sm" sx={{ fontWeight: 'bold' }}>
-                              Description
-                            </Typography>
-                          </th>
-                          <th style={{ width: '40%' }}>
-                            <Typography level="title-sm" sx={{ fontWeight: 'bold' }}>
-                              Amount (R)
-                            </Typography>
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {tableData.map((row, index) => (
-                          <tr key={index}>
-                            <td>
-                              <Typography
-                                level="body-sm"
-                                sx={{
-                                  fontWeight: row.highlight ? 'bold' : 'normal',
-                                  color: row.highlight ? 'primary.500' : 'inherit'
-                                }}
-                              >
-                                {row.label}
-                              </Typography>
-                            </td>
-                            <td>
-                              <Typography
-                                level="body-sm"
-                                sx={{
-                                  fontWeight: row.highlight ? 'bold' : 'normal',
-                                  color: row.highlight ? 'primary.500' : 'inherit'
-                                }}
-                              >
-                                {row.value}
-                              </Typography>
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </Table>
-                  </Sheet>
-                </div>
-              </div>
-            </div>
-          </div>
-          <button onClick={handleDownload}>Download PDF</button>
+          <Button onClick={handleDownload}>Download PDF</Button>
         </Box>
         <Box className="output-box">
           <Box>
             <Box className="client-details">
-              <Typography className="age">
-                How old will you be on 28 February 2025?
-              </Typography>
-              <Box className="age-group">
-                <Box>
-                  <Button
-                    color="neutral"
-                    onClick={function () {}}
-                    variant="soft"
-                    className="age-blocks"
-                  >
-                    {"<"} 65
-                  </Button>
-                </Box>
-                <Box>
-                  <Button
-                    color="neutral"
-                    onClick={function () {}}
-                    variant="soft"
-                    className="age-blocks"
-                  >
-                    65-74
-                  </Button>
-                </Box>
-                <Box>
-                  <Button
-                    color="neutral"
-                    onClick={function () {}}
-                    variant="soft"
-                    className="age-blocks"
-                  >
-                    {">"} 74
-                  </Button>
-                </Box>
-              </Box>
-              <Typography className="age">
-                What is your total annual taxable income?{" "}
-              </Typography>
-              <Box className="textfield-wrapper">
-                {/* <div class="textfield-container"> */}
-                <Textarea
-                  color="neutral"
-                  disabled={false}
-                  minRows={2}
-                  placeholder="Enter your total annual taxable income"
-                  size="md"
-                  className="textfield"
-                  value={totalAnnualTaxableIncome}
-                  onChange={(e) => setTotalAnnualTaxableIncome(e.target.value)}
-                />
-                {/* </div> */}
-                <Box className="info-text-container">
-                  <Typography>
-                    Your gross income minus deductions, e.g. Retirement Annuity,
-                    Medical Aid.
-                  </Typography>
-                </Box>
-              </Box>
+              <CalculatorInput
+                title={"How old will you be on 28 February 2025?"}
+                value={clientAge}
+                setValue={setClientAge}
+              />
+              <CalculatorInput
+                title={"What is your total annual taxable income?"}
+                value={totalAnnualTaxableIncome}
+                setValue={setTotalAnnualTaxableIncome}
+              />
             </Box>
             <Box className="client-details">
-              <Typography className="age">Total Investment Value</Typography>
-              <Box className="textfield-wrapper">
-                <Box className="textfield-container space">
-                  <Textarea
-                    color="neutral"
-                    disabled={false}
-                    minRows={2}
-                    placeholder="R"
-                    size="md"
-                    className="textfield"
-                    value={totalInvestmentValue}
-                    onChange={(e) => setTotalInvestmentValue(e.target.value)}
-                  ></Textarea>
-                </Box>
-              </Box>
-              <Typography className="age">
-                Gross Annual Portfolio Return (%)
-              </Typography>
-              <Box className="textfield-wrapper space">
-                <Box className="textfield-container">
-                  <Input
-                    className="textfield"
-                    type="number"
-                    variant="soft"
-                    defaultValue={0}
-                    slotProps={{
-                      input: {
-                        min: 0,
-                        max: 100,
-                        step: 0.1,
-                      },
-                    }}
-                    value={grossAnnualPortfolioReturn}
-                    onChange={(e) =>
-                      setGrossAnnualPortfolioReturn(e.target.value)
-                    }
-                  />
-                </Box>
-              </Box>
-
-              <Typography className="age">
-                Return From SA Interest (%)
-              </Typography>
-              <Box className="textfield-wrapper space">
-                <Box className="textfield-container">
-                  <Input
-                    className="textfield"
-                    type="number"
-                    variant="soft"
-                    defaultValue={0}
-                    slotProps={{
-                      input: {
-                        min: 0,
-                        max: 100,
-                        step: 0.1,
-                      },
-                    }}
-                    value={returnFromSaInterest}
-                    onChange={(e) => setReturnFromSaInterest(e.target.value)}
-                  />
-                </Box>
-              </Box>
-
-              <Typography className="age">
-                Return From SA Local Dividends (Non-REIT) (%)
-              </Typography>
-              <Box className="textfield-wrapper space">
-                <Box className="textfield-container">
-                  <Input
-                    className="textfield"
-                    type="number"
-                    variant="soft"
-                    defaultValue={0}
-                    slotProps={{
-                      input: {
-                        min: 0,
-                        max: 100,
-                        step: 0.1,
-                      },
-                    }}
-                    value={returnFromSaLocalDividends}
-                    onChange={(e) =>
-                      setReturnFromSaLocalDividends(e.target.value)
-                    }
-                  />
-                </Box>
-              </Box>
-
-              <Typography className="age">
-                Return From Local SA REIT Dividends (%)
-              </Typography>
-              <Box className="textfield-wrapper space">
-                <Box className="textfield-container">
-                  <Input
-                    className="textfield"
-                    type="number"
-                    variant="soft"
-                    defaultValue={0}
-                    slotProps={{
-                      input: {
-                        min: 0,
-                        max: 100,
-                        step: 0.1,
-                      },
-                    }}
-                    value={returnFromLocalSaReitDividends}
-                    onChange={(e) =>
-                      setReturnFromLocalSaReitDividends(e.target.value)
-                    }
-                  />
-                </Box>
-              </Box>
-
-              <Typography className="age">
-                Return From Foreign Dividends (%)
-              </Typography>
-              <Box className="textfield-wrapper space">
-                <Box className="textfield-container">
-                  <Input
-                    className="textfield"
-                    type="number"
-                    variant="soft"
-                    defaultValue={0}
-                    slotProps={{
-                      input: {
-                        min: 0,
-                        max: 100,
-                        step: 0.1,
-                      },
-                    }}
-                    value={returnFromForeignDividends}
-                    onChange={(e) =>
-                      setReturnFromForeignDividends(e.target.value)
-                    }
-                  />
-                </Box>
-              </Box>
-
-              <Typography className="age">
-                Return From Capital Growth (%)
-              </Typography>
-              <Box className="textfield-wrapper space">
-                <Box className="textfield-container">
-                  <Input
-                    className="textfield"
-                    type="number"
-                    variant="soft"
-                    defaultValue={0}
-                    slotProps={{
-                      input: {
-                        min: 0,
-                        max: 100,
-                        step: 0.1,
-                      },
-                    }}
-                    value={returnFromLocalCapitalGrowth}
-                    onChange={(e) =>
-                      setReturnFromLocalCapitalGrowth(e.target.value)
-                    }
-                  />
-                </Box>
-              </Box>
-
-              <Typography className="age">
-                Average Portfolio Turnover (%)
-              </Typography>
-              <Box className="textfield-wrapper space">
-                <Box className="textfield-container">
-                  <Input
-                    className="textfield"
-                    type="number"
-                    variant="soft"
-                    defaultValue={0}
-                    slotProps={{
-                      input: {
-                        min: 0,
-                        max: 100,
-                        step: 0.1,
-                      },
-                    }}
-                    value={averagePortfolioTurnover}
-                    onChange={(e) =>
-                      setAveragePortfolioTurnover(e.target.value)
-                    }
-                  />
-                </Box>
-              </Box>
-
-              <Typography className="age">
-                Assumed Realised Gain On Turnover (%)
-              </Typography>
-              <Box className="textfield-wrapper space">
-                <Box className="textfield-container">
-                  <Input
-                    className="textfield"
-                    type="number"
-                    variant="soft"
-                    defaultValue={0}
-                    slotProps={{
-                      input: {
-                        min: 0,
-                        max: 100,
-                        step: 0.1,
-                      },
-                    }}
-                    value={assumedRealisedGainOnTurnover}
-                    onChange={(e) =>
-                      setAssumedRealisedGainOnTurnover(e.target.value)
-                    }
-                  />
-                </Box>
-              </Box>
+              <CalculatorInput
+                title={"Total Investment Value"}
+                value={totalInvestmentValue}
+                setValue={setTotalInvestmentValue}
+              />
+              <CalculatorInput
+                title={"Gross Annual Portfolio Return (%)"}
+                value={grossAnnualPortfolioReturn}
+                setValue={setGrossAnnualPortfolioReturn}
+              />
+              <CalculatorInput
+                title={"Return From SA Interest (%)"}
+                value={returnFromSaInterest}
+                setValue={setReturnFromSaInterest}
+              />
+              <CalculatorInput
+                title={"Return From SA Local Dividends (Non-REIT) (%)"}
+                value={returnFromSaLocalDividends}
+                setValue={setReturnFromSaLocalDividends}
+              />
+              <CalculatorInput
+                title={"Return From Local SA REIT Dividends (%)"}
+                value={returnFromLocalSaReitDividends}
+                setValue={setReturnFromLocalSaReitDividends}
+              />
+              <CalculatorInput
+                title={"Return From Foreign Dividends (%)"}
+                value={returnFromForeignDividends}
+                setValue={setReturnFromForeignDividends}
+              />
+              <CalculatorInput
+                title={"Return From Capital Growth (%)"}
+                value={returnFromLocalCapitalGrowth}
+                setValue={setReturnFromLocalCapitalGrowth}
+              />
+              <CalculatorInput
+                title={"Average Portfolio Turnover (%)"}
+                value={averagePortfolioTurnover}
+                setValue={setAveragePortfolioTurnover}
+              />
+              <CalculatorInput
+                title={"Assumed Realised Gain On Turnover (%)"}
+                value={assumedRealisedGainOnTurnover}
+                setValue={setAssumedRealisedGainOnTurnover}
+              />
             </Box>
 
             <Box className="client-details">
-              <Typography className="age">Wrapper Type</Typography>
-              <Select
-                variant="soft"
-                className="options space"
-                id="wrapperType"
+              <WrapperTypeDropdown
                 value={wrapperTypeToAnalyse}
-                onChange={(e, newValue) => setWrapperTypeToAnalyse(newValue)}
-                placeholder="Endowment"
-              >
-                <Option value="Endowment">Endowment</Option>
-                <Option value="RA">RA</Option>
-                <Option value="TFSA">TFSA</Option>
-                <Option value="Offshore Endowment">Offshore Endowment</Option>
-                <Option value="Local or Foreign Note">
-                  Local or Foreign Note
-                </Option>
-              </Select>
-              <Typography className="age">
-                Wrapper Annual Cost (EAC %){" "}
-              </Typography>
-              <Box className="textfield-wrapper space">
-                <Box className="textfield-container">
-                  <Input
-                    className="textfield"
-                    type="number"
-                    variant="soft"
-                    defaultValue={0}
-                    slotProps={{
-                      input: {
-                        min: 0,
-                        max: 100,
-                        step: 0.1,
-                      },
-                    }}
-                    value={wrapperAnnualCostEac}
-                    onChange={(e) => setWrapperAnnualCostEac(e.target.value)}
-                  />
-                </Box>
-              </Box>
+                setValue={setWrapperTypeToAnalyse}
+              />
+              <CalculatorInput
+                title={"Wrapper Annual Cost (EAC %)"}
+                value={wrapperAnnualCostEac}
+                setValue={setWrapperAnnualCostEac}
+              />
 
               {wrapperTypeToAnalyse == "RA" && (
-                <Box>
-                  <Typography className="age">
-                    Annual RA Contribution
-                  </Typography>
-                  <Box className="textfield-wrapper">
-                    <Box className="textfield-container">
-                      <Textarea
-                        color="neutral"
-                        disabled={false}
-                        minRows={2}
-                        placeholder="Enter your annual RA contribution"
-                        size="md"
-                        className="textfield"
-                        value={annualRaContribution}
-                        onChange={(e) =>
-                          setAnnualRaContribution(e.target.value)
-                        }
-                      ></Textarea>
-                    </Box>
-                    <Box className="info-text-container">
-                      <Typography>
-                        Your gross income minus deductions, e.g. Retirement
-                        Annuity, Medical Aid.
-                      </Typography>
-                    </Box>
-                  </Box>
-                </Box>
+                <CalculatorInput
+                  title={"Annual RA Contribution"}
+                  value={annualRaContribution}
+                  setValue={setAnnualRaContribution}
+                />
               )}
             </Box>
-            {/* <button class="calculate"><span><span>Calculate</span></span></button> */}
             <Button
               onClick={handleCalculation}
               variant="solid"
