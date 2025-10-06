@@ -230,3 +230,12 @@ body {
   right: 20px;
   z-index: 1000;
 }
+
+@media (min-width: 1634px){
+  .client-details-fw{
+    width: 1280px;
+  }
+  .calculate{
+    width: 84%;
+  }
+}
