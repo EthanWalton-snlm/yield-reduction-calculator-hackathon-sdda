@@ -79,6 +79,7 @@ function App() {
       annualRaContribution,
     };
 
+    window.scrollTo({top: 0, behavior: "smooth"})
     setLoading(true);
 
     const response = await axios.get("http://localhost:5000/calculate", {
@@ -244,11 +245,6 @@ function App() {
             </Button>
           </Box>
         </Box>
-      </Box>
-      <Box className="chatbot-icon">
-        <IconButton variant="solid" color="primary" sx={{ fontSize: "24px" }}>
-          💬
-        </IconButton>
       </Box>
     </CssVarsProvider>
   );
