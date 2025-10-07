@@ -12,6 +12,9 @@ import {
   ModalClose,
   Sheet,
   Table,
+  Card,
+  CardContent,
+  Divider,
 } from "@mui/joy";
 import PictureAsPdfSharpIcon from "@mui/icons-material/PictureAsPdfSharp";
 import { CssVarsProvider, useColorScheme } from "@mui/joy/styles";
@@ -43,12 +46,13 @@ export function SummaryTable({ contentRef, data }) {
       <Button onClick={handleDownload} endDecorator={<PictureAsPdfSharpIcon />}>
         Download{" "}
       </Button>
+      <Box ref={contentRef}>
       <Sheet sx={{
         width: '50%',
         margin: '0 auto',
         display: 'block'
       }}>
-      <Table cellPadding="10" cellSpacing="0" ref={contentRef} aria-label="table with sticky header"
+      <Table cellPadding="10" cellSpacing="0"  aria-label="table with sticky header"
           stickyHeader
           stickyFooter
           stripe="odd"
@@ -93,15 +97,56 @@ export function SummaryTable({ contentRef, data }) {
         </thead>
         <tbody>
           {data &&
-            Object.entries(data).map(([key, value], index) => (
-              <tr key={index}>
-                <td>{formatKey(key).toUpperCase()}</td>
-                <td>{value}</td>
-              </tr>
-            ))}
+            Object.entries(data)
+              .filter(([key]) => key !== 'aiResponse') // Exclude AI response from table
+              .map(([key, value], index) => (
+                <tr key={index}>
+                  <td>{formatKey(key).toUpperCase()}</td>
+                  <td>{value}</td>
+                </tr>
+              ))}
         </tbody>
       </Table>
     </Sheet>
+
+    {/* AI Response Card */}
+    {data?.aiResponse && data.aiResponse !== "AI OVERVIEW DISABLED" && (
+      <Card
+        variant="outlined"
+        sx={{
+          mt: 3,
+          width: '100%',
+          backgroundColor: '#f8fafc'
+        }}
+      >
+        <CardContent>
+          <Typography
+            level="h4"
+            sx={{
+              mb: 2,
+              color: '#2374bb',
+              display: 'flex',
+              alignItems: 'center',
+              gap: 1
+            }}
+          >
+            🤖 AI Financial Analysis
+          </Typography>
+          <Divider sx={{ mb: 2 }} />
+          <Typography
+            level="body-md"
+            sx={{
+              whiteSpace: 'pre-wrap',
+              lineHeight: 1.6,
+              fontSize: '0.95rem'
+            }}
+          >
+            {data.aiResponse}
+          </Typography>
+        </CardContent>
+      </Card>
+    )}
+    </Box>
     </Box>
   );
 }

@@ -72,18 +72,18 @@ def get_ai_response(test_payload):
 
     Please provide:
 
-    1. **Executive Summary** (2-3 sentences): The key benefit and yield improvement in simple terms
+    1. Executive Summary (2-3 sentences): The key benefit and yield improvement in simple terms
 
-    2. **Tax Impact Breakdown**: Explain how different taxes affect this client's returns (use the detailed tax data provided)
+    2. Tax Impact Breakdown: Explain how different taxes affect this client's returns (use the detailed tax data provided)
 
-    3. **Wrapper Benefits**: Clearly explain why the {test_payload["wrapper"]["type"]} wrapper is beneficial for this client
+    3. Wrapper Benefits: Clearly explain why the {test_payload["wrapper"]["type"]} wrapper is beneficial for this client.
+       Explain difference with wrapper and without wrapper.
 
-    4. **Client-Friendly Explanation**: Translate into language a client would understand, focusing on:
+    4. Client-Friendly Explanation: Translate into language a client would understand, focusing on:
        - Annual rand value of tax savings
        - What this means for their wealth over time
        - Key advantages of using the wrapper
 
-    5. **Portfolio Manager Talking Points**: 3-4 key phrases the PM can use to highlight the product's tax efficiency advantage
 
     Keep explanations concise, use South African tax context, and focus on demonstrating clear value proposition in rand terms.
     Format this into a properly structured report that is legible and neat and also provide some insights and advice the client on
