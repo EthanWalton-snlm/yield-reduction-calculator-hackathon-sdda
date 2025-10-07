@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Box, Button, IconButton, Typography } from "@mui/joy";
 import { CssVarsProvider, useColorScheme } from "@mui/joy/styles";
 import "./App.css";
@@ -79,7 +79,6 @@ function App() {
       annualRaContribution,
     };
 
-    window.scrollTo({top: 0, behavior: "smooth"})
     setLoading(true);
 
     const response = await axios.get("http://localhost:5000/calculate", {
@@ -90,6 +89,11 @@ function App() {
     setCalculated(true);
     setCalculationModalOpen(true);
     setLoading(false);
+
+     setTimeout(() => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }, 100);
+
     console.log("API response:", calculationResultRef.current);
   };
 
