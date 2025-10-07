@@ -43,7 +43,10 @@ export function SummaryTable({ contentRef, data }) {
 
   return (
     <Box id="content">
-      <Box className="summary-table" ref={contentRef}>
+      <Button onClick={handleDownload} endDecorator={<PictureAsPdfSharpIcon />}>
+        Download{" "}
+      </Button>
+      <Box ref={contentRef}>
         <Sheet
           sx={{
             width: "50%",
@@ -74,18 +77,23 @@ export function SummaryTable({ contentRef, data }) {
                 borderTop: "none",
               },
               "& tbody tr:nth-child(odd) td": {
-                backgroundColor: "#f0f4f8",
+                backgroundColor:
+                  mode === "dark" ? "rgba(255, 255, 255, 0.1)" : "#f0f4f8",
+                color: mode === "dark" ? "white" : "inherit",
               },
               "& tbody td:nth-child(2)": {
                 fontWeight: "bold",
               },
               "& tbody tr:nth-last-child(2) td": {
                 fontWeight: "bold",
+                backgroundColor: mode === "dark" ? "#2374bb" : "#9fb9d4",
+                color: mode === "dark" ? "white" : "inherit",
               },
               "& tbody tr:last-child td": {
                 borderBottom: "none",
                 fontWeight: "bold",
-                backgroundColor: "#f0f4f8",
+                backgroundColor: mode === "dark" ? "#2374bb" : "#9fb9d4",
+                color: mode === "dark" ? "white" : "inherit",
               },
             }}
           >
@@ -114,8 +122,12 @@ export function SummaryTable({ contentRef, data }) {
           <Card
             variant="outlined"
             sx={{
+              mt: 3,
               width: "100%",
-              backgroundColor: "#f8fafc",
+              backgroundColor:
+                mode === "dark" ? "rgba(255, 255, 255, 0.05)" : "#f8fafc",
+              borderColor:
+                mode === "dark" ? "rgba(255, 255, 255, 0.2)" : undefined,
             }}
           >
             <CardContent>
@@ -123,7 +135,7 @@ export function SummaryTable({ contentRef, data }) {
                 level="h4"
                 sx={{
                   mb: 2,
-                  color: "#2374bb",
+                  color: mode === "dark" ? "#7db3e8" : "#2374bb",
                   display: "flex",
                   alignItems: "center",
                   gap: 1,
