@@ -43,10 +43,14 @@ export function SummaryTable({ contentRef, data }) {
 
   return (
     <Box id="content">
-      <Button onClick={handleDownload} endDecorator={<PictureAsPdfSharpIcon />}>
-        Download{" "}
+      <Button
+        onClick={handleDownload}
+        endDecorator={<PictureAsPdfSharpIcon />}
+        sx={{ my: 3 }}
+      >
+        Download Summary{" "}
       </Button>
-      <Box ref={contentRef}>
+      <Box ref={contentRef} className="summary-table">
         <Sheet
           sx={{
             width: "50%",
@@ -122,7 +126,6 @@ export function SummaryTable({ contentRef, data }) {
           <Card
             variant="outlined"
             sx={{
-              mt: 3,
               width: "100%",
               backgroundColor:
                 mode === "dark" ? "rgba(255, 255, 255, 0.05)" : "#f8fafc",
