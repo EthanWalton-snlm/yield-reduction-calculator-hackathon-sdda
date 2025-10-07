@@ -122,6 +122,7 @@ function App() {
 
   return (
     <CssVarsProvider>
+      <Box sx={{backgroundColor: mode === 'dark' ? '#1f1f1f': '#fffffff'}}>
       <Box className="header">
         <img
           src="https://sanlamprivatewealth.mu/wp-content/uploads/2021/11/Sanlam-Private-wealth-50px-height.png"
@@ -283,6 +284,7 @@ function App() {
             </Button>
           </Box>
         </Box>
+      </Box>
       </Box>
     </CssVarsProvider>
   );
