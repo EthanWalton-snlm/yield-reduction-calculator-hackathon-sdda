@@ -108,8 +108,8 @@ function App() {
       const reader = new FileReader();
 
       reader.onload = (event) => {
-        const lines = event.target.result.split('\n');
-        const inputValues = lines[1].split(',');
+        const lines = event.target.result.split("\n");
+        const inputValues = lines[1].split(",");
         setClientAge(Number(inputValues[0]));
         setTotalAnnualTaxableIncome(Number(inputValues[1]));
         setTotalInvestmentValue(Number(inputValues[2]));
@@ -150,182 +150,188 @@ function App() {
 
   return (
     <CssVarsProvider>
-      <Box sx={{backgroundColor: mode === 'dark' ? '#1f1f1f': '#ffffff'}}>
-      <Box className="header">
-        <img
-          src="https://sanlamprivatewealth.mu/wp-content/uploads/2021/11/Sanlam-Private-wealth-50px-height.png"
-          alt=""
-          className="logo"
-        ></img>
-        <ThemeToggle />
-         <input
-        type="file"
-        accept=".csv"
-        ref={fileInputRef}
-        onChange={importCsv}
-        style={{ display: 'none' }}
-      />
-         <Button onClick={() => fileInputRef.current.click()}>
-        Import CSV
-      </Button>
-      </Box>
-
-      <Box className="container">
-        <ProgressModal open={loading} />
-        <Box className="box">
-          <Box>
-            <h1 className="first-heading">Calculate your Yield Reduction</h1>
-            <h1 className="second-heading"
-            style={{color: mode === 'dark' ? '#f0f0f0' : 'inherit'}}>Yield Reduction Calculator</h1>
-            <Box className="underline"></Box>
-            <p className="description"
-            style={{color: mode === 'dark' ? '#f0f0f0' : 'inherit'}}>
-              Calculate the Yield Reduction by entering the relevant
-              information.
-            </p>
-          </Box>
-          {calculated && (
-            <>
-              <Box className="flex-row">
-                <ResultBox
-                  title={"Monetary Reduction"}
-                  value={
-                    calculationResultRef.current?.yieldReductionEnhancement
-                  }
-                  isCurrency
-                />
-                <ResultBox
-                  title={"Percentage Reduction"}
-                  value={
-                    calculationResultRef.current
-                      ?.yieldReductionEnhancementPercent * 100
-                  }
-                  isPercent
-                />
-              </Box>
-              <Box className="flex-row">
-                <Button
-                  onClick={() => setShowSummaryTable(!showSummaryTable)}
-                  endDecorator={
-                    showSummaryTable ? <ExpandLessIcon /> : <ExpandMoreIcon />
-                  }
-                  sx={{ my: 3, color: mode === 'dark' ? '#f0f0f0' : 'inherit' }}
-                >
-                  View Summary
-                </Button>
-                <Button
-                  onClick={handleDownload}
-                  endDecorator={<PictureAsPdfSharpIcon />}
-                  sx={{ my: 3, color: mode === 'dark' ? '#f0f0f0' : 'inherit' }}
-                  disabled={showSummaryTable ? false : true}
-                >
-                  Download Summary{" "}
-                </Button>
-              </Box>
-            </>
-          )}
-          {showSummaryTable && (
-            <SummaryTable
-              contentRef={contentRef}
-              data={calculationResultRef.current}
-              mode={mode}
-            />
-          )}
+      <Box sx={{ backgroundColor: mode === "dark" ? "#1f1f1f" : "#ffffff" }}>
+        <Box className="header">
+          <img
+            src="https://sanlamprivatewealth.mu/wp-content/uploads/2021/11/Sanlam-Private-wealth-50px-height.png"
+            alt=""
+            className="logo"
+          ></img>
+          <ThemeToggle />
+          <input
+            type="file"
+            accept=".csv"
+            ref={fileInputRef}
+            onChange={importCsv}
+            style={{ display: "none" }}
+          />
+          <Button onClick={() => fileInputRef.current.click()}>
+            Import CSV
+          </Button>
         </Box>
-        <Box className="output-box">
-          <Box>
-            <Box className="flex-row">
-              <Box className="client-details">
-                <AgeSpineditInput
-                  title={"How old will you be on 28 February 2025?"}
-                  value={clientAge}
-                  setValue={setClientAge}
-                />
-                <CalculatorInput
-                  title={"What is your total annual taxable income?"}
-                  value={totalAnnualTaxableIncome}
-                  setValue={setTotalAnnualTaxableIncome}
-                />
-              </Box>
 
-              <Box className="client-details">
-                <WrapperTypeDropdown
-                  value={wrapperTypeToAnalyse}
-                  setValue={setWrapperTypeToAnalyse}
+        <Box className="container">
+          <ProgressModal open={loading} />
+          <Box className="box">
+            <Box>
+              <h1 className="first-heading">Calculate your Yield Reduction</h1>
+              <h1
+                className="second-heading"
+                style={{ color: mode === "dark" ? "#f0f0f0" : "inherit" }}
+              >
+                Yield Reduction Calculator
+              </h1>
+              <Box className="underline"></Box>
+              <p
+                className="description"
+                style={{ color: mode === "dark" ? "#f0f0f0" : "inherit" }}
+              >
+                Calculate the Yield Reduction by entering the relevant
+                information.
+              </p>
+            </Box>
+            {calculated && (
+              <>
+                <Box className="flex-row">
+                  <ResultBox
+                    title={"Monetary Reduction"}
+                    value={
+                      calculationResultRef.current?.yieldReductionEnhancement
+                    }
+                    isCurrency
+                  />
+                  <ResultBox
+                    title={"Percentage Reduction"}
+                    value={
+                      calculationResultRef.current
+                        ?.yieldReductionEnhancementPercent * 100
+                    }
+                    isPercent
+                  />
+                </Box>
+                <Box className="flex-row">
+                  <Button
+                    onClick={() => setShowSummaryTable(!showSummaryTable)}
+                    endDecorator={
+                      showSummaryTable ? <ExpandLessIcon /> : <ExpandMoreIcon />
+                    }
+                    sx={{ my: 3, color: "#f0f0f0" }}
+                  >
+                    View Summary
+                  </Button>
+                  <Button
+                    onClick={handleDownload}
+                    endDecorator={<PictureAsPdfSharpIcon />}
+                    sx={{ my: 3, color: "#f0f0f0" }}
+                    disabled={showSummaryTable ? false : true}
+                  >
+                    Download Summary{" "}
+                  </Button>
+                </Box>
+              </>
+            )}
+            {showSummaryTable && (
+              <SummaryTable
+                contentRef={contentRef}
+                data={calculationResultRef.current}
+                mode={mode}
+              />
+            )}
+          </Box>
+          <Box className="output-box">
+            <Box>
+              <Box className="flex-row">
+                <Box className="client-details">
+                  <AgeSpineditInput
+                    title={"How old will you be on 28 February 2025?"}
+                    value={clientAge}
+                    setValue={setClientAge}
+                  />
+                  <CalculatorInput
+                    title={"What is your total annual taxable income?"}
+                    value={totalAnnualTaxableIncome}
+                    setValue={setTotalAnnualTaxableIncome}
+                  />
+                </Box>
+
+                <Box className="client-details">
+                  <WrapperTypeDropdown
+                    value={wrapperTypeToAnalyse}
+                    setValue={setWrapperTypeToAnalyse}
+                  />
+                  <SpineditInput
+                    title={"Wrapper Annual Cost (EAC %)"}
+                    value={wrapperAnnualCostEac}
+                    setValue={setWrapperAnnualCostEac}
+                  />
+
+                  {wrapperTypeToAnalyse == "RA" && (
+                    <CalculatorInput
+                      title={"Annual RA Contribution"}
+                      value={annualRaContribution}
+                      setValue={setAnnualRaContribution}
+                    />
+                  )}
+                </Box>
+              </Box>
+              <Box className="client-details-fw">
+                <CalculatorInput
+                  title={"Total Investment Value"}
+                  value={totalInvestmentValue}
+                  setValue={setTotalInvestmentValue}
                 />
                 <SpineditInput
-                  title={"Wrapper Annual Cost (EAC %)"}
-                  value={wrapperAnnualCostEac}
-                  setValue={setWrapperAnnualCostEac}
+                  title={"Gross Annual Portfolio Return (%)"}
+                  value={grossAnnualPortfolioReturn}
+                  setValue={setGrossAnnualPortfolioReturn}
                 />
-
-                {wrapperTypeToAnalyse == "RA" && (
-                  <CalculatorInput
-                    title={"Annual RA Contribution"}
-                    value={annualRaContribution}
-                    setValue={setAnnualRaContribution}
-                  />
-                )}
+                <SpineditInput
+                  title={"Return From SA Interest (%)"}
+                  value={returnFromSaInterest}
+                  setValue={setReturnFromSaInterest}
+                />
+                <SpineditInput
+                  title={"Return From SA Local Dividends (Non-REIT) (%)"}
+                  value={returnFromSaLocalDividends}
+                  setValue={setReturnFromSaLocalDividends}
+                />
+                <SpineditInput
+                  title={"Return From Local SA REIT Dividends (%)"}
+                  value={returnFromLocalSaReitDividends}
+                  setValue={setReturnFromLocalSaReitDividends}
+                />
+                <SpineditInput
+                  title={"Return From Foreign Dividends (%)"}
+                  value={returnFromForeignDividends}
+                  setValue={setReturnFromForeignDividends}
+                />
+                <SpineditInput
+                  title={"Return From Capital Growth (%)"}
+                  value={returnFromLocalCapitalGrowth}
+                  setValue={setReturnFromLocalCapitalGrowth}
+                />
+                <SpineditInput
+                  title={"Average Portfolio Turnover (%)"}
+                  value={averagePortfolioTurnover}
+                  setValue={setAveragePortfolioTurnover}
+                />
+                <SpineditInput
+                  title={"Assumed Realised Gain On Turnover (%)"}
+                  value={assumedRealisedGainOnTurnover}
+                  setValue={setAssumedRealisedGainOnTurnover}
+                />
               </Box>
+              <Button
+                onClick={handleCalculation}
+                variant="solid"
+                className="calculate"
+                sx={{ color: "#f0f0f0" }}
+              >
+                Calculate
+              </Button>
             </Box>
-            <Box className="client-details-fw">
-              <CalculatorInput
-                title={"Total Investment Value"}
-                value={totalInvestmentValue}
-                setValue={setTotalInvestmentValue}
-              />
-              <SpineditInput
-                title={"Gross Annual Portfolio Return (%)"}
-                value={grossAnnualPortfolioReturn}
-                setValue={setGrossAnnualPortfolioReturn}
-              />
-              <SpineditInput
-                title={"Return From SA Interest (%)"}
-                value={returnFromSaInterest}
-                setValue={setReturnFromSaInterest}
-              />
-              <SpineditInput
-                title={"Return From SA Local Dividends (Non-REIT) (%)"}
-                value={returnFromSaLocalDividends}
-                setValue={setReturnFromSaLocalDividends}
-              />
-              <SpineditInput
-                title={"Return From Local SA REIT Dividends (%)"}
-                value={returnFromLocalSaReitDividends}
-                setValue={setReturnFromLocalSaReitDividends}
-              />
-              <SpineditInput
-                title={"Return From Foreign Dividends (%)"}
-                value={returnFromForeignDividends}
-                setValue={setReturnFromForeignDividends}
-              />
-              <SpineditInput
-                title={"Return From Capital Growth (%)"}
-                value={returnFromLocalCapitalGrowth}
-                setValue={setReturnFromLocalCapitalGrowth}
-              />
-              <SpineditInput
-                title={"Average Portfolio Turnover (%)"}
-                value={averagePortfolioTurnover}
-                setValue={setAveragePortfolioTurnover}
-              />
-              <SpineditInput
-                title={"Assumed Realised Gain On Turnover (%)"}
-                value={assumedRealisedGainOnTurnover}
-                setValue={setAssumedRealisedGainOnTurnover}
-              />
-            </Box>
-            <Button
-              onClick={handleCalculation}
-              variant="solid"
-              className="calculate"
-              sx={{color: mode === 'dark' ? '#f0f0f0' : 'inherit'}}
-            >
-              Calculate
-            </Button>
           </Box>
         </Box>
-      </Box>
       </Box>
     </CssVarsProvider>
   );

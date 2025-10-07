@@ -193,6 +193,7 @@ export function SummaryTable({ contentRef, data, mode }) {
                 mode === "dark" ? "rgba(255, 255, 255, 0.05)" : "#f8fafc",
               borderColor:
                 mode === "dark" ? "rgba(255, 255, 255, 0.2)" : "#f8fafc",
+              border: "1px solid #e0e4e9",
             }}
           >
             <CardContent>
@@ -206,7 +207,7 @@ export function SummaryTable({ contentRef, data, mode }) {
                   gap: 1,
                 }}
               >
-                🤖 AI Financial Analysis
+                AI Financial Analysis
               </Typography>
               <Divider sx={{ mb: 2 }} />
               <Box
