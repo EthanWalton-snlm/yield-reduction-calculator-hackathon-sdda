@@ -1,5 +1,6 @@
 import { Typography, Box, Input } from "@mui/joy";
 import { useState, useEffect } from "react";
+import { useColorScheme } from "@mui/joy/styles";
 
 export function SpineditInput({ title, value, setValue }) {
   const [displayValue, setDisplayValue] = useState((value * 100).toFixed(2));
@@ -23,6 +24,7 @@ export function SpineditInput({ title, value, setValue }) {
       setDisplayValue(parsed.toFixed(2));
     }
   };
+  const { mode } = useColorScheme();
 
   return (
     <>
@@ -48,6 +50,7 @@ export function SpineditInput({ title, value, setValue }) {
               minHeight: 20,
               paddingY: 1,
               gap: 1,
+              backgroundColor: mode === 'dark' ? '#333333' : 'inherit',
               "& input": {
                 padding: "2px 6px",
               },

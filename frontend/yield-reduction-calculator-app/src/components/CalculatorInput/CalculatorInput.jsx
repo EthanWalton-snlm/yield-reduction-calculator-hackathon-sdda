@@ -7,6 +7,7 @@ import {
   Textarea,
   Input
 } from "@mui/joy";
+import { useColorScheme } from "@mui/joy/styles";
 
 export function CalculatorInput({ title, value, setValue }) {
 
@@ -15,6 +16,9 @@ export function CalculatorInput({ title, value, setValue }) {
     const initialValue = inputValue.replace(/\D/g, '');
     setValue(initialValue);
   };
+
+  const { mode } = useColorScheme();
+
   return (
     <>
       <Typography className="age">{title}</Typography>
@@ -33,6 +37,7 @@ export function CalculatorInput({ title, value, setValue }) {
               minHeight: 20,
               paddingY: 1,
               gap: 1,
+              backgroundColor: mode === 'dark' ? '#333333' : 'inherit',
               '& input': {
               padding: '2px 6px',
               }}}

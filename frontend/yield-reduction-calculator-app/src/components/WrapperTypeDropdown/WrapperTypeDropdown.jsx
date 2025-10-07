@@ -1,10 +1,14 @@
 import { Typography, Select, Option } from "@mui/joy";
+import { useColorScheme } from "@mui/joy/styles";
 
 export function WrapperTypeDropdown({
   title = "Wrapper Type",
   value,
   setValue,
 }) {
+
+  const { mode } = useColorScheme();
+
   return (
     <>
       <Typography className="age">{title}</Typography>
@@ -15,6 +19,7 @@ export function WrapperTypeDropdown({
         value={value}
         onChange={(e, newValue) => setValue(newValue)}
         placeholder="Endowment"
+        sx={{backgroundColor: mode === 'dark' ? '#333333' : 'inherit'}}
       >
         <Option value="Endowment">Endowment</Option>
         <Option value="RA">RA</Option>

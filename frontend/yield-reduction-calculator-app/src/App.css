@@ -29,7 +29,6 @@ body {
 .age-blocks {
   cursor: pointer;
   color: #464e58;
-  /* background: #fff; */
   border: 1px solid #d5dae1;
   border-radius: 4px;
   justify-content: center;
@@ -42,7 +41,6 @@ body {
 
 .options {
   color: #464e58;
-  /* background: #fff; */
   border: 1px solid #d5dae1;
   border-radius: 4px;
   justify-content: center;
@@ -63,28 +61,14 @@ body {
 
 .textfield {
   color: #464e58;
-  /* pointer-events: none;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    z-index: 2; */
-  /* width: 90%; */
   font-size: 16px;
   line-height: 24px;
-  /* transition-property: font-size, transform;
-    transition-duration: .3s;
-    transition-timing-function:
-    cubic-bezier(.23, 1, .32, 1);
-    position: absolute;
-    overflow: hidden;
-    transform: translate(16px, 16px); */
-  /* background: #fff; */
   border: 1px solid #d5dae1;
   position: relative;
   border-radius: 4px;
   border-radius: inherit;
   flex-direction: row;
   flex: 1;
-  /* align-items: center; */
   gap: 8px;
   display: flex;
   padding: 16px;
@@ -215,7 +199,6 @@ body {
 }
 
 .header {
-  /* position: fixed; */
   top: 0;
   left: 0;
   right: 0;
