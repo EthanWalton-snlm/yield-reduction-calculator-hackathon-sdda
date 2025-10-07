@@ -176,7 +176,7 @@ export function SummaryTable({ contentRef, data, mode }) {
                   .map(([key, value], index) => (
                     <tr key={index}>
                       <td>{formatKey(key).toUpperCase()}</td>
-                      <td>{value}</td>
+                      <td>{formatValue(key, value)}</td>
                     </tr>
                   ))}
             </tbody>
@@ -231,4 +231,31 @@ function formatKey(key) {
   return key
     .replace(/([A-Z])/g, " $1") // insert space before capital letters
     .replace(/^./, (str) => str.toUpperCase()); // capitalize first letter
+}
+
+function formatValue(key, value) {
+    // Convert camelCase to uppercase with spaces to match array
+  const newKey = formatKey(key).toUpperCase();
+
+  const unformatDecimals = [
+    "CLIENTS MARGINAL INCOME TAX RATE",
+    "GROSS PORTFOLIO RETURN",
+    "NET RETURN UNWRAPPED PERCENTAGE",
+    "NET RETURN WRAPPED PERCENTAGE",
+    "WRAPPER COST",
+    "YIELD REDUCTION ENHANCEMENT PERCENT"
+  ];
+
+  if (!unformatDecimals.includes(newKey) && value === 0){
+    return "R 0";
+  }
+
+  if (unformatDecimals.includes(newKey)){
+    return `${(Number(value) * 100)}%`;
+  } else {
+    const unformatMonetary = String(value || '').replace(/\D/g, '');
+    return `R ${unformatMonetary.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
+  }
+
+
 }
