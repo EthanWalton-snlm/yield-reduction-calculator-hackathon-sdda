@@ -137,9 +137,11 @@ function App() {
         <Box className="box">
           <Box>
             <h1 className="first-heading">Calculate your Yield Reduction</h1>
-            <h1 className="second-heading">Yield Reduction Calculator</h1>
+            <h1 className="second-heading"
+            style={{color: mode === 'dark' ? '#f0f0f0' : 'inherit'}}>Yield Reduction Calculator</h1>
             <Box className="underline"></Box>
-            <p className="description">
+            <p className="description"
+            style={{color: mode === 'dark' ? '#f0f0f0' : 'inherit'}}>
               Calculate the Yield Reduction by entering the relevant
               information.
             </p>
@@ -169,14 +171,14 @@ function App() {
                   endDecorator={
                     showSummaryTable ? <ExpandLessIcon /> : <ExpandMoreIcon />
                   }
-                  sx={{ my: 3 }}
+                  sx={{ my: 3, color: mode === 'dark' ? '#f0f0f0' : 'inherit' }}
                 >
                   View Summary
                 </Button>
                 <Button
                   onClick={handleDownload}
                   endDecorator={<PictureAsPdfSharpIcon />}
-                  sx={{ my: 3 }}
+                  sx={{ my: 3, color: mode === 'dark' ? '#f0f0f0' : 'inherit' }}
                   disabled={showSummaryTable ? false : true}
                 >
                   Download Summary{" "}
@@ -279,6 +281,7 @@ function App() {
               onClick={handleCalculation}
               variant="solid"
               className="calculate"
+              sx={{color: mode === 'dark' ? '#f0f0f0' : 'inherit'}}
             >
               Calculate
             </Button>

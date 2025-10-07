@@ -11,7 +11,8 @@ export function WrapperTypeDropdown({
 
   return (
     <>
-      <Typography className="age">{title}</Typography>
+      <Typography className="age"
+       sx={{color: mode === 'dark' ? '#f0f0f0' : 'inherit'}}>{title}</Typography>
       <Select
         variant="soft"
         className="options space"
@@ -19,7 +20,9 @@ export function WrapperTypeDropdown({
         value={value}
         onChange={(e, newValue) => setValue(newValue)}
         placeholder="Endowment"
-        sx={{backgroundColor: mode === 'dark' ? '#333333' : 'inherit'}}
+        sx={{backgroundColor: mode === 'dark' ? '#333333' : 'inherit',
+          color: mode === 'dark' ? '#f0f0f0' : 'inherit'
+        }}
       >
         <Option value="Endowment">Endowment</Option>
         <Option value="RA">RA</Option>

@@ -1,4 +1,5 @@
 import { Box, Typography } from "@mui/joy";
+import { useColorScheme } from "@mui/joy/styles";
 
 export function ResultBox({
   title,
@@ -6,12 +7,14 @@ export function ResultBox({
   isPercent = false,
   isCurrency = false,
 }) {
+  const { mode } = useColorScheme();
   return (
     <Box className="results-box">
       <Typography
         level="h3"
-        textColor="inherit"
-        sx={{ fontWeight: "md", mb: 1 }}
+        sx={{ fontWeight: "md", mb: 1,
+          color: mode === 'dark' ? '#f0f0f0' : 'inherit',
+        }}
       >
         {title}
       </Typography>

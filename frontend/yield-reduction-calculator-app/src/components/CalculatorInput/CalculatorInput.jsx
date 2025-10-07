@@ -21,7 +21,8 @@ export function CalculatorInput({ title, value, setValue }) {
 
   return (
     <>
-      <Typography className="age">{title}</Typography>
+      <Typography className="age"
+       sx={{color: mode === 'dark' ? '#f0f0f0' : 'inherit'}}>{title}</Typography>
       <Box className="textfield-wrapper">
         <Box className="textfield-container space">
           <Input
@@ -37,6 +38,7 @@ export function CalculatorInput({ title, value, setValue }) {
               minHeight: 20,
               paddingY: 1,
               gap: 1,
+              color: mode === 'dark' ? '#f0f0f0' : 'inherit',
               backgroundColor: mode === 'dark' ? '#333333' : 'inherit',
               '& input': {
               padding: '2px 6px',

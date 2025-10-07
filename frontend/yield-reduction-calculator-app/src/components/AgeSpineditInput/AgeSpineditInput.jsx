@@ -13,7 +13,10 @@ export function AgeSpineditInput({ title, value, setValue }) {
   const { mode } = useColorScheme();
     return(
     <>
-      <Typography className="age">{title}</Typography>
+      <Typography className="age"
+        sx={{color: mode === 'dark' ? '#f0f0f0' : 'inherit'}}
+        >{title}
+      </Typography>
       <Box className="textfield-wrapper">
         <Box className="textfield-container space">
           <Input
@@ -35,6 +38,7 @@ export function AgeSpineditInput({ title, value, setValue }) {
               paddingY: 1,
               gap: 1,
               backgroundColor: mode === 'dark' ? '#333333' : 'inherit',
+              color: mode === 'dark' ? '#f0f0f0' : 'inherit',
               '& input': {
               padding: '2px 6px',
               }}}
