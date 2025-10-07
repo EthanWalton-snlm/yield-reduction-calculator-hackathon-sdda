@@ -26,7 +26,7 @@ export function SummaryTable({ contentRef, data }) {
 
     const options = {
       margin: 1,
-      filename: "test.pdf",
+      filename: "yield_calculation.pdf",
       image: { type: "jpeg", quality: 0.98 },
       html2canvas: { scale: 2 },
       jsPDF: { unit: "in", format: "letter", orientation: "landscape" },
@@ -38,11 +38,11 @@ export function SummaryTable({ contentRef, data }) {
   };
 
   return (
-    <Box ref={contentRef} id="content">
+    <Box id="content">
       <Button onClick={handleDownload} endDecorator={<PictureAsPdfSharpIcon />}>
         Download{" "}
       </Button>
-      <Table cellPadding="10" cellSpacing="0">
+      <Table cellPadding="10" cellSpacing="0" ref={contentRef}>
         <thead>
           <tr>
             <th>Name</th>
