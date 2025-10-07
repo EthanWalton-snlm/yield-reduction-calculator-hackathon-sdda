@@ -121,7 +121,8 @@ export function SummaryTable({ contentRef, data }) {
         sx={{
           mt: 3,
           width: '100%',
-          backgroundColor: '#f8fafc'
+          backgroundColor: mode === 'dark' ? 'rgba(255, 255, 255, 0.05)' : '#f8fafc',
+          borderColor: mode === 'dark' ? 'rgba(255, 255, 255, 0.2)' : undefined
         }}
       >
         <CardContent>
@@ -129,7 +130,7 @@ export function SummaryTable({ contentRef, data }) {
             level="h4"
             sx={{
               mb: 2,
-              color: '#2374bb',
+              color: mode === 'dark' ? '#7db3e8' : '#2374bb',
               display: 'flex',
               alignItems: 'center',
               gap: 1
