@@ -83,7 +83,6 @@ function App() {
       annualRaContribution,
     };
 
-    window.scrollTo({ top: 0, behavior: "smooth" });
     setLoading(true);
 
     const response = await axios.get("http://localhost:5000/calculate", {
@@ -94,6 +93,11 @@ function App() {
     setCalculated(true);
     //setCalculationModalOpen(true);
     setLoading(false);
+
+    setTimeout(() => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }, 100);
+
     console.log("API response:", calculationResultRef.current);
   };
 

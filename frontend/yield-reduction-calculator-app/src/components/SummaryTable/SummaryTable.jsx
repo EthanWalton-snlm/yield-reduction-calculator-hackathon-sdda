@@ -19,6 +19,97 @@ import {
 import { CssVarsProvider } from "@mui/joy/styles";
 
 export function SummaryTable({ contentRef, data, mode }) {
+  // Function to format AI response with styled headings
+  const formatAIResponse = (text) => {
+    return text.split("\n").map((line, index) => {
+      const trimmed = line.trim();
+
+      // Headers (lines starting with ##, ###, etc.)
+      if (trimmed.startsWith("##")) {
+        return (
+          <Typography
+            key={index}
+            level="h5"
+            sx={{
+              mt: 2,
+              mb: 1,
+              color: mode === "dark" ? "black" : "#2374bb",
+              fontWeight: "bold",
+            }}
+          >
+            {trimmed.replace(/^#+\s*/, "")}
+          </Typography>
+        );
+      }
+
+      // Numbered headers (1. **Header**, 2. **Header**, etc.)
+      if (/^\d+\.\s*\*\*.*\*\*/.test(trimmed)) {
+        const title = trimmed.replace(/^\d+\.\s*\*\*(.*?)\*\*.*/, "$1");
+        return (
+          <Typography
+            key={index}
+            level="h5"
+            sx={{
+              mt: 2,
+              mb: 1,
+              color: mode === "dark" ? "#fff" : "#333",
+              fontWeight: "bold",
+              borderBottom: "1px solid",
+              borderColor: mode === "dark" ? "#fff" : "#333",
+              pb: 0.5,
+            }}
+          >
+            {trimmed.match(/^\d+\./)[0]} {title}
+          </Typography>
+        );
+      }
+
+      // Bold text (**text**)
+      if (trimmed.includes("**")) {
+        const parts = trimmed.split(/(\*\*.*?\*\*)/g);
+        return (
+          <Typography key={index} level="body-md" sx={{ mb: 1 }}>
+            {parts.map((part, i) =>
+              part.startsWith("**") && part.endsWith("**") ? (
+                <Box
+                  component="span"
+                  key={i}
+                  sx={{
+                    fontWeight: "bold",
+                    color: mode === "dark" ? "#fff" : "#333",
+                  }}
+                >
+                  {part.slice(2, -2)}
+                </Box>
+              ) : (
+                part
+              )
+            )}
+          </Typography>
+        );
+      }
+
+      // Regular text
+      if (trimmed) {
+        return (
+          <Typography
+            key={index}
+            level="body-md"
+            sx={{
+              mb: 1,
+              color: mode === "dark" ? "#e0e0e0" : "#555",
+            }}
+          >
+            {trimmed}
+          </Typography>
+        );
+      }
+
+      // Empty line
+      return <Box key={index} sx={{ height: "8px" }} />;
+    });
+  };
+
   return (
     <Box id="content">
       <Box ref={contentRef} className="summary-table">
@@ -101,7 +192,7 @@ export function SummaryTable({ contentRef, data, mode }) {
               backgroundColor:
                 mode === "dark" ? "rgba(255, 255, 255, 0.05)" : "#f8fafc",
               borderColor:
-                mode === "dark" ? "rgba(255, 255, 255, 0.2)" : undefined,
+                mode === "dark" ? "rgba(255, 255, 255, 0.2)" : "#f8fafc",
             }}
           >
             <CardContent>
@@ -118,16 +209,14 @@ export function SummaryTable({ contentRef, data, mode }) {
                 🤖 AI Financial Analysis
               </Typography>
               <Divider sx={{ mb: 2 }} />
-              <Typography
-                level="body-md"
+              <Box
                 sx={{
-                  whiteSpace: "pre-wrap",
-                  lineHeight: 1.6,
+                  "& > *": { lineHeight: 1.6 },
                   fontSize: "0.95rem",
                 }}
               >
-                {data.aiResponse}
-              </Typography>
+                {formatAIResponse(data.aiResponse)}
+              </Box>
             </CardContent>
           </Card>
         )}

@@ -87,7 +87,7 @@ def get_ai_response(test_payload):
 
     Keep explanations concise, use South African tax context, and focus on demonstrating clear value proposition in rand terms.
     Format this into a properly structured report that is legible and neat and also provide some insights and advice the client on
-    which product which be suitable, with or without the wrapper.
+    which product which be suitable, with or without the wrapper. Highlight the important parts in the report and put the headings in bold.
     Full calculation data:
     {json.dumps(test_payload, indent=2)}
     """
