@@ -1,45 +1,60 @@
-import {
-  Typography,
-  Modal,
-  ModalDialog,
-  ModalClose,
-  Box,
-  Textarea,
-  Input
-} from "@mui/joy";
+import { Typography, Box, Input } from "@mui/joy";
+import { useState, useEffect } from "react";
 
 export function SpineditInput({ title, value, setValue }) {
+  const [displayValue, setDisplayValue] = useState((value * 100).toFixed(2));
 
-    return(
+  useEffect(() => {
+    setDisplayValue((value * 100).toFixed(2));
+  }, [value]);
+
+  const handleChange = (e) => {
+    const input = e.target.value;
+    setDisplayValue(input);
+    const parsed = parseFloat(input);
+    if (!isNaN(parsed)) {
+      setValue(parsed / 100);
+    }
+  };
+
+  const handleBlur = () => {
+    const parsed = parseFloat(displayValue);
+    if (!isNaN(parsed)) {
+      setDisplayValue(parsed.toFixed(2));
+    }
+  };
+
+  return (
     <>
       <Typography className="age">{title}</Typography>
       <Box className="textfield-wrapper">
         <Box className="textfield-container space">
           <Input
-          className="textfield"
+            className="textfield"
             endDecorator="%"
-             type="number"
-             variant="soft"
-             defaultValue={value * 100}
-             slotProps={{
-                input: {
+            type="number"
+            variant="soft"
+            value={displayValue}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            slotProps={{
+              input: {
                 min: 0,
                 max: 100,
-                step: 0.001,
-                },
+                step: 0.01,
+              },
             }}
-            onChange={(e) => setValue(e.target.value / 100)}
             sx={{
               minHeight: 20,
               paddingY: 1,
               gap: 1,
-              '& input': {
-              padding: '2px 6px',
-              }}}
-
-          ></Input>
+              "& input": {
+                padding: "2px 6px",
+              },
+            }}
+          />
         </Box>
       </Box>
     </>
-    )
+  );
 }

@@ -53,7 +53,7 @@ function App() {
   const [wrapperAnnualCostEac, setWrapperAnnualCostEac] = useState(0.0035);
   const [annualRaContribution, setAnnualRaContribution] = useState(350000);
   const [clientAge, setClientAge] = useState(55);
-  const [calculationModalOpen, setCalculationModalOpen] = useState(false);
+  //const [calculationModalOpen, setCalculationModalOpen] = useState(false);
   const [showSummaryTable, setShowSummaryTable] = useState(false);
   const [calculated, setCalculated] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -79,7 +79,7 @@ function App() {
       annualRaContribution,
     };
 
-    window.scrollTo({top: 0, behavior: "smooth"})
+    window.scrollTo({ top: 0, behavior: "smooth" });
     setLoading(true);
 
     const response = await axios.get("http://localhost:5000/calculate", {
@@ -88,7 +88,7 @@ function App() {
 
     calculationResultRef.current = response.data;
     setCalculated(true);
-    setCalculationModalOpen(true);
+    //setCalculationModalOpen(true);
     setLoading(false);
     console.log("API response:", calculationResultRef.current);
   };
