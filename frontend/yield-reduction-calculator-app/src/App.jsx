@@ -101,6 +101,34 @@ function App() {
     console.log("API response:", calculationResultRef.current);
   };
 
+  const fileInputRef = useRef(null);
+  const importCsv = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+
+      reader.onload = (event) => {
+        const lines = event.target.result.split('\n');
+        const inputValues = lines[1].split(',');
+        setClientAge(Number(inputValues[0]));
+        setTotalAnnualTaxableIncome(Number(inputValues[1]));
+        setTotalInvestmentValue(Number(inputValues[2]));
+        setGrossAnnualPortfolioReturn(Number(inputValues[3]));
+        setReturnFromSaInterest(Number(inputValues[4]));
+        setReturnFromSaLocalDividends(Number(inputValues[5]));
+        setReturnFromLocalSaReitDividends(Number(inputValues[6]));
+        setReturnFromForeignDividends(Number(inputValues[7]));
+        setReturnFromLocalCapitalGrowth(Number(inputValues[8]));
+        setAveragePortfolioTurnover(Number(inputValues[9]));
+        setAssumedRealisedGainOnTurnover(Number(inputValues[10]));
+        setWrapperTypeToAnalyse(inputValues[11]);
+        setWrapperAnnualCostEac(Number(inputValues[12]));
+        setAnnualRaContribution(Number(inputValues[13]));
+      };
+      reader.readAsText(file);
+    }
+  };
+
   const handleDownload = async () => {
     const element = contentRef.current;
 
@@ -130,6 +158,16 @@ function App() {
           className="logo"
         ></img>
         <ThemeToggle />
+         <input
+        type="file"
+        accept=".csv"
+        ref={fileInputRef}
+        onChange={importCsv}
+        style={{ display: 'none' }}
+      />
+         <Button onClick={() => fileInputRef.current.click()}>
+        Import CSV
+      </Button>
       </Box>
 
       <Box className="container">
