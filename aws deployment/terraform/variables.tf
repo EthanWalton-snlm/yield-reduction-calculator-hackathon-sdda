@@ -4,17 +4,17 @@ default = "eu-west-1"
 }
 
 variable "vpc_id" {
-  default = "vpc-03763396c7ad1e07a"
+  default = "vpc-098ff0a57012ee924"
 }
 
 variable "private_subnet_ids" {
   type    = list(string)
-  default = ["subnet-006fbe07c6331b7e5", "subnet-0c9e6a7043df9ec3a", "subnet-001248f21d5cf2ea1"]
+  default = ["subnet-00d6f9601f9bd44be", "subnet-0fd7553b3309fae41", "subnet-01435e493609879c7"]
 }
 
 variable "public_subnet_ids"{
     type = list(string)
-    default = ["subnet-0ccb12e11ee9f5f7c", "subnet-0f281383718f2259b", "subnet-0f0164279e14f807d"]
+    default = ["subnet-05e0c4eeba2ecf2dd", "subnet-0b9a345a01c9a4c6b", "subnet-024c6701cf2527e53"]
 }
 
 variable "tags" {
@@ -33,5 +33,5 @@ variable "personal_cidr_blocks" {
 
 variable "custom_name" {
   type = string
-  default = "deploy"
+  default = "hackathon"
 }

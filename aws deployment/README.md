@@ -10,10 +10,11 @@
    6. `docker tag deploy-test-app:latest 043516549334.dkr.ecr.eu-west-1.amazonaws.com/deploy-test-app:latest`
    7. `docker push 043516549334.dkr.ecr.eu-west-1.amazonaws.com/deploy-test-app:latest`
    8. `cd terraform`
-   9. `terraform init`
-   10. `terraform plan`
-   11. `terraform apply`
-3.  Visit Load balancer DNS
+   9. `Change VPC and Subnet IDs`
+   10. `terraform init`
+   11. `terraform plan`
+   12. `terraform apply`
+3. Visit Load balancer DNS
 
 ## Cleanup
 
