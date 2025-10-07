@@ -1,10 +1,10 @@
 import { useState, useRef } from "react";
 import { Box, Button, IconButton, Typography } from "@mui/joy";
-import html2pdf from "html2pdf.js";
 import { CssVarsProvider, useColorScheme } from "@mui/joy/styles";
 import "./App.css";
 import axios from "axios";
 import { ResultsModal } from "./components/ResultsModal/ResultsModal";
+import { ProgressModal } from "./components/ProgressModal/ProgressModal";
 import { CalculatorInput } from "./components/CalculatorInput/CalculatorInput";
 import { WrapperTypeDropdown } from "./components/WrapperTypeDropdown/WrapperTypeDropdown";
 import { SummaryTable } from "./components/SummaryTable/SummaryTable";
@@ -56,6 +56,7 @@ function App() {
   const [calculationModalOpen, setCalculationModalOpen] = useState(false);
   const [showSummaryTable, setShowSummaryTable] = useState(false);
   const [calculated, setCalculated] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const contentRef = useRef();
   const calculationResultRef = useRef(null);
@@ -78,6 +79,8 @@ function App() {
       annualRaContribution,
     };
 
+    setLoading(true);
+
     const response = await axios.get("http://localhost:5000/calculate", {
       params,
     });
@@ -85,12 +88,12 @@ function App() {
     calculationResultRef.current = response.data;
     setCalculated(true);
     setCalculationModalOpen(true);
+    setLoading(false);
     console.log("API response:", calculationResultRef.current);
   };
 
   return (
     <CssVarsProvider>
-
       <Box className="header">
         <img
           src="https://sanlamprivatewealth.mu/wp-content/uploads/2021/11/Sanlam-Private-wealth-50px-height.png"
@@ -101,13 +104,15 @@ function App() {
       </Box>
 
       <Box className="container">
+        <ProgressModal open={loading} />
         <Box className="box">
           <Box>
             <h1 className="first-heading">Calculate your Yield Reduction</h1>
             <h1 className="second-heading">Yield Reduction Calculator</h1>
             <Box className="underline"></Box>
             <p className="description">
-              Calculate the Yield Reduction by entering the relevant information.
+              Calculate the Yield Reduction by entering the relevant
+              information.
             </p>
           </Box>
           {calculated && (

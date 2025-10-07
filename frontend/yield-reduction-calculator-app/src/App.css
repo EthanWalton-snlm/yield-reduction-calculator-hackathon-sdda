@@ -89,7 +89,7 @@ body {
   display: flex;
   padding: 16px;
   margin-top: 10px;
-  }
+}
 .textfield-container {
   border-radius: inherit;
   flex-direction: column;
@@ -233,15 +233,21 @@ body {
   z-index: 1000;
 }
 
-@media (min-width: 1634px){
-  .client-details-fw{
+@media (min-width: 1634px) {
+  .client-details-fw {
     width: 1280px;
   }
-  .calculate{
+  .calculate {
     width: 84%;
   }
 
-  .container{
+  .container {
     margin-left: 150px;
   }
+}
+
+.summary-table {
+  display: flex;
+  flex-direction: row;
+  gap: 1em;
 }

@@ -43,110 +43,109 @@ export function SummaryTable({ contentRef, data }) {
 
   return (
     <Box id="content">
-      <Button onClick={handleDownload} endDecorator={<PictureAsPdfSharpIcon />}>
-        Download{" "}
-      </Button>
-      <Box ref={contentRef}>
-      <Sheet sx={{
-        width: '50%',
-        margin: '0 auto',
-        display: 'block'
-      }}>
-      <Table cellPadding="10" cellSpacing="0"  aria-label="table with sticky header"
-          stickyHeader
-          stickyFooter
-          stripe="odd"
-          hoverRow
-
+      <Box className="summary-table" ref={contentRef}>
+        <Sheet
           sx={{
-            border: '1px solid #e0e4e9',
-            borderRadius: '8px',
-            overflow: 'hidden',
-            '& thead th': {
-              backgroundColor: '#2374bb',
-              color: 'white',
-              fontWeight: 'bold',
-              fontSize:'16px'
-            },
-            '& tbody td': {
-              border: '1px solid #e0e0e0',
-              borderTop: 'none',
-            },
-            '& tbody tr:nth-child(odd) td': {
-              backgroundColor: '#f0f4f8',
-            },
-            '& tbody td:nth-child(2)': {
-              fontWeight: 'bold',
-
-            },
-            '& tbody tr:nth-last-child(2) td': {
-              fontWeight: 'bold',
-
-            },
-            '& tbody tr:last-child td': {
-              borderBottom: 'none',
-              fontWeight: 'bold',
-              backgroundColor: '#f0f4f8',
-            }
-          }}>
-        <thead>
-          <tr>
-            <th>Description</th>
-            <th>Value</th>
-          </tr>
-        </thead>
-        <tbody>
-          {data &&
-            Object.entries(data)
-              .filter(([key]) => key !== 'aiResponse') // Exclude AI response from table
-              .map(([key, value], index) => (
-                <tr key={index}>
-                  <td>{formatKey(key).toUpperCase()}</td>
-                  <td>{value}</td>
-                </tr>
-              ))}
-        </tbody>
-      </Table>
-    </Sheet>
-
-    {/* AI Response Card */}
-    {data?.aiResponse && data.aiResponse !== "AI OVERVIEW DISABLED" && (
-      <Card
-        variant="outlined"
-        sx={{
-          mt: 3,
-          width: '100%',
-          backgroundColor: '#f8fafc'
-        }}
-      >
-        <CardContent>
-          <Typography
-            level="h4"
+            width: "50%",
+            margin: "0 auto",
+            display: "block",
+          }}
+        >
+          <Table
+            cellPadding="10"
+            cellSpacing="0"
+            aria-label="table with sticky header"
+            stickyHeader
+            stickyFooter
+            stripe="odd"
+            hoverRow
             sx={{
-              mb: 2,
-              color: '#2374bb',
-              display: 'flex',
-              alignItems: 'center',
-              gap: 1
+              border: "1px solid #e0e4e9",
+              borderRadius: "8px",
+              overflow: "hidden",
+              "& thead th": {
+                backgroundColor: "#2374bb",
+                color: "white",
+                fontWeight: "bold",
+                fontSize: "16px",
+              },
+              "& tbody td": {
+                border: "1px solid #e0e0e0",
+                borderTop: "none",
+              },
+              "& tbody tr:nth-child(odd) td": {
+                backgroundColor: "#f0f4f8",
+              },
+              "& tbody td:nth-child(2)": {
+                fontWeight: "bold",
+              },
+              "& tbody tr:nth-last-child(2) td": {
+                fontWeight: "bold",
+              },
+              "& tbody tr:last-child td": {
+                borderBottom: "none",
+                fontWeight: "bold",
+                backgroundColor: "#f0f4f8",
+              },
             }}
           >
-            🤖 AI Financial Analysis
-          </Typography>
-          <Divider sx={{ mb: 2 }} />
-          <Typography
-            level="body-md"
+            <thead>
+              <tr>
+                <th>Description</th>
+                <th>Value</th>
+              </tr>
+            </thead>
+            <tbody>
+              {data &&
+                Object.entries(data)
+                  .filter(([key]) => key !== "aiResponse") // Exclude AI response from table
+                  .map(([key, value], index) => (
+                    <tr key={index}>
+                      <td>{formatKey(key).toUpperCase()}</td>
+                      <td>{value}</td>
+                    </tr>
+                  ))}
+            </tbody>
+          </Table>
+        </Sheet>
+
+        {/* AI Response Card */}
+        {data?.aiResponse && data.aiResponse !== "AI OVERVIEW DISABLED" && (
+          <Card
+            variant="outlined"
             sx={{
-              whiteSpace: 'pre-wrap',
-              lineHeight: 1.6,
-              fontSize: '0.95rem'
+              width: "100%",
+              backgroundColor: "#f8fafc",
             }}
           >
-            {data.aiResponse}
-          </Typography>
-        </CardContent>
-      </Card>
-    )}
-    </Box>
+            <CardContent>
+              <Typography
+                level="h4"
+                sx={{
+                  mb: 2,
+                  color: "#2374bb",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 1,
+                }}
+              >
+                🤖 AI Financial Analysis
+              </Typography>
+              <Divider sx={{ mb: 2 }} />
+              <Typography
+                level="body-md"
+                sx={{
+                  whiteSpace: "pre-wrap",
+                  lineHeight: 1.6,
+                  fontSize: "0.95rem",
+                }}
+              >
+                {data.aiResponse}
+              </Typography>
+            </CardContent>
+          </Card>
+        )}
+      </Box>
     </Box>
   );
 }

@@ -1,4 +1,10 @@
-import { Typography, Modal, ModalDialog, ModalClose } from "@mui/joy";
+import {
+  Typography,
+  Modal,
+  ModalDialog,
+  ModalClose,
+  CircularProgress,
+} from "@mui/joy";
 
 export function ResultsModal({ open, setOpen, calculationResultRef }) {
   return (
