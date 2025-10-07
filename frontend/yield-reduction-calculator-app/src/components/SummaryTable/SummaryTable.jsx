@@ -16,40 +16,11 @@ import {
   CardContent,
   Divider,
 } from "@mui/joy";
-import PictureAsPdfSharpIcon from "@mui/icons-material/PictureAsPdfSharp";
-import { CssVarsProvider, useColorScheme } from "@mui/joy/styles";
-import html2pdf from "html2pdf.js";
+import { CssVarsProvider } from "@mui/joy/styles";
 
-export function SummaryTable({ contentRef, data }) {
-  const { mode, setMode } = useColorScheme();
-  const handleDownload = async () => {
-    const element = contentRef.current;
-
-    const isDark = mode === "dark";
-    if (isDark) setMode("light");
-
-    const options = {
-      margin: 1,
-      filename: "yield_calculation.pdf",
-      image: { type: "jpeg", quality: 0.98 },
-      html2canvas: { scale: 2 },
-      jsPDF: { unit: "in", format: "letter", orientation: "landscape" },
-    };
-
-    await html2pdf().set(options).from(element).save();
-
-    if (isDark) setMode("dark");
-  };
-
+export function SummaryTable({ contentRef, data, mode }) {
   return (
     <Box id="content">
-      <Button
-        onClick={handleDownload}
-        endDecorator={<PictureAsPdfSharpIcon />}
-        sx={{ my: 3 }}
-      >
-        Download Summary{" "}
-      </Button>
       <Box ref={contentRef} className="summary-table">
         <Sheet
           sx={{

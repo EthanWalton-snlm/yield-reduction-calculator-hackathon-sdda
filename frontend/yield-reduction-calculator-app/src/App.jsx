@@ -4,17 +4,20 @@ import { CssVarsProvider, useColorScheme } from "@mui/joy/styles";
 import "./App.css";
 import axios from "axios";
 import { ResultsModal } from "./components/ResultsModal/ResultsModal";
+import { ResultBox } from "./components/ResultBox/ResultBox";
 import { ProgressModal } from "./components/ProgressModal/ProgressModal";
 import { CalculatorInput } from "./components/CalculatorInput/CalculatorInput";
 import { WrapperTypeDropdown } from "./components/WrapperTypeDropdown/WrapperTypeDropdown";
 import { SummaryTable } from "./components/SummaryTable/SummaryTable";
 import DarkModeSharpIcon from "@mui/icons-material/DarkModeSharp";
 import LightModeSharpIcon from "@mui/icons-material/LightModeSharp";
+import PictureAsPdfSharpIcon from "@mui/icons-material/PictureAsPdfSharp";
 // import PictureAsPdfSharpIcon from '@mui/icons-material/PictureAsPdfSharp';
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { AgeSpineditInput } from "./components/AgeSpineditInput/AgeSpineditInput";
 import { SpineditInput } from "./components/SpineditInput/SpineditInput";
+import html2pdf from "html2pdf.js";
 
 function ThemeToggle() {
   const { mode, setMode } = useColorScheme();
@@ -30,6 +33,7 @@ function ThemeToggle() {
 }
 
 function App() {
+  const { mode, setMode } = useColorScheme();
   const [totalAnnualTaxableIncome, setTotalAnnualTaxableIncome] =
     useState(5000000);
   const [totalInvestmentValue, setTotalInvestmentValue] = useState(20000000);
@@ -93,6 +97,25 @@ function App() {
     console.log("API response:", calculationResultRef.current);
   };
 
+  const handleDownload = async () => {
+    const element = contentRef.current;
+
+    const isDark = mode === "dark";
+    if (isDark) setMode("light");
+
+    const options = {
+      margin: 1,
+      filename: "yield_calculation.pdf",
+      image: { type: "jpeg", quality: 0.98 },
+      html2canvas: { scale: 2 },
+      jsPDF: { unit: "in", format: "letter", orientation: "landscape" },
+    };
+
+    await html2pdf().set(options).from(element).save();
+
+    if (isDark) setMode("dark");
+  };
+
   return (
     <CssVarsProvider>
       <Box className="header">
@@ -118,38 +141,49 @@ function App() {
           </Box>
           {calculated && (
             <>
-              <Typography
-                component="h3"
-                level="h5"
-                textColor="inherit"
-                sx={{ fontWeight: "md", mb: 1 }}
-              >
-                Monetary: R
-                {calculationResultRef.current?.yieldReductionEnhancement}
-              </Typography>
-              <Typography
-                component="h3"
-                level="h5"
-                textColor="inherit"
-                sx={{ fontWeight: "md", mb: 1 }}
-              >
-                Percentage:{" "}
-                {calculationResultRef.current
-                  ?.yieldReductionEnhancementPercent * 100}
-                %
-              </Typography>
-              <IconButton
-                onClick={() => setShowSummaryTable(!showSummaryTable)}
-              >
-                {" "}
-                {showSummaryTable ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-              </IconButton>
+              <Box className="flex-row">
+                <ResultBox
+                  title={"Monetary Reduction"}
+                  value={
+                    calculationResultRef.current?.yieldReductionEnhancement
+                  }
+                  isCurrency
+                />
+                <ResultBox
+                  title={"Percentage Reduction"}
+                  value={
+                    calculationResultRef.current
+                      ?.yieldReductionEnhancementPercent * 100
+                  }
+                  isPercent
+                />
+              </Box>
+              <Box className="flex-row">
+                <Button
+                  onClick={() => setShowSummaryTable(!showSummaryTable)}
+                  endDecorator={
+                    showSummaryTable ? <ExpandLessIcon /> : <ExpandMoreIcon />
+                  }
+                  sx={{ my: 3 }}
+                >
+                  View Summary
+                </Button>
+                <Button
+                  onClick={handleDownload}
+                  endDecorator={<PictureAsPdfSharpIcon />}
+                  sx={{ my: 3 }}
+                  disabled={showSummaryTable ? false : true}
+                >
+                  Download Summary{" "}
+                </Button>
+              </Box>
             </>
           )}
           {showSummaryTable && (
             <SummaryTable
               contentRef={contentRef}
               data={calculationResultRef.current}
+              mode={mode}
             />
           )}
         </Box>

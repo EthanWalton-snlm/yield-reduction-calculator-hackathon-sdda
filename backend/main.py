@@ -210,7 +210,7 @@ def calculate(
 
     # calculations
     gross_portfolio_return = total_investment_value * gross_annual_portfolio_return
-    sa_interest = gross_annual_portfolio_return * return_from_sa_interest
+    sa_interest = gross_portfolio_return * return_from_sa_interest
     sa_local_dividends = gross_portfolio_return * return_from_sa_local_dividends
     sa_reit_dividends = gross_portfolio_return * return_from_local_sa_reit_dividends
     foreign_dividends = gross_portfolio_return * return_from_foreign_dividends
@@ -513,7 +513,7 @@ def calculate(
 
     # DEBUG: list all variables
     if DEBUG:
-        for k, v in list(globals().items()):  # take a static copy of the dictionary
+        for k, v in list(locals().items()):  # take a static copy of the dictionary
             if not k.startswith("__") and not callable(v):
                 print(f"{k} = {v}")
 
