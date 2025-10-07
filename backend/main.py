@@ -86,7 +86,8 @@ def get_ai_response(test_payload):
     5. **Portfolio Manager Talking Points**: 3-4 key phrases the PM can use to highlight the product's tax efficiency advantage
 
     Keep explanations concise, use South African tax context, and focus on demonstrating clear value proposition in rand terms.
-
+    Format this into a properly structured report that is legible and neat and also provide some insights and advice the client on
+    which product which be suitable, with or without the wrapper.
     Full calculation data:
     {json.dumps(test_payload, indent=2)}
     """

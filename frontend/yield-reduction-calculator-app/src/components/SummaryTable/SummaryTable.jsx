@@ -10,6 +10,7 @@ import {
   Modal,
   ModalDialog,
   ModalClose,
+  Sheet,
   Table,
 } from "@mui/joy";
 import PictureAsPdfSharpIcon from "@mui/icons-material/PictureAsPdfSharp";
@@ -42,10 +43,51 @@ export function SummaryTable({ contentRef, data }) {
       <Button onClick={handleDownload} endDecorator={<PictureAsPdfSharpIcon />}>
         Download{" "}
       </Button>
-      <Table cellPadding="10" cellSpacing="0" ref={contentRef}>
+      <Sheet sx={{
+        width: '50%',
+        margin: '0 auto',
+        display: 'block'
+      }}>
+      <Table cellPadding="10" cellSpacing="0" ref={contentRef} aria-label="table with sticky header"
+          stickyHeader
+          stickyFooter
+          stripe="odd"
+          hoverRow
+
+          sx={{
+            border: '1px solid #e0e4e9',
+            borderRadius: '8px',
+            overflow: 'hidden',
+            '& thead th': {
+              backgroundColor: '#2374bb',
+              color: 'white',
+              fontWeight: 'bold',
+              fontSize:'16px'
+            },
+            '& tbody td': {
+              border: '1px solid #e0e0e0',
+              borderTop: 'none',
+            },
+            '& tbody tr:nth-child(odd) td': {
+              backgroundColor: '#f0f4f8',
+            },
+            '& tbody td:nth-child(2)': {
+              fontWeight: 'bold',
+
+            },
+            '& tbody tr:nth-last-child(2) td': {
+              fontWeight: 'bold',
+
+            },
+            '& tbody tr:last-child td': {
+              borderBottom: 'none',
+              fontWeight: 'bold',
+              backgroundColor: '#f0f4f8',
+            }
+          }}>
         <thead>
           <tr>
-            <th>Name</th>
+            <th>Description</th>
             <th>Value</th>
           </tr>
         </thead>
@@ -53,12 +95,13 @@ export function SummaryTable({ contentRef, data }) {
           {data &&
             Object.entries(data).map(([key, value], index) => (
               <tr key={index}>
-                <td>{formatKey(key)}</td>
+                <td>{formatKey(key).toUpperCase()}</td>
                 <td>{value}</td>
               </tr>
             ))}
         </tbody>
       </Table>
+    </Sheet>
     </Box>
   );
 }

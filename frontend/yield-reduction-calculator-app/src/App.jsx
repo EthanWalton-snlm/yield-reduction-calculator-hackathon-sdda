@@ -107,8 +107,7 @@ function App() {
             <h1 className="second-heading">Yield Reduction Calculator</h1>
             <Box className="underline"></Box>
             <p className="description">
-              Calculate the Yield Reduction by entering the relevant information
-              on the right
+              Calculate the Yield Reduction by entering the relevant information.
             </p>
           </Box>
           {calculated && (
