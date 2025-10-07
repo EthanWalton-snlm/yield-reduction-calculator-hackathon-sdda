@@ -12,6 +12,7 @@ import { SummaryTable } from "./components/SummaryTable/SummaryTable";
 import DarkModeSharpIcon from "@mui/icons-material/DarkModeSharp";
 import LightModeSharpIcon from "@mui/icons-material/LightModeSharp";
 import PictureAsPdfSharpIcon from "@mui/icons-material/PictureAsPdfSharp";
+import FileUploadIcon from '@mui/icons-material/FileUpload';
 // import PictureAsPdfSharpIcon from '@mui/icons-material/PictureAsPdfSharp';
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -157,7 +158,7 @@ function App() {
             alt=""
             className="logo"
           ></img>
-          <ThemeToggle />
+          <Box className="import-csv">
           <input
             type="file"
             accept=".csv"
@@ -166,8 +167,10 @@ function App() {
             style={{ display: "none" }}
           />
           <Button onClick={() => fileInputRef.current.click()}>
-            Import CSV
+            <FileUploadIcon/> CSV
           </Button>
+          </Box>
+          <ThemeToggle />
         </Box>
 
         <Box className="container">

@@ -199,15 +199,16 @@ body {
 }
 
 .header {
-  top: 0;
-  left: 0;
-  right: 0;
   height: 80px;
-  z-index: 1000;
   display: flex;
   justify-content: space-between;
+  flex-wrap: nowrap;
   align-items: center;
-  padding: 10px 120px;
+  flex-direction: row;
+  padding-left: 120px;
+  padding-right: 120px;
+  margin-left: 50px;
+  margin-right: 50px;
 }
 
 .logo {
@@ -232,6 +233,13 @@ body {
 
   .container {
     margin-left: 150px;
+  }
+
+  .header{
+    padding-left: 140px;
+    padding-right: 140px;
+    margin-left: 140px;
+    margin-right: 140px;
   }
 }
 
