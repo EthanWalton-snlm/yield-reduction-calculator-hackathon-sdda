@@ -73,7 +73,8 @@ export function SummaryTable({ contentRef, data }) {
               borderTop: 'none',
             },
             '& tbody tr:nth-child(odd) td': {
-              backgroundColor: '#f0f4f8',
+              backgroundColor: mode === 'dark' ? 'rgba(255, 255, 255, 0.1)' : '#f0f4f8',
+              color: mode === 'dark' ? 'white' : 'inherit',
             },
             '& tbody td:nth-child(2)': {
               fontWeight: 'bold',
@@ -81,12 +82,16 @@ export function SummaryTable({ contentRef, data }) {
             },
             '& tbody tr:nth-last-child(2) td': {
               fontWeight: 'bold',
+              backgroundColor: mode === 'dark' ? '#2374bb' : '#9fb9d4',
+              color: mode === 'dark' ? 'white' : 'inherit',
 
             },
             '& tbody tr:last-child td': {
               borderBottom: 'none',
               fontWeight: 'bold',
               backgroundColor: '#f0f4f8',
+              backgroundColor: mode === 'dark' ? '#2374bb' : '#9fb9d4',
+              color: mode === 'dark' ? 'white' : 'inherit',
             }
           }}>
         <thead>
