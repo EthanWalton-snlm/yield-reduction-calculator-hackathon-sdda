@@ -56,13 +56,13 @@ function ResultsPage({
       <Box className="flex-row">
         <ResultBox
           title={"Monetary Reduction"}
-          value={calculationResultRef.current?.yieldReductionEnhancement}
+          value={(calculationResultRef.current?.yieldReductionEnhancement).toFixed(2)}
           isCurrency
         />
         <ResultBox
           title={"Percentage Reduction"}
           value={
-            calculationResultRef.current?.yieldReductionEnhancementPercent * 100
+            (calculationResultRef.current?.yieldReductionEnhancementPercent * 100)?.toFixed(3)
           }
           isPercent
         />

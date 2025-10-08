@@ -95,32 +95,43 @@ function App() {
 
   const fileInputRef = useRef(null);
   const importCsv = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
+  const file = e.target.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const lines = event.target.result.split(/\r?\n/).filter(line => line.trim() !== '');
+      const map = {};
+      lines.forEach(line => {
+        const parts = line.split(',');
+        if (parts.length < 2) return;
+        const key = parts[0];
+        const val = parts.slice(1).join(',');
+        map[key] = val;
+      });
 
-      reader.onload = (event) => {
-        const lines = event.target.result.split("\n");
-        const inputValues = lines[1].split(",");
-        setClientAge(Number(inputValues[0]));
-        setTotalAnnualTaxableIncome(Number(inputValues[1]));
-        setTotalInvestmentValue(Number(inputValues[2]));
-        setGrossAnnualPortfolioReturn(Number(inputValues[3]));
-        setReturnFromSaInterest(Number(inputValues[4]));
-        setReturnFromSaLocalDividends(Number(inputValues[5]));
-        setReturnFromLocalSaReitDividends(Number(inputValues[6]));
-        setReturnFromForeignDividends(Number(inputValues[7]));
-        setReturnFromLocalCapitalGrowth(Number(inputValues[8]));
-        setAveragePortfolioTurnover(Number(inputValues[9]));
-        setAssumedRealisedGainOnTurnover(Number(inputValues[10]));
-        setWrapperTypeToAnalyse(inputValues[11]);
-        setWrapperAnnualCostEac(Number(inputValues[12]));
-        setAnnualRaContribution(Number(inputValues[13]));
-      };
-      reader.readAsText(file);
-    }
-  };
+      const sanitizeValue = (val) =>
+      Number(val.replace(/[^0-9.-]+/g, "").trim());
 
+      // Set values using the map
+      if (map["Client's Age"]) setClientAge(sanitizeValue(map["Client's Age"]));
+      if (map["Client's Total Annual Taxable Income (Before RA)"]) setTotalAnnualTaxableIncome(sanitizeValue(map["Client's Total Annual Taxable Income (Before RA)"].replace(/[^\d.]/g, '').replace(/\.00$/, '')));
+      if (map["Total Investment Value (R)"]) setTotalInvestmentValue(sanitizeValue(map["Total Investment Value (R)"].replace(/[^\d.]/g, '').replace(/\.00$/, '')));
+      if (map["Gross Annual Portfolio Return (%)"]) setGrossAnnualPortfolioReturn(sanitizeValue(map["Gross Annual Portfolio Return (%)"].replace(/%/g, '')) / 100);
+      if (map["- % of Return from SA Interest"]) setReturnFromSaInterest(sanitizeValue(map["- % of Return from SA Interest"].replace(/%/g, '')) / 100);
+      if (map["- % of Return from SA Local Dividends (Non-REIT)"]) setReturnFromSaLocalDividends(sanitizeValue(map["- % of Return from SA Local Dividends (Non-REIT)"].replace(/%/g, '')) / 100);
+      if (map["- % of Return from SA REIT Dividends"]) setReturnFromLocalSaReitDividends(sanitizeValue(map["- % of Return from SA REIT Dividends"].replace(/%/g, '')) / 100);
+      if (map["- % of Return from Foreign Dividends"]) setReturnFromForeignDividends(sanitizeValue(map["- % of Return from Foreign Dividends"].replace(/%/g, '')) / 100);
+      if (map["- % of Return from Capital Growth"]) setReturnFromLocalCapitalGrowth(sanitizeValue(map["- % of Return from Capital Growth"].replace(/%/g, '')) / 100);
+      if (map["Average Portfolio Turnover (%)"]) setAveragePortfolioTurnover(sanitizeValue(map["Average Portfolio Turnover (%)"].replace(/%/g, '')) / 100);
+      if (map["Assumed Realised Gain on Turnover (%)"]) setAssumedRealisedGainOnTurnover(sanitizeValue(map["Assumed Realised Gain on Turnover (%)"].replace(/%/g, '')) / 100);
+      if (map["Wrapper Type to Analyse"]) setWrapperTypeToAnalyse(map["Wrapper Type to Analyse"]);
+      if (map["Wrapper Annual Cost (EAC %)"]) setWrapperAnnualCostEac(sanitizeValue(map["Wrapper Annual Cost (EAC %)"].replace(/%/g, '')) / 100);
+      if (map["Annual RA Contribution (if RA is selected)"]) setAnnualRaContribution(sanitizeValue(map["Annual RA Contribution (if RA is selected)"].replace(/[^\d.]/g, '').replace(/\.00$/, '')));
+    };
+
+    reader.readAsText(file);
+  }
+};
   return (
     <CssVarsProvider>
       <Box

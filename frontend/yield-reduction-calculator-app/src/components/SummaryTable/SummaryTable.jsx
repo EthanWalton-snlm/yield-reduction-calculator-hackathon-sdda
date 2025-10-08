@@ -249,13 +249,19 @@ function formatValue(key, value) {
   ];
 
   if (!unformatDecimals.includes(newKey) && value === 0) {
-    return "R 0";
+    return "R 0.00";
   }
 
   if (unformatDecimals.includes(newKey)) {
-    return `${Number(value) * 100}%`;
+    const percentValue = Number(value) * 100;
+    // Check if it's a whole number (no decimal places)
+    if (percentValue === Math.floor(percentValue)) {
+      return `${Math.floor(percentValue)}%`;
+    } else {
+      return `${percentValue.toFixed(3)}%`;
+    }
   } else {
-    const unformatMonetary = String(value || "").replace(/\D/g, "");
-    return `R ${unformatMonetary.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`;
+    const numericValue = Number(value) || 0;
+    return `R ${numericValue.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
   }
 }
