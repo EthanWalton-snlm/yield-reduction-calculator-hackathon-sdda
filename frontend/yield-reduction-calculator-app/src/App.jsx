@@ -13,7 +13,7 @@ import { ChatInterface } from "./components/Chatbot/ChatInterface";
 import DarkModeSharpIcon from "@mui/icons-material/DarkModeSharp";
 import LightModeSharpIcon from "@mui/icons-material/LightModeSharp";
 import PictureAsPdfSharpIcon from "@mui/icons-material/PictureAsPdfSharp";
-import FileUploadIcon from '@mui/icons-material/FileUpload';
+import FileUploadIcon from "@mui/icons-material/FileUpload";
 // import PictureAsPdfSharpIcon from '@mui/icons-material/PictureAsPdfSharp';
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -154,24 +154,29 @@ function App() {
     <CssVarsProvider>
       <Box sx={{ backgroundColor: mode === "dark" ? "#1f1f1f" : "#ffffff" }}>
         <Box className="header">
-          <img
-            src="https://sanlamprivatewealth.mu/wp-content/uploads/2021/11/Sanlam-Private-wealth-50px-height.png"
-            alt=""
-            className="logo"
-          ></img>
-          <Box className="import-csv">
-          <input
-            type="file"
-            accept=".csv"
-            ref={fileInputRef}
-            onChange={importCsv}
-            style={{ display: "none" }}
-          />
-          <Button onClick={() => fileInputRef.current.click()}>
-            <FileUploadIcon/> CSV
-          </Button>
+          <Box>
+            <img
+              src="https://sanlamprivatewealth.mu/wp-content/uploads/2021/11/Sanlam-Private-wealth-50px-height.png"
+              alt=""
+              className="logo"
+            ></img>
           </Box>
-          <ThemeToggle />
+          <Box className="import-csv">
+            <input
+              type="file"
+              accept=".csv"
+              ref={fileInputRef}
+              onChange={importCsv}
+              style={{ display: "none" }}
+            />
+            <Button
+              onClick={() => fileInputRef.current.click()}
+              className="csv-button"
+            >
+              <FileUploadIcon /> CSV
+            </Button>
+            <ThemeToggle />
+          </Box>
         </Box>
 
         <Box className="container">
@@ -220,31 +225,36 @@ function App() {
                       showSummaryTable ? <ExpandLessIcon /> : <ExpandMoreIcon />
                     }
                     sx={{ my: 3, color: "#f0f0f0" }}
+                    className="sanlam-button"
                   >
-                    View Summary
+                    VIEW SUMMARY
                   </Button>
                   <Button
                     onClick={handleDownload}
                     endDecorator={<PictureAsPdfSharpIcon />}
-                    sx={{ my: 3, color: "#f0f0f0" }}
-                    disabled={showSummaryTable ? false : true}
+                    sx={{
+                      my: 3,
+                      color: "#f0f0f0",
+                      display: showSummaryTable ? "flex" : "none",
+                    }}
+                    className="sanlam-button-reverse"
                   >
-                    Download Summary{" "}
+                    DOWNLOAD SUMMARY{" "}
                   </Button>
                 </Box>
               </>
             )}
             {showSummaryTable && (
               <>
-              <SummaryTable
-                contentRef={contentRef}
-                data={calculationResultRef.current}
-                mode={mode}
-              />
-              <ChatInterface
-                calculationData={calculationResultRef.current}
-                aiResponse={calculationResultRef.current?.aiResponse}
-              />
+                <SummaryTable
+                  contentRef={contentRef}
+                  data={calculationResultRef.current}
+                  mode={mode}
+                />
+                <ChatInterface
+                  calculationData={calculationResultRef.current}
+                  aiResponse={calculationResultRef.current?.aiResponse}
+                />
               </>
             )}
           </Box>
@@ -337,14 +347,12 @@ function App() {
                 className="calculate"
                 sx={{ color: "#f0f0f0" }}
               >
-                Calculate
+                CALCULATE
               </Button>
             </Box>
           </Box>
         </Box>
       </Box>
-
-
     </CssVarsProvider>
   );
 }

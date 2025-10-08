@@ -5,15 +5,14 @@ import {
   ModalClose,
   Box,
   Textarea,
-  Input
+  Input,
 } from "@mui/joy";
 import { useColorScheme } from "@mui/joy/styles";
 
 export function CalculatorInput({ title, value, setValue }) {
-
   const handleChange = (e) => {
     const inputValue = e.target.value;
-    const initialValue = inputValue.replace(/\D/g, '');
+    const initialValue = inputValue.replace(/\D/g, "");
     setValue(initialValue);
   };
 
@@ -21,8 +20,12 @@ export function CalculatorInput({ title, value, setValue }) {
 
   return (
     <>
-      <Typography className="age"
-       sx={{color: mode === 'dark' ? '#f0f0f0' : 'inherit'}}>{title}</Typography>
+      <Typography
+        className="age"
+        sx={{ color: mode === "dark" ? "#f0f0f0" : "inherit" }}
+      >
+        {title}
+      </Typography>
       <Box className="textfield-wrapper">
         <Box className="textfield-container space">
           <Input
@@ -32,18 +35,20 @@ export function CalculatorInput({ title, value, setValue }) {
             disabled={false}
             placeholder="0"
             className="textfield"
-            value={(value || '').toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+            value={(value || "")
+              .toString()
+              .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
             onChange={handleChange}
             sx={{
               minHeight: 20,
               paddingY: 1,
               gap: 1,
-              color: mode === 'dark' ? '#f0f0f0' : 'inherit',
-              backgroundColor: mode === 'dark' ? '#333333' : 'inherit',
-              '& input': {
-              padding: '2px 6px',
-              }}}
-
+              color: mode === "dark" ? "#f0f0f0" : "inherit",
+              backgroundColor: mode === "dark" ? "#333333" : "inherit",
+              "& input": {
+                padding: "2px 6px",
+              },
+            }}
           ></Input>
         </Box>
       </Box>

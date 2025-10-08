@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect } from "react";
 import {
   Box,
   Input,
@@ -8,21 +8,20 @@ import {
   CardContent,
   IconButton,
   Chip,
-  LinearProgress
-} from '@mui/joy';
-import { useColorScheme } from '@mui/joy/styles';
-import axios from 'axios';
-import SendIcon from '@mui/icons-material/Send';
-import SmartToyIcon from '@mui/icons-material/SmartToy';
-import PersonIcon from '@mui/icons-material/Person';
+  LinearProgress,
+} from "@mui/joy";
+import { useColorScheme } from "@mui/joy/styles";
+import axios from "axios";
+import SendIcon from "@mui/icons-material/Send";
+import SmartToyIcon from "@mui/icons-material/SmartToy";
+import PersonIcon from "@mui/icons-material/Person";
 
 export function ChatInterface({ calculationData, aiResponse }) {
   const { mode } = useColorScheme();
   const [messages, setMessages] = useState([]);
-  const [input, setInput] = useState('');
+  const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const messagesEndRef = useRef(null);
-
 
   // Quick question suggestions
   const quickQuestions = [
@@ -31,7 +30,7 @@ export function ChatInterface({ calculationData, aiResponse }) {
     "What's my actual net return?",
     "Should I choose this wrapper?",
     "What are the risks of this investment?",
-    "How does this compare to unwrapped investing?"
+    "How does this compare to unwrapped investing?",
   ];
 
   const sendMessage = async (questionText = null) => {
@@ -40,48 +39,47 @@ export function ChatInterface({ calculationData, aiResponse }) {
 
     // Add user message
     const userMessage = {
-      type: 'user',
+      type: "user",
       text: messageText,
-      timestamp: new Date().toLocaleTimeString()
+      timestamp: new Date().toLocaleTimeString(),
     };
-    setMessages(prev => [...prev, userMessage]);
+    setMessages((prev) => [...prev, userMessage]);
 
     // Clear input if it was typed (not from quick question)
-    if (!questionText) setInput('');
+    if (!questionText) setInput("");
 
     setLoading(true);
 
     try {
-      const response = await axios.post('http://localhost:5000/chat', {
+      const response = await axios.post("http://localhost:5000/chat", {
         question: messageText,
         calculationData,
         aiResponse,
-        conversationHistory: messages
+        conversationHistory: messages,
       });
 
       // Add AI response
       const aiMessage = {
-        type: 'ai',
+        type: "ai",
         text: response.data.answer,
-        timestamp: new Date().toLocaleTimeString()
+        timestamp: new Date().toLocaleTimeString(),
       };
-      setMessages(prev => [...prev, aiMessage]);
-
+      setMessages((prev) => [...prev, aiMessage]);
     } catch (error) {
-      console.error('Chat error:', error);
+      console.error("Chat error:", error);
       const errorMessage = {
-        type: 'ai',
-        text: 'Sorry, I encountered an error. Please try again.',
-        timestamp: new Date().toLocaleTimeString()
+        type: "ai",
+        text: "Sorry, I encountered an error. Please try again.",
+        timestamp: new Date().toLocaleTimeString(),
       };
-      setMessages(prev => [...prev, errorMessage]);
+      setMessages((prev) => [...prev, errorMessage]);
     }
 
     setLoading(false);
   };
 
   const handleKeyPress = (e) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
+    if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       sendMessage();
     }
@@ -91,19 +89,28 @@ export function ChatInterface({ calculationData, aiResponse }) {
     <Card
       variant="outlined"
       sx={{
-        mt: 3,
-        maxHeight: '500px',
-        display: 'flex',
-        flexDirection: 'column',
-        backgroundColor: mode === 'dark' ? 'rgba(255, 255, 255, 0.05)' : '#f8fafc',
-        borderColor: mode === 'dark' ? 'rgba(255, 255, 255, 0.2)' : undefined
+        my: 3,
+        maxHeight: "500px",
+        display: "flex",
+        flexDirection: "column",
+        backgroundColor:
+          mode === "dark" ? "rgba(255, 255, 255, 0.05)" : "#f8fafc",
+        borderColor: mode === "dark" ? "rgba(255, 255, 255, 0.2)" : undefined,
+        borderRadius: "4px",
       }}
     >
-      <CardContent sx={{ flex: 1, display: 'flex', flexDirection: 'column', p: 2 }}>
+      <CardContent
+        sx={{ flex: 1, display: "flex", flexDirection: "column", p: 2 }}
+      >
         {/* Header */}
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
-          <SmartToyIcon sx={{ color: mode === 'dark' ? '#7db3e8' : '#2374bb' }} />
-          <Typography level="h4" sx={{ color: mode === 'dark' ? '#7db3e8' : '#2374bb' }}>
+        <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 2 }}>
+          <SmartToyIcon
+            sx={{ color: mode === "dark" ? "#7db3e8" : "#2374bb" }}
+          />
+          <Typography
+            level="h4"
+            sx={{ color: mode === "dark" ? "#7db3e8" : "#2374bb" }}
+          >
             Investment Assistant
           </Typography>
         </Box>
@@ -114,14 +121,14 @@ export function ChatInterface({ calculationData, aiResponse }) {
             <Typography level="body-sm" sx={{ mb: 1, opacity: 0.7 }}>
               Quick questions:
             </Typography>
-            <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
+            <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>
               {quickQuestions.slice(0, 3).map((q, index) => (
                 <Button
                   key={index}
                   size="sm"
                   variant="outlined"
                   onClick={() => sendMessage(q)}
-                  sx={{ fontSize: '0.75rem' }}
+                  sx={{ fontSize: "0.75rem" }}
                 >
                   {q}
                 </Button>
@@ -131,65 +138,100 @@ export function ChatInterface({ calculationData, aiResponse }) {
         )}
 
         {/* Messages */}
-        <Box sx={{
-          flex: 1,
-          overflowY: 'auto',
-          mb: 2,
-          minHeight: '200px',
-          maxHeight: '300px'
-        }}>
+        <Box
+          sx={{
+            flex: 1,
+            overflowY: "auto",
+            mb: 2,
+            minHeight: "200px",
+            maxHeight: "300px",
+          }}
+        >
           {messages.map((msg, index) => (
-            <Box key={index} sx={{
-              mb: 2,
-              display: 'flex',
-              flexDirection: msg.type === 'user' ? 'row-reverse' : 'row',
-              alignItems: 'flex-start',
-              gap: 1
-            }}>
+            <Box
+              key={index}
+              sx={{
+                mb: 2,
+                display: "flex",
+                flexDirection: msg.type === "user" ? "row-reverse" : "row",
+                alignItems: "flex-start",
+                gap: 1,
+              }}
+            >
               {/* Avatar */}
-              <Box sx={{
-                width: 32,
-                height: 32,
-                borderRadius: '50%',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                backgroundColor: msg.type === 'user'
-                  ? (mode === 'dark' ? '#2374bb' : '#2374bb')
-                  : (mode === 'dark' ? '#444' : '#e0e0e0'),
-                flexShrink: 0
-              }}>
-                {msg.type === 'user' ?
-                  <PersonIcon sx={{ fontSize: 16, color: 'white' }} /> :
-                  <SmartToyIcon sx={{ fontSize: 16, color: mode === 'dark' ? '#7db3e8' : '#666' }} />
-                }
+              <Box
+                sx={{
+                  width: 32,
+                  height: 32,
+                  borderRadius: "50%",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  backgroundColor:
+                    msg.type === "user"
+                      ? mode === "dark"
+                        ? "#2374bb"
+                        : "#2374bb"
+                      : mode === "dark"
+                      ? "#444"
+                      : "#e0e0e0",
+                  flexShrink: 0,
+                }}
+              >
+                {msg.type === "user" ? (
+                  <PersonIcon sx={{ fontSize: 16, color: "white" }} />
+                ) : (
+                  <SmartToyIcon
+                    sx={{
+                      fontSize: 16,
+                      color: mode === "dark" ? "#7db3e8" : "#666",
+                    }}
+                  />
+                )}
               </Box>
 
               {/* Message */}
-              <Box sx={{
-                maxWidth: '75%',
-                backgroundColor: msg.type === 'user'
-                  ? (mode === 'dark' ? '#2374bb' : '#2374bb')
-                  : (mode === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'white'),
-                color: msg.type === 'user'
-                  ? 'white'
-                  : (mode === 'dark' ? '#e0e0e0' : '#333'),
-                p: 1.5,
-                borderRadius: '12px',
-                border: msg.type === 'ai' ? '1px solid' : 'none',
-                borderColor: mode === 'dark' ? 'rgba(255, 255, 255, 0.2)' : '#e0e0e0'
-              }}>
-                <Typography level="body-md" sx={{
-                  whiteSpace: 'pre-wrap',
-                  lineHeight: 1.4
-                }}>
+              <Box
+                sx={{
+                  maxWidth: "75%",
+                  backgroundColor:
+                    msg.type === "user"
+                      ? mode === "dark"
+                        ? "#2374bb"
+                        : "#2374bb"
+                      : mode === "dark"
+                      ? "rgba(255, 255, 255, 0.1)"
+                      : "white",
+                  color:
+                    msg.type === "user"
+                      ? "white"
+                      : mode === "dark"
+                      ? "#e0e0e0"
+                      : "#333",
+                  p: 1.5,
+                  borderRadius: "12px",
+                  border: msg.type === "ai" ? "1px solid" : "none",
+                  borderColor:
+                    mode === "dark" ? "rgba(255, 255, 255, 0.2)" : "#e0e0e0",
+                }}
+              >
+                <Typography
+                  level="body-md"
+                  sx={{
+                    whiteSpace: "pre-wrap",
+                    lineHeight: 1.4,
+                  }}
+                >
                   {msg.text}
                 </Typography>
-                <Typography level="body-xs" sx={{
-                  mt: 0.5,
-                  opacity: 0.7,
-                  fontSize: '0.7rem'
-                }}>
+                <Typography
+                  level="body-xs"
+                  sx={{
+                    mt: 0.5,
+                    opacity: 0.7,
+                    fontSize: "0.7rem",
+                  }}
+                >
                   {msg.timestamp}
                 </Typography>
               </Box>
@@ -197,7 +239,7 @@ export function ChatInterface({ calculationData, aiResponse }) {
           ))}
 
           {loading && (
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
+            <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 1 }}>
               <SmartToyIcon sx={{ fontSize: 16, opacity: 0.5 }} />
               <LinearProgress sx={{ flex: 1 }} />
             </Box>
@@ -207,7 +249,7 @@ export function ChatInterface({ calculationData, aiResponse }) {
         </Box>
 
         {/* Input */}
-        <Box sx={{ display: 'flex', gap: 1, alignItems: 'flex-end' }}>
+        <Box sx={{ display: "flex", gap: 1, alignItems: "flex-end" }}>
           <Input
             value={input}
             onChange={(e) => setInput(e.target.value)}
@@ -231,14 +273,14 @@ export function ChatInterface({ calculationData, aiResponse }) {
         {/* More Quick Questions */}
         {messages.length > 0 && (
           <Box sx={{ mt: 1 }}>
-            <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
+            <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>
               {quickQuestions.slice(3).map((q, index) => (
                 <Button
                   key={index}
                   size="sm"
                   variant="plain"
                   onClick={() => sendMessage(q)}
-                  sx={{ fontSize: '0.7rem', opacity: 0.7 }}
+                  sx={{ fontSize: "0.7rem", opacity: 0.7 }}
                 >
                   {q}
                 </Button>

@@ -130,13 +130,14 @@ export function SummaryTable({ contentRef, data, mode }) {
             hoverRow
             sx={{
               border: "1px solid #e0e4e9",
-              borderRadius: "8px",
+              borderRadius: "4px",
               overflow: "hidden",
               "& thead th": {
-                backgroundColor: "#2374bb",
+                backgroundColor: "#0075c9",
                 color: "white",
-                fontWeight: "bold",
+                fontWeight: "600",
                 fontSize: "16px",
+                verticalAlign: "middle",
               },
               "& tbody td": {
                 border: "1px solid #e0e0e0",
@@ -152,14 +153,14 @@ export function SummaryTable({ contentRef, data, mode }) {
               },
               "& tbody tr:nth-last-child(2) td": {
                 fontWeight: "bold",
-                backgroundColor: mode === "dark" ? "#2374bb" : "#9fb9d4",
-                color: mode === "dark" ? "white" : "inherit",
+                backgroundColor: "#0075c9",
+                color: "#fff",
               },
               "& tbody tr:last-child td": {
                 borderBottom: "none",
-                fontWeight: "bold",
-                backgroundColor: mode === "dark" ? "#2374bb" : "#9fb9d4",
-                color: mode === "dark" ? "white" : "inherit",
+                fontWeight: "600",
+                backgroundColor: "#0075c9",
+                color: "#fff",
               },
             }}
           >
@@ -175,7 +176,7 @@ export function SummaryTable({ contentRef, data, mode }) {
                   .filter(([key]) => key !== "aiResponse") // Exclude AI response from table
                   .map(([key, value], index) => (
                     <tr key={index}>
-                      <td>{formatKey(key).toUpperCase()}</td>
+                      <td>{formatKey(key)}</td>
                       <td>{formatValue(key, value)}</td>
                     </tr>
                   ))}
@@ -194,6 +195,7 @@ export function SummaryTable({ contentRef, data, mode }) {
               borderColor:
                 mode === "dark" ? "rgba(255, 255, 255, 0.2)" : "#f8fafc",
               border: "1px solid #e0e4e9",
+              borderRadius: "4px",
             }}
           >
             <CardContent>
@@ -234,7 +236,7 @@ function formatKey(key) {
 }
 
 function formatValue(key, value) {
-    // Convert camelCase to uppercase with spaces to match array
+  // Convert camelCase to uppercase with spaces to match array
   const newKey = formatKey(key).toUpperCase();
 
   const unformatDecimals = [
@@ -243,19 +245,17 @@ function formatValue(key, value) {
     "NET RETURN UNWRAPPED PERCENTAGE",
     "NET RETURN WRAPPED PERCENTAGE",
     "WRAPPER COST",
-    "YIELD REDUCTION ENHANCEMENT PERCENT"
+    "YIELD REDUCTION ENHANCEMENT PERCENT",
   ];
 
-  if (!unformatDecimals.includes(newKey) && value === 0){
+  if (!unformatDecimals.includes(newKey) && value === 0) {
     return "R 0";
   }
 
-  if (unformatDecimals.includes(newKey)){
-    return `${(Number(value) * 100)}%`;
+  if (unformatDecimals.includes(newKey)) {
+    return `${Number(value) * 100}%`;
   } else {
-    const unformatMonetary = String(value || '').replace(/\D/g, '');
-    return `R ${unformatMonetary.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
+    const unformatMonetary = String(value || "").replace(/\D/g, "");
+    return `R ${unformatMonetary.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`;
   }
-
-
 }
