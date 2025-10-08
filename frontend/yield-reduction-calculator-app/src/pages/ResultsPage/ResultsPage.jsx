@@ -36,7 +36,12 @@ function ResultsPage({
     };
 
     setLoading(true);
-    await html2pdf().set(options).from(element).save();
+    const worker = html2pdf().set(options).from(element);
+
+    const pdfBlob = await worker.outputPdf("blob");
+
+    const pdfUrl = URL.createObjectURL(pdfBlob);
+    window.open(pdfUrl, "_blank");
 
     if (isDark) setMode("dark");
     setLoading(false);
@@ -44,7 +49,10 @@ function ResultsPage({
 
   return (
     <>
-      <ProgressModal open={loading} title={"Compiling PDF..."} />
+      <ProgressModal
+        open={loading}
+        title={"Compiling PDF... This will take about 30 seconds"}
+      />
       <Box className="flex-row">
         <ResultBox
           title={"Monetary Reduction"}
@@ -60,6 +68,7 @@ function ResultsPage({
         />
       </Box>
       <Box className="flex-row">
+        {/* TODO: Are you sure modal */}
         <IconButton
           onClick={() => setCalculated(false)}
           sx={{ my: 3, color: "#f0f0f0" }}

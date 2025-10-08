@@ -123,7 +123,12 @@ function App() {
 
   return (
     <CssVarsProvider>
-      <Box sx={{ backgroundColor: mode === "dark" ? "#1f1f1f" : "#ffffff" }}>
+      <Box
+        sx={{
+          backgroundColor: mode === "dark" ? "#1f1f1f" : "#ffffff",
+          transition: "background-color 0.4s ease, color 0.4s ease",
+        }}
+      >
         <Box className="header">
           <Box>
             <img
@@ -151,7 +156,10 @@ function App() {
         </Box>
 
         <Box className="container">
-          <ProgressModal open={loading} />
+          <ProgressModal
+            open={loading}
+            title={"Generating Overview... This will take about 30 seconds"}
+          />
           <Box className="box">
             <Box>
               <h1 className="first-heading">Calculate your Yield Reduction</h1>
