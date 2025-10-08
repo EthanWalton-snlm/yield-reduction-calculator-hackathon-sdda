@@ -1,6 +1,6 @@
-import { Modal, CircularProgress } from "@mui/joy";
+import { Modal, CircularProgress, Typography, Box } from "@mui/joy";
 
-export function ProgressModal({ open }) {
+export function ProgressModal({ open, title = "" }) {
   return (
     <Modal
       open={open}
@@ -11,7 +11,14 @@ export function ProgressModal({ open }) {
         backgroundColor: "rgba(0, 0, 0, 0.4)",
       }}
     >
-      <CircularProgress size="lg" />
+      <Box className="loading">
+        <CircularProgress size="lg" />
+        {title ? (
+          <Typography sx={{ color: "white" }}>{title}</Typography>
+        ) : (
+          <></>
+        )}
+      </Box>
     </Modal>
   );
 }
