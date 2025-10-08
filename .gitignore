@@ -1,2 +1,30 @@
 .env
 venv/
+# Ignore Terraform state files
+*.tfstate
+*.tfstate.*
+
+# Ignore crash logs
+crash.log
+crash.*.log
+
+# Ignore Terraform’s working directory
+.terraform/
+.terraform.*
+
+# Ignore variable files that may contain secrets
+*.tfvars
+*.tfvars.json
+
+# Ignore override files
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Ignore plan output
+terraform.tfplan
+
+# Ignore local config
+.terraformrc
+terraform.rc

@@ -39,7 +39,7 @@ module "eks" {
 
 resource "aws_eks_access_entry" "eks_user_access" {
   cluster_name  = module.eks.cluster_name
-  principal_arn = "arn:aws:iam::043516549334:user/${var.custom_name}-test-user"
+  principal_arn = "arn:aws:iam::619071339639:user/${var.custom_name}"
   type          = "STANDARD"
 
   depends_on = [module.eks]
@@ -151,7 +151,7 @@ resource "aws_ecr_repository" "test-app" {
 
 resource "aws_iam_user_policy" "eks_full_inline_policy" {
   name = "eks-full-inline-policy"
-  user = "${var.custom_name}-test-user"
+  user = "${var.custom_name}"
 
   policy = jsonencode({
     Version = "2012-10-17",
@@ -268,48 +268,48 @@ resource "aws_security_group" "eks_fargate_sg" {
 }
 
 resource "aws_iam_user_policy_attachment" "attach_eks_cluster_policy" {
-  user       = "${var.custom_name}-test-user"
+  user       = "${var.aws_user}"
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
 }
 
 
 resource "aws_iam_user_policy_attachment" "attach_ecr_full_access" {
-  user       = "${var.custom_name}-test-user"
+  user       = "${var.aws_user}"
   policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryFullAccess"
 }
 
 resource "aws_iam_user_policy_attachment" "attach_ec2_full_access" {
-  user       = "${var.custom_name}-test-user"
+  user       = "${var.aws_user}"
   policy_arn = "arn:aws:iam::aws:policy/AmazonEC2FullAccess"
 }
 
 resource "aws_iam_user_policy_attachment" "attach_eks_service_access" {
-  user       = "${var.custom_name}-test-user"
+  user       = "${var.aws_user}"
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSServicePolicy"
 }
 
 resource "aws_iam_user_policy_attachment" "attach_elasticcontainer_public_full_access" {
-  user       = "${var.custom_name}-test-user"
+  user       = "${var.aws_user}"
   policy_arn = "arn:aws:iam::aws:policy/AmazonElasticContainerRegistryPublicFullAccess"
 }
 
 resource "aws_iam_user_policy_attachment" "attach_vpc_full_access" {
-  user       = "${var.custom_name}-test-user"
+  user       = "${var.aws_user}"
   policy_arn = "arn:aws:iam::aws:policy/AmazonVPCFullAccess"
 }
 
 resource "aws_iam_user_policy_attachment" "attach_cloudformation_full_access" {
-  user       = "${var.custom_name}-test-user"
+  user       = "${var.aws_user}"
   policy_arn = "arn:aws:iam::aws:policy/AWSCloudFormationFullAccess"
 }
 
 resource "aws_iam_user_policy_attachment" "attach_lb_full_access" {
-  user       = "${var.custom_name}-test-user"
+  user       = "${var.aws_user}"
   policy_arn = "arn:aws:iam::aws:policy/ElasticLoadBalancingFullAccess"
 }
 
 resource "aws_iam_user_policy_attachment" "attach_iam_full_access" {
-  user       = "${var.custom_name}-test-user"
+  user       = "${var.aws_user}"
   policy_arn = "arn:aws:iam::aws:policy/IAMFullAccess"
 }
 

@@ -207,6 +207,8 @@ body {
   line-height: 20px;
   letter-spacing: -0.25px;
   font-size: 14px;
+  margin-top: 2em;
+  margin-bottom: 4em;
 }
 
 .header {

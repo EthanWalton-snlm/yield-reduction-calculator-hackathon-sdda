@@ -1,14 +1,14 @@
-# AWS Deployment with EKS cluster and Fargate profile
+# AWS deploy-backendment with EKS cluster and Fargate profile
 
 1. Create IAM user with relevant permissions
 2. Local machine (in directory of the project):
    1. `cd <project_name>`
    2. `aws configure`
-   3. `aws ecr create-repository --repository-name deploy-test-app --region eu-west-1`
+   3. `aws ecr create-repository --repository-name deploy-backend-test-app --region eu-west-1`
    4. `aws ecr get-login-password --region eu-west-1 | docker login --username AWS --password-stdin 619071339639.dkr.ecr.eu-west-1.amazonaws.com`
-   5. `docker build -t deploy-test-app .`
-   6. `docker tag deploy-test-app:latest 619071339639.dkr.ecr.eu-west-1.amazonaws.com/deploy-test-app:latest`
-   7. `docker push 619071339639.dkr.ecr.eu-west-1.amazonaws.com/deploy-test-app:latest`
+   5. `docker build -t deploy-backend-test-app .`
+   6. `docker tag deploy-backend-test-app:latest 619071339639.dkr.ecr.eu-west-1.amazonaws.com/deploy-backend-test-app:latest`
+   7. `docker push 619071339639.dkr.ecr.eu-west-1.amazonaws.com/deploy-backend-test-app:latest`
    8. `cd terraform`
    9. `Change VPC and Subnet IDs and custom_name`
    10. `terraform init`

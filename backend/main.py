@@ -18,6 +18,11 @@ CORS(app, resources={r"/*": {"origins": "*"}})
 ENABLE_AI = False
 
 
+@app.route("/")
+def health():
+    return "OK", 200
+
+
 def table_lookup(value, table, col_index):
     """
     Finds the last row where threshold <= value

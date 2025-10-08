@@ -149,7 +149,7 @@ function App() {
               onClick={() => fileInputRef.current.click()}
               className="csv-button"
             >
-              <FileUploadIcon /> CSV
+              <FileUploadIcon /> LEGACY XLS
             </Button>
             <ThemeToggle />
           </Box>
@@ -174,8 +174,8 @@ function App() {
                 className="description"
                 style={{ color: mode === "dark" ? "#f0f0f0" : "inherit" }}
               >
-                Calculate the Yield Reduction by entering the relevant
-                information.
+                Calculate potential yield reduction by entering the relevant
+                information below.
               </p>
             </Box>
             {calculated && (
