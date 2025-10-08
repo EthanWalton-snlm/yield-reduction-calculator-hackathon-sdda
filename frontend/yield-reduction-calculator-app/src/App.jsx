@@ -3,23 +3,15 @@ import { Box, Button, IconButton, Typography } from "@mui/joy";
 import { CssVarsProvider, useColorScheme } from "@mui/joy/styles";
 import "./App.css";
 import axios from "axios";
-import { ResultsModal } from "./components/ResultsModal/ResultsModal";
-import { ResultBox } from "./components/ResultBox/ResultBox";
 import { ProgressModal } from "./components/ProgressModal/ProgressModal";
 import { CalculatorInput } from "./components/CalculatorInput/CalculatorInput";
 import { WrapperTypeDropdown } from "./components/WrapperTypeDropdown/WrapperTypeDropdown";
-import { SummaryTable } from "./components/SummaryTable/SummaryTable";
-import { ChatInterface } from "./components/Chatbot/ChatInterface";
 import DarkModeSharpIcon from "@mui/icons-material/DarkModeSharp";
 import LightModeSharpIcon from "@mui/icons-material/LightModeSharp";
-import PictureAsPdfSharpIcon from "@mui/icons-material/PictureAsPdfSharp";
 import FileUploadIcon from "@mui/icons-material/FileUpload";
-// import PictureAsPdfSharpIcon from '@mui/icons-material/PictureAsPdfSharp';
-import ExpandLessIcon from "@mui/icons-material/ExpandLess";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { AgeSpineditInput } from "./components/AgeSpineditInput/AgeSpineditInput";
 import { SpineditInput } from "./components/SpineditInput/SpineditInput";
-import html2pdf from "html2pdf.js";
+import ResultsPage from "./pages/ResultsPage/ResultsPage";
 
 function ThemeToggle() {
   const { mode, setMode } = useColorScheme();
@@ -59,8 +51,6 @@ function App() {
   const [wrapperAnnualCostEac, setWrapperAnnualCostEac] = useState(0.0035);
   const [annualRaContribution, setAnnualRaContribution] = useState(350000);
   const [clientAge, setClientAge] = useState(55);
-  //const [calculationModalOpen, setCalculationModalOpen] = useState(false);
-  const [showSummaryTable, setShowSummaryTable] = useState(false);
   const [calculated, setCalculated] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -131,25 +121,6 @@ function App() {
     }
   };
 
-  const handleDownload = async () => {
-    const element = contentRef.current;
-
-    const isDark = mode === "dark";
-    if (isDark) setMode("light");
-
-    const options = {
-      margin: 1,
-      filename: "yield_calculation.pdf",
-      image: { type: "jpeg", quality: 0.98 },
-      html2canvas: { scale: 2 },
-      jsPDF: { unit: "in", format: "a2", orientation: "portrait" },
-    };
-
-    await html2pdf().set(options).from(element).save();
-
-    if (isDark) setMode("dark");
-  };
-
   return (
     <CssVarsProvider>
       <Box sx={{ backgroundColor: mode === "dark" ? "#1f1f1f" : "#ffffff" }}>
@@ -200,157 +171,111 @@ function App() {
               </p>
             </Box>
             {calculated && (
-              <>
-                <Box className="flex-row">
-                  <ResultBox
-                    title={"Monetary Reduction"}
-                    value={
-                      calculationResultRef.current?.yieldReductionEnhancement
-                    }
-                    isCurrency
-                  />
-                  <ResultBox
-                    title={"Percentage Reduction"}
-                    value={
-                      calculationResultRef.current
-                        ?.yieldReductionEnhancementPercent * 100
-                    }
-                    isPercent
-                  />
-                </Box>
-                <Box className="flex-row">
-                  <Button
-                    onClick={() => setShowSummaryTable(!showSummaryTable)}
-                    endDecorator={
-                      showSummaryTable ? <ExpandLessIcon /> : <ExpandMoreIcon />
-                    }
-                    sx={{ my: 3, color: "#f0f0f0" }}
-                    className="sanlam-button"
-                  >
-                    VIEW SUMMARY
-                  </Button>
-                  <Button
-                    onClick={handleDownload}
-                    endDecorator={<PictureAsPdfSharpIcon />}
-                    sx={{
-                      my: 3,
-                      color: "#f0f0f0",
-                      display: showSummaryTable ? "flex" : "none",
-                    }}
-                    className="sanlam-button-reverse"
-                  >
-                    DOWNLOAD SUMMARY{" "}
-                  </Button>
-                </Box>
-              </>
-            )}
-            {showSummaryTable && (
-              <>
-                <SummaryTable
-                  contentRef={contentRef}
-                  data={calculationResultRef.current}
-                  mode={mode}
-                />
-                <ChatInterface
-                  calculationData={calculationResultRef.current}
-                  aiResponse={calculationResultRef.current?.aiResponse}
-                />
-              </>
+              <ResultsPage
+                calculationResultRef={calculationResultRef}
+                contentRef={contentRef}
+                mode={mode}
+                setMode={setMode}
+                setLoading={setLoading}
+                setCalculated={setCalculated}
+              />
             )}
           </Box>
-          <Box className="output-box">
-            <Box>
-              <Box className="flex-row">
-                <Box className="client-details">
-                  <AgeSpineditInput
-                    title={"How old will you be on 28 February 2025?"}
-                    value={clientAge}
-                    setValue={setClientAge}
-                  />
-                  <CalculatorInput
-                    title={"What is your total annual taxable income?"}
-                    value={totalAnnualTaxableIncome}
-                    setValue={setTotalAnnualTaxableIncome}
-                  />
-                </Box>
+          {!calculated && (
+            <Box className="output-box">
+              <Box>
+                <Box className="flex-row">
+                  <Box className="client-details">
+                    <AgeSpineditInput
+                      title={"How old will you be on 28 February 2025?"}
+                      value={clientAge}
+                      setValue={setClientAge}
+                    />
+                    <CalculatorInput
+                      title={"What is your total annual taxable income?"}
+                      value={totalAnnualTaxableIncome}
+                      setValue={setTotalAnnualTaxableIncome}
+                    />
+                  </Box>
 
-                <Box className="client-details">
-                  <WrapperTypeDropdown
-                    value={wrapperTypeToAnalyse}
-                    setValue={setWrapperTypeToAnalyse}
+                  <Box className="client-details">
+                    <WrapperTypeDropdown
+                      value={wrapperTypeToAnalyse}
+                      setValue={setWrapperTypeToAnalyse}
+                    />
+                    <SpineditInput
+                      title={"Wrapper Annual Cost (EAC %)"}
+                      value={wrapperAnnualCostEac}
+                      setValue={setWrapperAnnualCostEac}
+                    />
+
+                    {wrapperTypeToAnalyse == "RA" && (
+                      <CalculatorInput
+                        title={"Annual RA Contribution"}
+                        value={annualRaContribution}
+                        setValue={setAnnualRaContribution}
+                      />
+                    )}
+                  </Box>
+                </Box>
+                <Box className="client-details-fw">
+                  <CalculatorInput
+                    title={"Total Investment Value"}
+                    value={totalInvestmentValue}
+                    setValue={setTotalInvestmentValue}
                   />
                   <SpineditInput
-                    title={"Wrapper Annual Cost (EAC %)"}
-                    value={wrapperAnnualCostEac}
-                    setValue={setWrapperAnnualCostEac}
+                    title={"Gross Annual Portfolio Return (%)"}
+                    value={grossAnnualPortfolioReturn}
+                    setValue={setGrossAnnualPortfolioReturn}
                   />
-
-                  {wrapperTypeToAnalyse == "RA" && (
-                    <CalculatorInput
-                      title={"Annual RA Contribution"}
-                      value={annualRaContribution}
-                      setValue={setAnnualRaContribution}
-                    />
-                  )}
+                  <SpineditInput
+                    title={"Return From SA Interest (%)"}
+                    value={returnFromSaInterest}
+                    setValue={setReturnFromSaInterest}
+                  />
+                  <SpineditInput
+                    title={"Return From SA Local Dividends (Non-REIT) (%)"}
+                    value={returnFromSaLocalDividends}
+                    setValue={setReturnFromSaLocalDividends}
+                  />
+                  <SpineditInput
+                    title={"Return From Local SA REIT Dividends (%)"}
+                    value={returnFromLocalSaReitDividends}
+                    setValue={setReturnFromLocalSaReitDividends}
+                  />
+                  <SpineditInput
+                    title={"Return From Foreign Dividends (%)"}
+                    value={returnFromForeignDividends}
+                    setValue={setReturnFromForeignDividends}
+                  />
+                  <SpineditInput
+                    title={"Return From Capital Growth (%)"}
+                    value={returnFromLocalCapitalGrowth}
+                    setValue={setReturnFromLocalCapitalGrowth}
+                  />
+                  <SpineditInput
+                    title={"Average Portfolio Turnover (%)"}
+                    value={averagePortfolioTurnover}
+                    setValue={setAveragePortfolioTurnover}
+                  />
+                  <SpineditInput
+                    title={"Assumed Realised Gain On Turnover (%)"}
+                    value={assumedRealisedGainOnTurnover}
+                    setValue={setAssumedRealisedGainOnTurnover}
+                  />
                 </Box>
+                <Button
+                  onClick={handleCalculation}
+                  variant="solid"
+                  className="calculate"
+                  sx={{ color: "#f0f0f0" }}
+                >
+                  CALCULATE
+                </Button>
               </Box>
-              <Box className="client-details-fw">
-                <CalculatorInput
-                  title={"Total Investment Value"}
-                  value={totalInvestmentValue}
-                  setValue={setTotalInvestmentValue}
-                />
-                <SpineditInput
-                  title={"Gross Annual Portfolio Return (%)"}
-                  value={grossAnnualPortfolioReturn}
-                  setValue={setGrossAnnualPortfolioReturn}
-                />
-                <SpineditInput
-                  title={"Return From SA Interest (%)"}
-                  value={returnFromSaInterest}
-                  setValue={setReturnFromSaInterest}
-                />
-                <SpineditInput
-                  title={"Return From SA Local Dividends (Non-REIT) (%)"}
-                  value={returnFromSaLocalDividends}
-                  setValue={setReturnFromSaLocalDividends}
-                />
-                <SpineditInput
-                  title={"Return From Local SA REIT Dividends (%)"}
-                  value={returnFromLocalSaReitDividends}
-                  setValue={setReturnFromLocalSaReitDividends}
-                />
-                <SpineditInput
-                  title={"Return From Foreign Dividends (%)"}
-                  value={returnFromForeignDividends}
-                  setValue={setReturnFromForeignDividends}
-                />
-                <SpineditInput
-                  title={"Return From Capital Growth (%)"}
-                  value={returnFromLocalCapitalGrowth}
-                  setValue={setReturnFromLocalCapitalGrowth}
-                />
-                <SpineditInput
-                  title={"Average Portfolio Turnover (%)"}
-                  value={averagePortfolioTurnover}
-                  setValue={setAveragePortfolioTurnover}
-                />
-                <SpineditInput
-                  title={"Assumed Realised Gain On Turnover (%)"}
-                  value={assumedRealisedGainOnTurnover}
-                  setValue={setAssumedRealisedGainOnTurnover}
-                />
-              </Box>
-              <Button
-                onClick={handleCalculation}
-                variant="solid"
-                className="calculate"
-                sx={{ color: "#f0f0f0" }}
-              >
-                CALCULATE
-              </Button>
             </Box>
-          </Box>
+          )}
         </Box>
       </Box>
     </CssVarsProvider>
