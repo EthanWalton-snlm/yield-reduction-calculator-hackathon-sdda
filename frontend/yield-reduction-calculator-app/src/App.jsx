@@ -159,7 +159,9 @@ function App() {
 
   return (
     <CssVarsProvider>
-      <Box sx={{ backgroundColor: mode === "dark" ? "#1f1f1f" : "#ffffff" }}>
+      <Box sx={{ backgroundColor: mode === "dark" ? "#1f1f1f" : "#ffffff",
+      transition: "background-color 0.4s ease, color 0.4s ease",
+      }}>
         <Box className="header">
           <Box>
             <img
