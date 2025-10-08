@@ -9,6 +9,7 @@ import { ProgressModal } from "./components/ProgressModal/ProgressModal";
 import { CalculatorInput } from "./components/CalculatorInput/CalculatorInput";
 import { WrapperTypeDropdown } from "./components/WrapperTypeDropdown/WrapperTypeDropdown";
 import { SummaryTable } from "./components/SummaryTable/SummaryTable";
+import { ChatInterface } from "./components/Chatbot/ChatInterface";
 import DarkModeSharpIcon from "@mui/icons-material/DarkModeSharp";
 import LightModeSharpIcon from "@mui/icons-material/LightModeSharp";
 import PictureAsPdfSharpIcon from "@mui/icons-material/PictureAsPdfSharp";
@@ -234,11 +235,17 @@ function App() {
               </>
             )}
             {showSummaryTable && (
+              <>
               <SummaryTable
                 contentRef={contentRef}
                 data={calculationResultRef.current}
                 mode={mode}
               />
+              <ChatInterface
+                calculationData={calculationResultRef.current}
+                aiResponse={calculationResultRef.current?.aiResponse}
+              />
+              </>
             )}
           </Box>
           <Box className="output-box">
@@ -336,6 +343,8 @@ function App() {
           </Box>
         </Box>
       </Box>
+
+
     </CssVarsProvider>
   );
 }
