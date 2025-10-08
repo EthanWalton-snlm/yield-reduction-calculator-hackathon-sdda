@@ -152,7 +152,7 @@ export function SummaryTable({ contentRef, data, mode }) {
                 fontWeight: "bold",
               },
               "& tbody tr:nth-last-child(2) td": {
-                fontWeight: "bold",
+                fontWeight: "600",
                 backgroundColor: "#0075c9",
                 color: "#fff",
               },
