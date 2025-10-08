@@ -145,7 +145,14 @@ function App() {
       jsPDF: { unit: "in", format: "a2", orientation: "portrait" },
     };
 
-    await html2pdf().set(options).from(element).save();
+    const worker = html2pdf().set(options).from(element);
+
+    // Generate the PDF as a Blob
+    const pdfBlob = await worker.outputPdf('blob');
+
+    // Create a URL and open in a new tab
+    const pdfUrl = URL.createObjectURL(pdfBlob);
+    window.open(pdfUrl, '_blank');
 
     if (isDark) setMode("dark");
   };
