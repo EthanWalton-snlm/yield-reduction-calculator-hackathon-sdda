@@ -155,6 +155,103 @@ def get_calculation():
     )
 
 
+@app.route("/chat", methods=["POST"])
+def chat_with_ai():
+    try:
+        data = request.json
+        question = data.get("question", "")
+        calculation_data = data.get("calculationData", {})
+        ai_response = data.get("aiResponse", "")
+        conversation_history = data.get("conversationHistory", [])
+
+        if not question.strip():
+            return jsonify({"error": "Question is required"}), 400
+
+        # Create context-aware prompt
+        prompt = create_chat_prompt(
+            question, calculation_data, ai_response, conversation_history
+        )
+
+        # Get AI response using existing infrastructure
+        if ENABLE_AI:
+            # Load environment variables from .env
+            load_dotenv()
+            AWS_REGION = os.getenv("AWS_REGION")
+            MODEL_ID = os.getenv("BEDROCK_MODEL_ID")
+            client = boto3.client(
+                "bedrock-runtime",
+                region_name=AWS_REGION,
+                aws_access_key_id=os.getenv("AWS_ACCESS_KEY_ID"),
+                aws_secret_access_key=os.getenv("AWS_SECRET_ACCESS_KEY"),
+            )
+            answer = invoke_model(prompt, MODEL_ID, client)
+        else:
+            answer = (
+                "AI chat is currently disabled. Please enable AI to use the chatbot."
+            )
+
+        return jsonify({"answer": answer})
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+def create_chat_prompt(question, calculation_data, ai_response, conversation_history):
+    """Create a comprehensive prompt for the chatbot"""
+
+    # Format conversation history
+    history_text = ""
+    if conversation_history:
+        history_text = "\n\nPrevious conversation:\n"
+        for msg in conversation_history[-6:]:  # Last 6 messages for context
+            msg_type = msg.get("type", "unknown").upper()
+            msg_text = msg.get("text", "")
+            history_text += f"{msg_type}: {msg_text}\n"
+
+    # Extract key data for context
+    investment_value = calculation_data.get("totalInvestmentValue", "Unknown")
+    yield_enhancement = calculation_data.get("yieldReductionEnhancement", "Unknown")
+    net_return_wrapped = calculation_data.get("netReturnWrapped", "Unknown")
+    net_return_unwrapped = calculation_data.get("netReturnUnwrapped", "Unknown")
+
+    prompt = f"""
+You are a Sanlam Financial Markets expert chatbot specializing in South African tax-efficient investment wrappers.
+
+CONTEXT:
+Client's Current Calculation Results:
+- Annual Yield Enhancement: R{yield_enhancement:,} (if numeric)
+- Net Return with Wrapper: R{net_return_wrapped:,} (if numeric)
+- Net Return without Wrapper: R{net_return_unwrapped:,} (if numeric)
+
+Previous AI Analysis Summary:
+{ai_response[:500] + "..." if len(str(ai_response)) > 500 else ai_response}
+
+{history_text}
+
+CURRENT QUESTION: {question}
+
+INSTRUCTIONS:
+1. Answer based on the specific calculation data provided
+2. Use South African tax laws and investment context
+3. Be concise but comprehensive (2-4 paragraphs max)
+4. Include specific rand amounts from the calculations when relevant
+5. Explain investment concepts in client-friendly terms
+6. If asked about alternatives, suggest based on the client's profile
+7. Always relate back to the client's specific situation
+8. Use a conversational, helpful tone
+
+AREAS OF EXPERTISE:
+- Tax-efficient investment wrappers (Endowments, RAs, TFSAs, Local/Foreign Notes)
+- South African tax implications (CGT, dividends withholding tax, income tax)
+- Investment returns and yield enhancement
+- Wrapper costs vs. tax benefits analysis
+
+Provide a helpful, accurate response:
+"""
+
+    return prompt
+
+
 def calculate(
     DEBUG,
     client_age,
