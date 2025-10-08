@@ -62,7 +62,7 @@ function ResultsPage({
         <ResultBox
           title={"Percentage Reduction"}
           value={
-            calculationResultRef.current?.yieldReductionEnhancementPercent * 100
+            (calculationResultRef.current?.yieldReductionEnhancementPercent * 100)?.toFixed(3)
           }
           isPercent
         />
