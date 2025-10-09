@@ -14,6 +14,10 @@ import { AgeSpineditInput } from "./components/AgeSpineditInput/AgeSpineditInput
 import { SpineditInput } from "./components/SpineditInput/SpineditInput";
 import ResultsPage from "./pages/ResultsPage/ResultsPage";
 import * as XLSX from "xlsx";
+import darkModeLogo from "./assets/inverse-logo.svg";
+
+// Light mode logo URL
+const lightModeLogo = "https://sanlamprivatewealth.mu/wp-content/uploads/2021/11/Sanlam-Private-wealth-50px-height.png";
 
 function ThemeToggle() {
   const { mode, setMode } = useColorScheme();
@@ -256,10 +260,10 @@ function App() {
         <Box className="header">
           <Box>
             <img
-              src="https://sanlamprivatewealth.mu/wp-content/uploads/2021/11/Sanlam-Private-wealth-50px-height.png"
-              alt=""
+              src={mode === "dark" ? darkModeLogo : lightModeLogo}
+              alt="Sanlam Private Wealth"
               className="logo"
-            ></img>
+            />
           </Box>
           <ThemeToggle />
         </Box>
@@ -318,7 +322,7 @@ function App() {
                 style={{ color: mode === "dark" ? "#f0f0f0" : "inherit" }}
               >
                 {!calculated
-                  ? "Calculate potential yield reduction by entering the relevant information below or import a csv file with the relevant information."
+                  ? "Calculate potential yield reduction by entering the relevant information below or import an xlsx file with the relevant information."
                   : "View a breakdown on your potential yield reduction and interact with our AI agent for more information."}
               </p>
             </Box>
