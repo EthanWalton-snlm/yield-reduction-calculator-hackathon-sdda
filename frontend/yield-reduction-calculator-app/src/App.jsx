@@ -8,7 +8,7 @@ import { CalculatorInput } from "./components/CalculatorInput/CalculatorInput";
 import { WrapperTypeDropdown } from "./components/WrapperTypeDropdown/WrapperTypeDropdown";
 import DarkModeSharpIcon from "@mui/icons-material/DarkModeSharp";
 import LightModeSharpIcon from "@mui/icons-material/LightModeSharp";
-import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
+import CancelRoundedIcon from "@mui/icons-material/CancelRounded";
 import FileUploadIcon from "@mui/icons-material/FileUpload";
 import { AgeSpineditInput } from "./components/AgeSpineditInput/AgeSpineditInput";
 import { SpineditInput } from "./components/SpineditInput/SpineditInput";
@@ -17,7 +17,8 @@ import * as XLSX from "xlsx";
 import darkModeLogo from "./assets/inverse-logo.svg";
 
 // Light mode logo URL
-const lightModeLogo = "https://sanlamprivatewealth.mu/wp-content/uploads/2021/11/Sanlam-Private-wealth-50px-height.png";
+const lightModeLogo =
+  "https://sanlamprivatewealth.mu/wp-content/uploads/2021/11/Sanlam-Private-wealth-50px-height.png";
 
 function ThemeToggle() {
   const { mode, setMode } = useColorScheme();
@@ -243,7 +244,7 @@ function App() {
                 color="danger"
                 onClick={() => setShowAlert(false)}
               >
-                <CloseRoundedIcon />
+                <CancelRoundedIcon />
               </IconButton>
             }
           >
