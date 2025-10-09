@@ -31,6 +31,12 @@ variable "personal_cidr_blocks" {
   default     = []
 }
 
+variable "vpc_cidr_blocks" {
+  description = "VPC CIDR Blocks"
+  type        = list(string)
+  default     = ["10.0.0.0/16"]
+}
+
 variable "custom_name" {
   type = string
   default = "ethan-be"
