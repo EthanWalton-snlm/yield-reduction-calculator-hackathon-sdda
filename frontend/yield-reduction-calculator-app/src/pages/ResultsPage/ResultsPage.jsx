@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Box, Button, IconButton } from "@mui/joy";
 import "../../App.css";
 import { ResultBox } from "../../components/ResultBox/ResultBox";
@@ -10,6 +10,7 @@ import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import html2pdf from "html2pdf.js";
 import RestartAltSharpIcon from "@mui/icons-material/RestartAltSharp";
+import SmartToyIcon from "@mui/icons-material/SmartToy";
 
 function ResultsPage({
   calculationResultRef,
@@ -46,8 +47,33 @@ function ResultsPage({
     setLoading(false);
   };
 
+  const scrollRef = useRef(null);
+
+  const scrollToAi = () => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
   return (
     <>
+      <Box
+        sx={{
+          position: "fixed",
+          bottom: 36,
+          right: 36,
+          zIndex: 1000,
+        }}
+      >
+        <IconButton
+          variant="solid"
+          color="primary"
+          size="lg"
+          onClick={scrollToAi}
+        >
+          <SmartToyIcon />
+        </IconButton>
+      </Box>
       <ProgressModal
         open={loading}
         title={"Compiling PDF... This will take about 30 seconds"}
@@ -96,10 +122,12 @@ function ResultsPage({
           data={calculationResultRef.current}
           mode={mode}
         />
-        <ChatInterface
-          calculationData={calculationResultRef.current}
-          aiResponse={calculationResultRef.current?.aiResponse}
-        />
+        <Box ref={scrollRef}>
+          <ChatInterface
+            calculationData={calculationResultRef.current}
+            aiResponse={calculationResultRef.current?.aiResponse}
+          />
+        </Box>
       </Box>
     </>
   );
