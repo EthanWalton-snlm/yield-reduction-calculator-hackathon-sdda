@@ -15,7 +15,9 @@ app = Flask(__name__)
 
 CORS(app, resources={r"/*": {"origins": "*"}})
 
-ENABLE_AI = False
+# Load environment variables from .env
+load_dotenv()
+ENABLE_AI = os.getenv("ENABLE_AI")
 
 
 @app.route("/")
@@ -179,8 +181,6 @@ def chat_with_ai():
 
         # Get AI response using existing infrastructure
         if ENABLE_AI:
-            # Load environment variables from .env
-            load_dotenv()
             AWS_REGION = os.getenv("AWS_REGION")
             MODEL_ID = os.getenv("BEDROCK_MODEL_ID")
             client = boto3.client(

@@ -43,9 +43,6 @@ kind: Service
 metadata:
   name: deploy-backend-test-app-service
   namespace: default
-  annotations:
-    service.beta.kubernetes.io/aws-load-balancer-type: "external"
-    service.beta.kubernetes.io/aws-load-balancer-target-type: "ip"
 spec:
   type: LoadBalancer
   selector:
@@ -60,9 +57,10 @@ metadata:
   name: deploy-backend-test-app-ingress
   namespace: default
   annotations:
-    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/scheme: internal
     alb.ingress.kubernetes.io/target-type: ip
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}]'
+    alb.ingress.kubernetes.io/load-balancer-attributes: idle_timeout.timeout_seconds=120
 spec:
   ingressClassName: alb
   rules:

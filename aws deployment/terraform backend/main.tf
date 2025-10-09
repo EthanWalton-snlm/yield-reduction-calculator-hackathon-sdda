@@ -267,6 +267,38 @@ resource "aws_security_group" "eks_fargate_sg" {
   tags = var.tags
 }
 
+resource "aws_security_group" "eks_cross_cluster_sg" {
+  name        = "${var.custom_name}-cross-cluster-sg"
+  description = "Allow internal app-to-app traffic between EKS clusters within VPC"
+  vpc_id      = var.vpc_id
+
+  ingress {
+    description      = "Allow internal communication between clusters"
+    from_port        = 80
+    to_port          = 80
+    protocol         = "tcp"
+    cidr_blocks      = var.vpc_cidr_blocks
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
+resource "aws_security_group_rule" "allow_cross_cluster_to_eks" {
+  type                     = "ingress"
+  from_port                = 80
+  to_port                  = 80
+  protocol                 = "tcp"
+  description              = "Allow traffic from other cluster in same VPC"
+  security_group_id        = aws_security_group.eks_fargate_sg.id
+  source_security_group_id = aws_security_group.eks_cross_cluster_sg.id
+  depends_on               = [module.eks]
+}
+
 resource "aws_iam_user_policy_attachment" "attach_eks_cluster_policy" {
   user       = "${var.aws_user}"
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"

@@ -13,6 +13,9 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy all app code
 COPY . .
 
+# Copy .env (TODO: remove and add to kubernetes deployment instead)
+COPY .env .env
+
 # Expose Flask port
 EXPOSE 80
 
@@ -22,4 +25,4 @@ ENV FLASK_RUN_HOST=0.0.0.0
 ENV FLASK_ENV=production
 
 # Run with Gunicorn for production
-CMD ["gunicorn", "--bind", "0.0.0.0:80", "main:app"]
+CMD ["gunicorn", "--bind", "0.0.0.0:80", "--timeout", "120", "main:app"]
