@@ -17,9 +17,9 @@ CORS(app, resources={r"/*": {"origins": "*"}})
 
 # Load environment variables from .env
 load_dotenv()
-ENABLE_AI = os.getenv("ENABLE_AI").lower() == "true"
+ENABLE_AI = os.getenv("ENABLE_AI").lower() == "true"  # type: ignore
 
-test_payload = ""
+test_payload = {}
 
 
 @app.route("/")
@@ -105,7 +105,7 @@ def get_ai_response():
     which product which be suitable, with or without the wrapper. Highlight the important parts in the report and put the headings in bold.
     Full calculation data:
     {json.dumps(test_payload, indent=2)}
-    """
+    """  # type: ignore
 
     print("Sending payload to Claude...")
     return jsonify(
@@ -172,10 +172,10 @@ def get_calculation():
 def chat_with_ai():
     try:
         data = request.json
-        question = data.get("question", "")
-        calculation_data = data.get("calculationData", {})
-        ai_response = data.get("aiResponse", "")
-        conversation_history = data.get("conversationHistory", [])
+        question = data.get("question", "")  # type: ignore
+        calculation_data = data.get("calculationData", {})  # type: ignore
+        ai_response = data.get("aiResponse", "")  # type: ignore
+        conversation_history = data.get("conversationHistory", [])  # type: ignore
 
         if not question.strip():
             return jsonify({"error": "Question is required"}), 400
@@ -230,6 +230,7 @@ You are a Sanlam Financial Markets expert chatbot specializing in South African 
 
 CONTEXT:
 Client's Current Calculation Results:
+- Total Investment Value: R{investment_value:,} (if numeric)
 - Annual Yield Enhancement: R{yield_enhancement:,} (if numeric)
 - Net Return with Wrapper: R{net_return_wrapped:,} (if numeric)
 - Net Return without Wrapper: R{net_return_unwrapped:,} (if numeric)
@@ -394,35 +395,37 @@ def calculate(
         + tax_on_foreign_dividends
         + tax_on_capital_gains
     )
+    ########
+    # NOTE #
+    ########
+    internal_tax_on_interest_note = 0
 
-    internal_tax_on_interest = 0
-
-    internal_tax_on_reit_dividends = (
+    internal_tax_on_reit_dividends_note = (
         sa_reit_dividends * ENDOWMENT_INCOME_RATE
         if (wrapper_type_to_analyse == "Local or Foreign Note")
         else 0
     )
 
-    internal_tax_on_local_dividends = (
+    internal_tax_on_local_dividends_note = (
         sa_local_dividends * DWT_RATE_LOCAL_NON_REIT
         if (wrapper_type_to_analyse == "Local or Foreign Note")
         else 0
     )
 
-    internal_tax_on_foreign_dividends = (
+    internal_tax_on_foreign_dividends_note = (
         foreign_dividends * DWT_RATE_LOCAL_NON_REIT
         if (wrapper_type_to_analyse == "Local or Foreign Note")
         else 0
     )
 
-    internal_tax_on_capital_gains = 0
+    internal_tax_on_capital_gains_note = 0
 
     total_tax_on_local_or_foreign_note = (
-        internal_tax_on_interest
-        + internal_tax_on_reit_dividends
-        + internal_tax_on_local_dividends
-        + internal_tax_on_foreign_dividends
-        + internal_tax_on_capital_gains
+        internal_tax_on_interest_note
+        + internal_tax_on_reit_dividends_note
+        + internal_tax_on_local_dividends_note
+        + internal_tax_on_foreign_dividends_note
+        + internal_tax_on_capital_gains_note
     )
 
     cost_of_note = (
@@ -432,6 +435,9 @@ def calculate(
     )
 
     total_cost_of_note = cost_of_note + total_tax_on_local_or_foreign_note
+    #############
+    # Endowment #
+    #############
 
     internal_tax_on_interest_endowment = (
         sa_interest * ENDOWMENT_INCOME_RATE
@@ -451,7 +457,9 @@ def calculate(
         or wrapper_type_to_analyse == "Offshore Endowment"
         else 0
     )
-    internal_tax_on_foreign_dividends_endowment = internal_tax_on_local_dividends_endowment  # TODO: clarify if this is a mistake (B59)
+    internal_tax_on_foreign_dividends_endowment = (
+        internal_tax_on_local_dividends_endowment
+    )
     internal_tax_on_capital_gains_endowment = (
         gross_realised_capital_gains * ENDOWMENT_CGT_EFFECTIVE_RATE
         if wrapper_type_to_analyse == "Endowment"
@@ -467,7 +475,7 @@ def calculate(
         if wrapper_type_to_analyse == "Endowment"
         or wrapper_type_to_analyse == "Offshore Endowment"
         else 0
-    )  # TODO: also includes B5 on spreadsheet, clarify (B61)
+    )
     wrapper_cost_endowment = (
         total_investment_value * wrapper_annual_cost_eac
         if wrapper_type_to_analyse == "Endowment"
@@ -477,7 +485,11 @@ def calculate(
     total_cost_and_internal_tax_endowment = (
         total_internal_tax_endowment + wrapper_cost_endowment
     )
-    upfront_tax_saving_endowment = 0  # TODO: B64 blank on excel
+    upfront_tax_saving_endowment = 0
+
+    ######
+    # RA #
+    ######
 
     total_internal_tax_ra = 0
     wrapper_cost_ra = (
@@ -502,7 +514,11 @@ def calculate(
         if wrapper_type_to_analyse == "RA"
         else 0
     )
-    total_cost_and_internal_tax = wrapper_cost_ra
+    total_cost_and_internal_tax_ra = wrapper_cost_ra
+
+    ########
+    # TFSA #
+    ########
 
     total_internal_tax_tfsa = 0
     wrapper_cost_tfsa = (
@@ -511,7 +527,11 @@ def calculate(
         else 0
     )
     total_cost_and_internal_tax_tfsa = wrapper_cost_tfsa
-    upfront_tax_saving_tfsa = 0  # B78 is empty, fix?
+    upfront_tax_saving_tfsa = 0
+
+    ################
+    ################
+    ################
 
     total_tax_within_selected_wrapper = 0
     if (
@@ -581,14 +601,48 @@ def calculate(
             "type": wrapper_type_to_analyse,
             "EAC": wrapper_annual_cost_eac,
             "internal_tax": {
-                "interest": internal_tax_on_interest,
-                "local_dividends": internal_tax_on_local_dividends,
-                "REIT_dividends": internal_tax_on_reit_dividends,
-                "foreign_dividends": internal_tax_on_foreign_dividends,
-                "capital_gains": internal_tax_on_capital_gains,
+                "interest": internal_tax_on_interest_note
+                if wrapper_type_to_analyse == "Local or Foreign Note"
+                else internal_tax_on_interest_endowment
+                if wrapper_type_to_analyse == "Endowment"
+                or wrapper_type_to_analyse == "Offshore Endowment"
+                else "NOT APPLICABLE",
+                "local_dividends": internal_tax_on_local_dividends_note
+                if wrapper_type_to_analyse == "Local or Foreign Note"
+                else internal_tax_on_local_dividends_endowment
+                if wrapper_type_to_analyse == "Endowment"
+                or wrapper_type_to_analyse == "Offshore Endowment"
+                else "NOT APPLICABLE",
+                "REIT_dividends": internal_tax_on_reit_dividends_note
+                if wrapper_type_to_analyse == "Local or Foreign Note"
+                else internal_tax_on_reit_dividends_endowment
+                if wrapper_type_to_analyse == "Endowment"
+                or wrapper_type_to_analyse == "Offshore Endowment"
+                else "NOT APPLICABLE",
+                "foreign_dividends": internal_tax_on_foreign_dividends_note
+                if wrapper_type_to_analyse == "Local or Foreign Note"
+                else internal_tax_on_foreign_dividends_endowment
+                if wrapper_type_to_analyse == "Endowment"
+                or wrapper_type_to_analyse == "Offshore Endowment"
+                else "NOT APPLICABLE",
+                "capital_gains": internal_tax_on_capital_gains_note
+                if wrapper_type_to_analyse == "Local or Foreign Note"
+                else internal_tax_on_capital_gains_endowment
+                if wrapper_type_to_analyse == "Endowment"
+                or wrapper_type_to_analyse == "Offshore Endowment"
+                else "NOT APPLICABLE",
             },
-            "wrapper_cost": wrapper_annual_cost_eac,  # ?
-            "total_cost_and_tax": total_cost_and_internal_tax,
+            "wrapper_cost": wrapper_annual_cost_eac,
+            "total_cost_and_tax": total_cost_of_note
+            if wrapper_type_to_analyse == "Local or Foreign Note"
+            else total_cost_and_internal_tax_endowment
+            if wrapper_type_to_analyse == "Endowment"
+            or wrapper_type_to_analyse == "Offshore Endowment"
+            else total_cost_and_internal_tax_ra
+            if wrapper_type_to_analyse == "RA"
+            else total_cost_and_internal_tax_tfsa
+            if wrapper_type_to_analyse == "TFSA"
+            else "NOT APPLICABLE",
         },
         "tax": {
             "gross_income_tax": gross_income_tax_payable,
@@ -624,6 +678,55 @@ def calculate(
             if not k.startswith("__") and not callable(v):
                 print(f"{k} = {v}")
 
+    note_return = {
+        "internalTaxOnInterest": internal_tax_on_interest_note,
+        "internalTaxOnReitDividends": internal_tax_on_reit_dividends_note,
+        "internalTaxOnLocalDividends": internal_tax_on_local_dividends_note,
+        "internalTaxOnForeignDividends": internal_tax_on_foreign_dividends_note,
+        "internalTaxOnCapitalGains": internal_tax_on_capital_gains_note,
+        "totalInternalTax": total_tax_on_local_or_foreign_note,
+        "totalWrapperCost": cost_of_note,
+        "totalCostAndInternalTax": total_cost_of_note,
+    }
+
+    endowment_return = {
+        "internalTaxOnInterest": internal_tax_on_interest_endowment,
+        "internalTaxOnReitDividends": internal_tax_on_reit_dividends_endowment,
+        "internalTaxOnLocalDividends": internal_tax_on_local_dividends_endowment,
+        "internalTaxOnForeignDividends": internal_tax_on_foreign_dividends_endowment,
+        "internalTaxOnCapitalGains": internal_tax_on_capital_gains_endowment,
+        "totalInternalTax": total_internal_tax_endowment,
+        "totalWrapperCost": wrapper_cost_endowment,
+        "totalCostAndInternalTax": total_cost_and_internal_tax_endowment,
+    }
+
+    ra_return = {
+        "totalInternalTax": total_internal_tax_ra,
+        "wrapperCost": wrapper_cost_ra,
+        "actualRaContribution": actual_ra_contribtution,
+        "maxDeductibleRaContribution": max_deductible_ra_contribution,
+        "upfrontTaxSavingFromRaContribution": upfront_tax_saving_from_ra_contribution,
+        "totalCostAndInternalTax": total_cost_and_internal_tax_ra,
+    }
+
+    tfsa_return = {
+        "totalInternalTax": total_internal_tax_tfsa,
+        "wrapperCost": wrapper_cost_tfsa,
+        "upfrontTaxSaving": upfront_tax_saving_tfsa,
+        "totalCostAndInternalTax": total_cost_and_internal_tax_tfsa,
+    }
+
+    wrapper_return = (
+        note_return
+        if wrapper_type_to_analyse == "Local or Foreign Note"
+        else endowment_return
+        if wrapper_type_to_analyse == "Endowment"
+        or wrapper_type_to_analyse == "Offshore Endowment"
+        else ra_return
+        if wrapper_type_to_analyse == "RA"
+        else tfsa_return
+    )
+
     return jsonify(
         {
             "yieldReductionEnhancement": annual_yield_enhancement_monetary,
@@ -648,17 +751,10 @@ def calculate(
             "taxablePortionOfCapitalGains": taxable_portion_of_capital_gains,
             "taxOnCapitalGains": tax_on_capital_gains,
             "totalTaxUnwrapped": total_tax_unwrapped,
-            "internalTaxOnInterest": internal_tax_on_interest,
-            "internalTaxOnReitDividends": internal_tax_on_reit_dividends,
-            "internalTaxOnLocalDividends": internal_tax_on_local_dividends,
-            "internalTaxOnForeignDividends": internal_tax_on_foreign_dividends,
-            "internalTaxOnCapitalGains": internal_tax_on_capital_gains,
-            "totalInternalTaxLocalOrForeignNote": total_tax_on_local_or_foreign_note,
+            **wrapper_return,
             "wrapperCost": wrapper_annual_cost_eac,
-            "totalCostAndInternalTax": total_cost_and_internal_tax,
             "totalTaxWithinSelectedWrapper": total_tax_within_selected_wrapper,
             "monetaryCostOfSelectedWrapper": monetary_cost_of_selected_wrapper,
-            "upfrontTaxSavingFromSelectedWrapper": upfront_tax_saving_from_selected_wrapper,
             "netReturnUnwrapped": net_return_unwrapped,
             "netReturnUnwrappedPercentage": net_return_unwrapped_percentage,
             "netReturnWrapped": net_return_wrapped,

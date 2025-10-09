@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import { Box, Button, IconButton, Typography } from "@mui/joy";
+import { Box, Button, Select, Option } from "@mui/joy";
 import { CssVarsProvider, useColorScheme } from "@mui/joy/styles";
 import "./App.css";
 import axios from "axios";
@@ -212,10 +212,46 @@ function App() {
               <h1 className="first-heading">Calculate your Yield Reduction</h1>
               <h1
                 className="second-heading"
-                style={{ color: mode === "dark" ? "#f0f0f0" : "inherit" }}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "0.5rem",
+                  flexWrap: "wrap",
+                  color: mode === "dark" ? "#f0f0f0" : "inherit",
+                  fontWeight: "600",
+                }}
               >
-                Yield Reduction Calculator
+                Yield Reduction Calculator for{" "}
+                <Select
+                  variant="soft"
+                  className="first-heading"
+                  defaultValue="individuals"
+                  color="primary"
+                  disabled={calculated ? true : false}
+                  sx={{
+                    minWidth: 140,
+                    fontSize: "1em",
+                    fontWeight: "bold",
+                    backgroundColor: "transparent",
+                    color: mode === "dark" ? "#f0f0f0" : "inherit",
+                    borderBottom: "2px solid",
+                    borderColor: "primary.outlinedBorder",
+                    "&:hover": {
+                      backgroundColor: "rgba(0, 117, 201, 0.1)",
+                      borderColor: "primary.outlinedHoverBorder",
+                    },
+                    "&.Mui-focused": {
+                      borderColor: "primary.solidBg",
+                    },
+                    marginLeft: "0.25em",
+                  }}
+                >
+                  <Option value="individuals">Individuals</Option>
+                  <Option value="companies">Companies</Option>
+                  <Option value="trusts">Trusts</Option>
+                </Select>
               </h1>
+
               <Box className="underline"></Box>
               <p
                 className="description"
