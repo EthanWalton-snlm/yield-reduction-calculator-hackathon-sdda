@@ -247,7 +247,7 @@ body {
     width: 1280px;
   }
   .calculate {
-    width: 84%;
+    width: 89%;
   }
 
   .container {
@@ -260,6 +260,24 @@ body {
     margin-left: 140px;
     margin-right: 140px;
   }
+
+}
+
+@media (max-width: 1325px) {
+  .calculate {
+    width: 100%;
+  }
+  .container{
+  padding-left: 65px;
+  margin-top: 50px;
+  padding-bottom: 100px;
+  }
+
+  .header{
+    padding-left: 70px;
+    padding-right: 70px;
+  }
+
 }
 
 .summary-table {
