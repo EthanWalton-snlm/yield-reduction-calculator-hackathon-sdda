@@ -90,17 +90,29 @@ export function ChatInterface({ calculationData, aiResponse }) {
       variant="outlined"
       sx={{
         my: 3,
-        maxHeight: "500px",
+        minHeight: "80vh",
+        maxWidth: "80%",
+        margin: "0 auto",
         display: "flex",
         flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
         backgroundColor:
-          mode === "dark" ? "rgba(255, 255, 255, 0.05)" : "#f8fafc",
+          mode === "dark"
+            ? "rgba(31, 31, 31, 0.9)"
+            : "rgba(248, 250, 252, 0.9)",
         borderColor: mode === "dark" ? "rgba(255, 255, 255, 0.2)" : undefined,
         borderRadius: "4px",
       }}
     >
       <CardContent
-        sx={{ flex: 1, display: "flex", flexDirection: "column", p: 2 }}
+        sx={{
+          flex: 1,
+          display: "flex",
+          flexDirection: "column",
+          p: 2,
+          justifyContent: "space-between",
+        }}
       >
         {/* Header */}
         <Box
@@ -242,67 +254,71 @@ export function ChatInterface({ calculationData, aiResponse }) {
         </Box>
 
         {/* Input */}
-        <Box sx={{ display: "flex", gap: 1, alignItems: "flex-end" }}>
-          <Input
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            placeholder="Ask about your investment calculation..."
-            onKeyPress={handleKeyPress}
-            disabled={loading}
-            multiline
-            maxRows={3}
-            sx={{ flex: 1 }}
-          />
-          <IconButton
-            onClick={() => sendMessage()}
-            disabled={loading || !input.trim()}
-            color="primary"
-            variant="solid"
-          >
-            <SendIcon />
-          </IconButton>
-        </Box>
+        <Box>
+          <Box sx={{ display: "flex", gap: 1, alignItems: "flex-end" }}>
+            <Input
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              placeholder="Ask me anything about your investment calculation..."
+              onKeyPress={handleKeyPress}
+              disabled={loading}
+              multiline
+              maxRows={3}
+              sx={{ flex: 1 }}
+            />
+            <IconButton
+              onClick={() => sendMessage()}
+              disabled={loading || !input.trim()}
+              color="primary"
+              variant="solid"
+            >
+              <SendIcon />
+            </IconButton>
+          </Box>
 
-        {/* Quick Questions */}
-        <Box sx={{ mt: 1 }}>
-          <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>
-            {quickQuestions.map((q, index) => (
-              <Box
-                key={index}
-                onClick={() => sendMessage(q)}
-                sx={{
-                  padding: "8px 12px",
-                  backgroundColor:
-                    mode === "dark" ? "rgba(255, 255, 255, 0.1)" : "#f0f4f8",
-                  border: "1px solid",
-                  borderColor:
-                    mode === "dark" ? "rgba(255, 255, 255, 0.2)" : "#e0e4e9",
-                  borderRadius: "8px",
-                  cursor: "pointer",
-                  transition: "all 0.2s ease",
-                  "&:hover": {
-                    backgroundColor:
-                      mode === "dark" ? "rgba(255, 255, 255, 0.15)" : "#e0f2fe",
-                    borderColor: mode === "dark" ? "#7db3e8" : "#2374bb",
-                    transform: "translateY(-1px)",
-                  },
-                }}
-              >
-                <Typography
-                  level="body-sm"
+          {/* Quick Questions */}
+          <Box sx={{ mt: 1 }}>
+            <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>
+              {quickQuestions.map((q, index) => (
+                <Box
+                  key={index}
+                  onClick={() => sendMessage(q)}
                   sx={{
-                    fontSize: "0.7rem",
-                    color: mode === "dark" ? "#e0e0e0" : "#555",
-                    textAlign: "center",
+                    padding: "8px 12px",
+                    backgroundColor:
+                      mode === "dark" ? "rgba(255, 255, 255, 0.1)" : "#f0f4f8",
+                    border: "1px solid",
+                    borderColor:
+                      mode === "dark" ? "rgba(255, 255, 255, 0.2)" : "#e0e4e9",
+                    borderRadius: "8px",
+                    cursor: "pointer",
+                    transition: "all 0.2s ease",
                     "&:hover": {
-                      color: mode === "dark" ? "#7db3e8" : "#2374bb",
+                      backgroundColor:
+                        mode === "dark"
+                          ? "rgba(255, 255, 255, 0.15)"
+                          : "#e0f2fe",
+                      borderColor: mode === "dark" ? "#7db3e8" : "#2374bb",
+                      transform: "translateY(-1px)",
                     },
                   }}
                 >
-                  {q}
-                </Typography>
-              </Box>
-            ))}
+                  <Typography
+                    level="body-sm"
+                    sx={{
+                      fontSize: "0.7rem",
+                      color: mode === "dark" ? "#e0e0e0" : "#555",
+                      textAlign: "center",
+                      "&:hover": {
+                        color: mode === "dark" ? "#7db3e8" : "#2374bb",
+                      },
+                    }}
+                  >
+                    {q}
+                  </Typography>
+                </Box>
+              ))}
+            </Box>
           </Box>
         </Box>
       </CardContent>

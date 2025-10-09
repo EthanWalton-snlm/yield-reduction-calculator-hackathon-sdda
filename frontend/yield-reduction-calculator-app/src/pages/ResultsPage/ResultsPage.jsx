@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import { Box, Button, IconButton } from "@mui/joy";
+import { Box, Button, IconButton, Modal, ModalClose, Sheet } from "@mui/joy";
 import "../../App.css";
 import { ResultBox } from "../../components/ResultBox/ResultBox";
 import { SummaryTable } from "../../components/SummaryTable/SummaryTable";
@@ -20,6 +20,7 @@ function ResultsPage({
   setCalculated,
 }) {
   const [loading, setLoading] = useState(false);
+  const [openChatbot, setOpenChatbot] = useState(false);
 
   const handleDownload = async () => {
     const element = contentRef.current;
@@ -49,31 +50,8 @@ function ResultsPage({
 
   const scrollRef = useRef(null);
 
-  const scrollToAi = () => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollIntoView({ behavior: "smooth" });
-    }
-  };
-
   return (
     <>
-      <Box
-        sx={{
-          position: "fixed",
-          bottom: 36,
-          right: 36,
-          zIndex: 1000,
-        }}
-      >
-        <IconButton
-          variant="solid"
-          color="primary"
-          size="lg"
-          onClick={scrollToAi}
-        >
-          <SmartToyIcon />
-        </IconButton>
-      </Box>
       <ProgressModal
         open={loading}
         title={"Compiling PDF... This will take about 30 seconds"}
@@ -94,7 +72,7 @@ function ResultsPage({
           isPercent
         />
       </Box>
-      <Box className="flex-row">
+      <Box className="flex-row-space-between">
         {/* TODO: Are you sure modal */}
         <IconButton
           onClick={() => setCalculated(false)}
@@ -102,18 +80,34 @@ function ResultsPage({
         >
           <RestartAltSharpIcon />
         </IconButton>
-        <Button
-          onClick={handleDownload}
-          endDecorator={<PictureAsPdfSharpIcon />}
-          sx={{
-            my: 3,
-            color: "#f0f0f0",
-            display: "flex",
-          }}
-          className="sanlam-button-reverse"
-        >
-          DOWNLOAD DETAILS{" "}
-        </Button>
+        <Box sx={{ display: "flex", flexDirection: "row", gap: 1 }}>
+          <Button
+            onClick={() => setOpenChatbot(true)}
+            endDecorator={<SmartToyIcon />}
+            sx={{
+              my: 3,
+              color: "#f0f0f0",
+              display: "flex",
+            }}
+            className="sanlam-button"
+          >
+            CHAT WITH SANYIELD{" "}
+          </Button>
+          <Button
+            onClick={handleDownload}
+            endDecorator={<PictureAsPdfSharpIcon />}
+            sx={{
+              my: 3,
+              color: "#f0f0f0",
+              display: "flex",
+            }}
+            className={
+              mode === "dark" ? "sanlam-button" : "sanlam-button-reverse"
+            }
+          >
+            DOWNLOAD DETAILS{" "}
+          </Button>
+        </Box>
       </Box>
 
       <Box className="flex-column">
@@ -123,10 +117,29 @@ function ResultsPage({
           mode={mode}
         />
         <Box ref={scrollRef}>
-          <ChatInterface
-            calculationData={calculationResultRef.current}
-            aiResponse={calculationResultRef.current?.aiResponse}
-          />
+          <Modal
+            open={openChatbot}
+            onClose={() => setOpenChatbot(false)}
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Sheet
+              className="flex-column"
+              sx={{ backgroundColor: "rgba(0,0,0,0)" }}
+            >
+              <ModalClose
+                variant="plain"
+                sx={{ p: 1, right: 130, zIndex: 1000 }}
+              />
+              <ChatInterface
+                calculationData={calculationResultRef.current}
+                aiResponse={calculationResultRef.current?.aiResponse}
+              />
+            </Sheet>
+          </Modal>
         </Box>
       </Box>
     </>

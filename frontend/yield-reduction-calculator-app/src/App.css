@@ -147,6 +147,12 @@ body {
   gap: 1em;
 }
 
+.flex-row-space-between {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
 .flex-col {
   display: flex;
   flex-direction: row;
