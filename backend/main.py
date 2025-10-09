@@ -225,6 +225,10 @@ def chat_with_ai():
         return jsonify({"answer": answer})
 
     except Exception as e:
+        import traceback
+
+        print("Error in /chat:", e)
+        traceback.print_exc()
         return jsonify({"error": str(e)}), 500
 
 
@@ -251,7 +255,7 @@ You are a Sanlam Financial Markets expert chatbot specializing in South African 
 
 CONTEXT:
 Client's Current Calculation Results:
-- Total Investment Value: R{investment_value:,} (if numeric)
+- Total Investment Value: R{investment_value} (if numeric)
 - Annual Yield Enhancement: R{yield_enhancement:,} (if numeric)
 - Net Return with Wrapper: R{net_return_wrapped:,} (if numeric)
 - Net Return without Wrapper: R{net_return_unwrapped:,} (if numeric)
