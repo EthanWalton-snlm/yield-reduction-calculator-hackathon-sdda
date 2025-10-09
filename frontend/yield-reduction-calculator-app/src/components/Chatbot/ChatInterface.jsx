@@ -103,7 +103,7 @@ export function ChatInterface({ calculationData, aiResponse }) {
         sx={{ flex: 1, display: "flex", flexDirection: "column", p: 2 }}
       >
         {/* Header */}
-        <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 2 }}>
+        <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 1, mb: 2, fontSize: "1.25rem" }}>
           <SmartToyIcon
             sx={{ color: mode === "dark" ? "#7db3e8" : "#2374bb" }}
           />
@@ -111,29 +111,24 @@ export function ChatInterface({ calculationData, aiResponse }) {
             level="h4"
             sx={{ color: mode === "dark" ? "#7db3e8" : "#2374bb" }}
           >
-            Investment Assistant
+            SanYield
           </Typography>
         </Box>
 
         {/* Quick Questions */}
         {messages.length === 0 && (
           <Box sx={{ mb: 2 }}>
-            <Typography level="body-sm" sx={{ mb: 1, opacity: 0.7 }}>
-              Quick questions:
+            <Typography
+              level="body-md"
+              sx={{
+                mb: 1,
+                opacity: 0.7,
+                textAlign: "center",
+                color: mode === "dark" ? "#e0e0e0" : "#666"
+              }}
+            >
+              Ask me anything about your investment calculation
             </Typography>
-            <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>
-              {quickQuestions.slice(0, 3).map((q, index) => (
-                <Button
-                  key={index}
-                  size="sm"
-                  variant="outlined"
-                  onClick={() => sendMessage(q)}
-                  sx={{ fontSize: "0.75rem" }}
-                >
-                  {q}
-                </Button>
-              ))}
-            </Box>
           </Box>
         )}
 
@@ -270,24 +265,45 @@ export function ChatInterface({ calculationData, aiResponse }) {
           </IconButton>
         </Box>
 
-        {/* More Quick Questions */}
-        {messages.length > 0 && (
-          <Box sx={{ mt: 1 }}>
-            <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>
-              {quickQuestions.slice(3).map((q, index) => (
-                <Button
-                  key={index}
-                  size="sm"
-                  variant="plain"
-                  onClick={() => sendMessage(q)}
-                  sx={{ fontSize: "0.7rem", opacity: 0.7 }}
+        {/* Quick Questions */}
+        <Box sx={{ mt: 1 }}>
+          <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>
+            {quickQuestions.map((q, index) => (
+              <Box
+                key={index}
+                onClick={() => sendMessage(q)}
+                sx={{
+                  padding: "8px 12px",
+                  backgroundColor: mode === "dark" ? "rgba(255, 255, 255, 0.1)" : "#f0f4f8",
+                  border: "1px solid",
+                  borderColor: mode === "dark" ? "rgba(255, 255, 255, 0.2)" : "#e0e4e9",
+                  borderRadius: "8px",
+                  cursor: "pointer",
+                  transition: "all 0.2s ease",
+                  "&:hover": {
+                    backgroundColor: mode === "dark" ? "rgba(255, 255, 255, 0.15)" : "#e0f2fe",
+                    borderColor: mode === "dark" ? "#7db3e8" : "#2374bb",
+                    transform: "translateY(-1px)",
+                  }
+                }}
+              >
+                <Typography
+                  level="body-sm"
+                  sx={{
+                    fontSize: "0.7rem",
+                    color: mode === "dark" ? "#e0e0e0" : "#555",
+                    textAlign: "center",
+                    "&:hover": {
+                      color: mode === "dark" ? "#7db3e8" : "#2374bb",
+                    }
+                  }}
                 >
                   {q}
-                </Button>
-              ))}
-            </Box>
+                </Typography>
+              </Box>
+            ))}
           </Box>
-        )}
+        </Box>
       </CardContent>
     </Card>
   );

@@ -3,10 +3,18 @@ import { useState, useEffect } from "react";
 import { useColorScheme } from "@mui/joy/styles";
 
 export function SpineditInput({ title, value, setValue }) {
-  const [displayValue, setDisplayValue] = useState((value * 100).toFixed(2));
+  const formatDisplayValue = (val) => {
+    const percentValue = val * 100;
+    // Format to 3 decimal places first, then remove trailing zeros
+    const formatted = percentValue.toFixed(3);
+    // Remove trailing zeros and decimal point if not needed
+    return parseFloat(formatted).toString();
+  };
+
+  const [displayValue, setDisplayValue] = useState(formatDisplayValue(value));
 
   useEffect(() => {
-    setDisplayValue((value * 100).toFixed(2));
+    setDisplayValue(formatDisplayValue(value));
   }, [value]);
 
   const handleChange = (e) => {
@@ -21,7 +29,10 @@ export function SpineditInput({ title, value, setValue }) {
   const handleBlur = () => {
     const parsed = parseFloat(displayValue);
     if (!isNaN(parsed)) {
-      setDisplayValue(parsed.toFixed(2));
+      // Format to 3 decimal places first, then remove trailing zeros
+      const formatted = parsed.toFixed(3);
+      // Remove trailing zeros and decimal point if not needed
+      setDisplayValue(parseFloat(formatted).toString());
     }
   };
   const { mode } = useColorScheme();

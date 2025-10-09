@@ -83,7 +83,7 @@ function ResultsPage({
           sx={{ my: 3, color: "#f0f0f0" }}
           className="sanlam-button"
         >
-          VIEW SUMMARY
+          VIEW DETAILS
         </Button>
         <Button
           onClick={handleDownload}
@@ -95,7 +95,7 @@ function ResultsPage({
           }}
           className="sanlam-button-reverse"
         >
-          DOWNLOAD SUMMARY{" "}
+          DOWNLOAD DETAILS{" "}
         </Button>
       </Box>
       {showSummaryTable && (
