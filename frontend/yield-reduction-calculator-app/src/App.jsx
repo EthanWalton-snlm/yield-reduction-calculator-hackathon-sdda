@@ -29,29 +29,28 @@ function ThemeToggle() {
 
 function App() {
   const { mode, setMode } = useColorScheme();
-  const [totalAnnualTaxableIncome, setTotalAnnualTaxableIncome] =
-    useState(5000000);
-  const [totalInvestmentValue, setTotalInvestmentValue] = useState(20000000);
+  const [totalAnnualTaxableIncome, setTotalAnnualTaxableIncome] = useState();
+  const [totalInvestmentValue, setTotalInvestmentValue] = useState();
   const [grossAnnualPortfolioReturn, setGrossAnnualPortfolioReturn] =
-    useState(0.1);
-  const [returnFromSaInterest, setReturnFromSaInterest] = useState(0);
+    useState();
+  const [returnFromSaInterest, setReturnFromSaInterest] = useState();
   const [returnFromSaLocalDividends, setReturnFromSaLocalDividends] =
-    useState(0.05);
+    useState();
   const [returnFromLocalSaReitDividends, setReturnFromLocalSaReitDividends] =
-    useState(0.02);
+    useState();
   const [returnFromForeignDividends, setReturnFromForeignDividends] =
-    useState(0.05);
+    useState();
   const [returnFromLocalCapitalGrowth, setReturnFromLocalCapitalGrowth] =
-    useState(0.78);
-  const [averagePortfolioTurnover, setAveragePortfolioTurnover] = useState(0.3);
+    useState();
+  const [averagePortfolioTurnover, setAveragePortfolioTurnover] = useState();
   const [assumedRealisedGainOnTurnover, setAssumedRealisedGainOnTurnover] =
-    useState(0.1);
+    useState();
   const [wrapperTypeToAnalyse, setWrapperTypeToAnalyse] = useState(
     "Local or Foreign Note"
   );
-  const [wrapperAnnualCostEac, setWrapperAnnualCostEac] = useState(0.0035);
-  const [annualRaContribution, setAnnualRaContribution] = useState(350000);
-  const [clientAge, setClientAge] = useState(55);
+  const [wrapperAnnualCostEac, setWrapperAnnualCostEac] = useState();
+  const [annualRaContribution, setAnnualRaContribution] = useState();
+  const [clientAge, setClientAge] = useState();
   const [calculated, setCalculated] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -261,12 +260,14 @@ function App() {
                 <Box className="flex-row">
                   <Box className="client-details">
                     <AgeSpineditInput
-                      title={"How old will you be on 28 February 2025?"}
+                      title={"How old will the client be on 28 February 2025?"}
                       value={clientAge}
                       setValue={setClientAge}
                     />
                     <CalculatorInput
-                      title={"What is your total annual taxable income?"}
+                      title={
+                        "What is the client's total annual taxable income?"
+                      }
                       value={totalAnnualTaxableIncome}
                       setValue={setTotalAnnualTaxableIncome}
                     />

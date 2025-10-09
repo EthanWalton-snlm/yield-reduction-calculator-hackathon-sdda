@@ -28,7 +28,7 @@ variable "tags" {
 variable "personal_cidr_blocks" {
   description = "CIDR blocks to allow access from. Defaults to current IP if empty"
   type        = list(string)
-  default     = []
+  default     = ["0.0.0.0/0"]
 }
 
 variable "custom_name" {

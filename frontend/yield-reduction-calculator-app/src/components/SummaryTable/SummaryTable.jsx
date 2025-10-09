@@ -271,7 +271,7 @@ function formatValue(key, value) {
   ];
 
   if (!unformatDecimals.includes(newKey) && value === 0) {
-    return "R 0.00";
+    return "R0.00";
   }
 
   if (unformatDecimals.includes(newKey)) {
@@ -284,7 +284,7 @@ function formatValue(key, value) {
     }
   } else {
     const numericValue = Number(value) || 0;
-    return `R ${numericValue.toLocaleString("en-US", {
+    return `R${numericValue.toLocaleString("en-US", {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2,
     })}`;
