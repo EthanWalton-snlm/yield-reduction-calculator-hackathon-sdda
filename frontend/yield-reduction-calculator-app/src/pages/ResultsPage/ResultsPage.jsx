@@ -1,5 +1,14 @@
 import { useState, useRef } from "react";
-import { Box, Button, IconButton, Modal, ModalClose, Sheet } from "@mui/joy";
+import {
+  Box,
+  Button,
+  IconButton,
+  Modal,
+  ModalClose,
+  Sheet,
+  ModalDialog,
+  Typography,
+} from "@mui/joy";
 import "../../App.css";
 import { ResultBox } from "../../components/ResultBox/ResultBox";
 import { SummaryTable } from "../../components/SummaryTable/SummaryTable";
@@ -21,6 +30,7 @@ function ResultsPage({
 }) {
   const [loading, setLoading] = useState(false);
   const [openChatbot, setOpenChatbot] = useState(false);
+  const [confirmationModalOpen, setConfirmationModalOpen] = useState(false);
 
   const handleDownload = async () => {
     const element = contentRef.current;
@@ -52,10 +62,68 @@ function ResultsPage({
 
   return (
     <>
-      <ProgressModal
-        open={loading}
-        title={"Compiling PDF... This will take about 30 seconds"}
-      />
+      <Modal
+        onClose={() => setConfirmationModalOpen(false)}
+        aria-labelledby="modal-title"
+        open={confirmationModalOpen}
+      >
+        <ModalDialog>
+          <ModalClose />
+          <Typography id="modal-title" level="h4">
+            Reset Calculation
+          </Typography>
+          <Typography>Are you sure? All progress will be lost.</Typography>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-between",
+              gap: 8,
+            }}
+          >
+            <Box sx={{ display: "flex", gap: 1 }}>
+              <Button
+                onClick={() => setCalculated(false)}
+                sx={{
+                  my: 2,
+                  color: "#f0f0f0",
+                  display: "flex",
+                }}
+                className="sanlam-button"
+              >
+                YES{" "}
+              </Button>
+              <Button
+                onClick={() => setConfirmationModalOpen(false)}
+                sx={{
+                  my: 2,
+                  color: "#f0f0f0",
+                  display: "flex",
+                }}
+                className={
+                  mode === "dark" ? "sanlam-button" : "sanlam-button-reverse"
+                }
+              >
+                NO{" "}
+              </Button>
+            </Box>
+            <Button
+              onClick={handleDownload}
+              sx={{
+                my: 2,
+                color: "#f0f0f0",
+                display: "flex",
+              }}
+              className={
+                mode === "dark" ? "sanlam-button" : "sanlam-button-reverse"
+              }
+            >
+              <PictureAsPdfSharpIcon />
+            </Button>
+          </Box>
+        </ModalDialog>
+      </Modal>
+      <ProgressModal open={loading} title={"Compiling PDF..."} />
       <Box className="flex-row">
         <ResultBox
           title={"Monetary Reduction"}
@@ -73,9 +141,8 @@ function ResultsPage({
         />
       </Box>
       <Box className="flex-row-space-between">
-        {/* TODO: Are you sure modal */}
         <IconButton
-          onClick={() => setCalculated(false)}
+          onClick={() => setConfirmationModalOpen(true)}
           sx={{ my: 3, color: "#f0f0f0" }}
         >
           <RestartAltSharpIcon />

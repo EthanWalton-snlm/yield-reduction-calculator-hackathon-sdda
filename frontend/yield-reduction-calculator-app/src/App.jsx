@@ -1,5 +1,5 @@
-import { useState, useRef } from "react";
-import { Box, Button, Select, Option } from "@mui/joy";
+import { useState, useRef, useEffect } from "react";
+import { Box, Button, Select, Option, Alert, IconButton } from "@mui/joy";
 import { CssVarsProvider, useColorScheme } from "@mui/joy/styles";
 import "./App.css";
 import axios from "axios";
@@ -8,6 +8,7 @@ import { CalculatorInput } from "./components/CalculatorInput/CalculatorInput";
 import { WrapperTypeDropdown } from "./components/WrapperTypeDropdown/WrapperTypeDropdown";
 import DarkModeSharpIcon from "@mui/icons-material/DarkModeSharp";
 import LightModeSharpIcon from "@mui/icons-material/LightModeSharp";
+import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import FileUploadIcon from "@mui/icons-material/FileUpload";
 import { AgeSpineditInput } from "./components/AgeSpineditInput/AgeSpineditInput";
 import { SpineditInput } from "./components/SpineditInput/SpineditInput";
@@ -29,6 +30,9 @@ function ThemeToggle() {
 
 function App() {
   const { mode, setMode } = useColorScheme();
+  const [alertMessage, setAlertMessage] = useState(400);
+  const [showAlert, setShowAlert] = useState(false);
+  const [selectedEntity, setSelectedEntity] = useState("individuals");
   const [totalAnnualTaxableIncome, setTotalAnnualTaxableIncome] = useState();
   const [totalInvestmentValue, setTotalInvestmentValue] = useState();
   const [grossAnnualPortfolioReturn, setGrossAnnualPortfolioReturn] =
@@ -59,6 +63,7 @@ function App() {
 
   const handleCalculation = async () => {
     const params = {
+      selectedEntity,
       clientAge,
       totalAnnualTaxableIncome,
       totalInvestmentValue,
@@ -77,23 +82,51 @@ function App() {
 
     setLoading(true);
 
-    const response = await axios.get("http://localhost:5000/calculate", {
-      params,
-    });
+    try {
+      const response = await axios.get("http://localhost:5000/calculate", {
+        params,
+      });
 
-    calculationResultRef.current = response.data;
-    setCalculated(true);
-    //setCalculationModalOpen(true);
-    setLoading(false);
+      calculationResultRef.current = response.data;
+      setCalculated(true);
+      //setCalculationModalOpen(true);
+      setLoading(false);
 
-    setTimeout(() => {
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }, 100);
-
-    console.log("API response:", calculationResultRef.current);
+      setTimeout(() => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }, 100);
+    } catch (error) {
+      setLoading(false);
+      setAlertMessage(error.message);
+      console.log(error.message);
+      setShowAlert(true);
+    }
   };
 
   const fileInputRef = useRef(null);
+
+  const resetInputs = () => {
+    setClientAge();
+    setTotalAnnualTaxableIncome();
+    setTotalInvestmentValue();
+    setGrossAnnualPortfolioReturn();
+    setReturnFromSaInterest();
+    setReturnFromSaLocalDividends();
+    setReturnFromLocalSaReitDividends();
+    setReturnFromForeignDividends();
+    setReturnFromLocalCapitalGrowth();
+    setAveragePortfolioTurnover();
+    setAssumedRealisedGainOnTurnover();
+    setWrapperTypeToAnalyse();
+    setWrapperAnnualCostEac();
+    setAnnualRaContribution();
+  };
+
+  useEffect(() => {
+    if (calculated === false) {
+      resetInputs();
+    }
+  }, [calculated]); // dependency: re-run when isOpen changes
 
   const importExcel = (e) => {
     const file = e.target.files[0];
@@ -188,6 +221,32 @@ function App() {
   };
   return (
     <CssVarsProvider>
+      {showAlert && (
+        <Box
+          sx={{
+            position: "fixed",
+            bottom: 36,
+            right: 36,
+            zIndex: 1000,
+          }}
+        >
+          <Alert
+            color="danger"
+            endDecorator={
+              <IconButton
+                variant="plain"
+                size="sm"
+                color="danger"
+                onClick={() => setShowAlert(false)}
+              >
+                <CloseRoundedIcon />
+              </IconButton>
+            }
+          >
+            Error: {alertMessage}
+          </Alert>
+        </Box>
+      )}
       <Box
         sx={{
           backgroundColor: mode === "dark" ? "#1f1f1f" : "#ffffff",
@@ -228,6 +287,7 @@ function App() {
                   defaultValue="individuals"
                   color="primary"
                   disabled={calculated ? true : false}
+                  onChange={(e, newValue) => setSelectedEntity(newValue)}
                   sx={{
                     minWidth: 140,
                     fontSize: "1em",
@@ -295,15 +355,23 @@ function App() {
               <Box>
                 <Box className="flex-row">
                   <Box className="client-details">
-                    <AgeSpineditInput
-                      title={"How old will the client be on 28 February 2025?"}
-                      value={clientAge}
-                      setValue={setClientAge}
-                    />
+                    {selectedEntity === "individuals" && (
+                      <AgeSpineditInput
+                        title={
+                          "How old will the client be on 28 February 2025?"
+                        }
+                        value={clientAge}
+                        setValue={setClientAge}
+                      />
+                    )}
                     <CalculatorInput
-                      title={
-                        "What is the client's total annual taxable income?"
-                      }
+                      title={`What is the ${
+                        selectedEntity === "individuals"
+                          ? "client"
+                          : selectedEntity === "companies"
+                          ? "company"
+                          : "trust"
+                      }'s total annual taxable income?`}
                       value={totalAnnualTaxableIncome}
                       setValue={setTotalAnnualTaxableIncome}
                     />

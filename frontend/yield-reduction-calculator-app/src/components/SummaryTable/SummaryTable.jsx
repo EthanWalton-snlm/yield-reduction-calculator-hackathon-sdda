@@ -161,6 +161,7 @@ export function SummaryTable({ contentRef, data, mode }) {
               "& tbody td": {
                 border: "1px solid #e0e0e0",
                 borderTop: "none",
+                backgroundColor: mode === "dark" ? "#1f1f1f" : "",
               },
               "& tbody tr:nth-child(odd) td": {
                 backgroundColor:
@@ -169,6 +170,7 @@ export function SummaryTable({ contentRef, data, mode }) {
               },
               "& tbody td:nth-child(2)": {
                 fontWeight: "bold",
+                backgroundColor: mode === "dark" ? "#1f1f1f" : "",
               },
               "& tbody tr:nth-last-child(2) td": {
                 fontWeight: "600",
