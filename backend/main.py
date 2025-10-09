@@ -324,8 +324,8 @@ def calculate(
 
     DWT_RATE_LOCAL_NON_REIT = 0.2
 
-    ANNUAL_EXCLUSION = 40000
-    INCLUSION_RATE = 0.4
+    ANNUAL_EXCLUSION = 40000 if selected_entity == "individuals" else 0
+    INCLUSION_RATE = 0.4 if selected_entity == "individuals" else 0
 
     ENDOWMENT_INCOME_RATE = 0.3
     ENDOWMENT_CGT_EFFECTIVE_RATE = 0.12
@@ -373,24 +373,43 @@ def calculate(
         else total_annual_taxable_income
     )
 
-    gross_income_tax_payable = table_lookup(
-        adjusted_taxable_income_for_RA, INCOME_TAX_TABLE, 2
-    ) + (
-        adjusted_taxable_income_for_RA
-        - table_lookup(adjusted_taxable_income_for_RA, INCOME_TAX_TABLE, 4)
-    ) * table_lookup(adjusted_taxable_income_for_RA, INCOME_TAX_TABLE, 3)
+    if selected_entity == "individuals":
+        gross_income_tax_payable = table_lookup(
+            adjusted_taxable_income_for_RA, INCOME_TAX_TABLE, 2
+        ) + (
+            adjusted_taxable_income_for_RA
+            - table_lookup(adjusted_taxable_income_for_RA, INCOME_TAX_TABLE, 4)
+        ) * table_lookup(adjusted_taxable_income_for_RA, INCOME_TAX_TABLE, 3)
+    else:
+        gross_income_tax_payable = adjusted_taxable_income_for_RA * (
+            0.28 if selected_entity == "companies" else 0.45
+        )
 
     applicable_rate = (
-        PRIMARY_REBATE_AMT
-        + (SECONDARY_REBATE_AMT if client_age >= 65 else 0)
-        + (TERIARY_REBATE_AMT if client_age >= 75 else 0)
+        (
+            PRIMARY_REBATE_AMT
+            + (SECONDARY_REBATE_AMT if client_age >= 65 else 0)
+            + (TERIARY_REBATE_AMT if client_age >= 75 else 0)
+        )
+        if selected_entity == "individuals"
+        else 0
     )
 
-    clients_marginal_income_tax_rate = table_lookup(
-        adjusted_taxable_income_for_RA, INCOME_TAX_TABLE, 3
+    clients_marginal_income_tax_rate = (
+        table_lookup(adjusted_taxable_income_for_RA, INCOME_TAX_TABLE, 3)
+        if selected_entity == "individuals"
+        else 0.28
+        if selected_entity == "companies"
+        else 0.45
     )
 
-    interest_exemption = OVER_65_EXEMPTION if client_age >= 65 else UNDER_65_EXEMPTION
+    interest_exemption = (
+        OVER_65_EXEMPTION
+        if client_age >= 65
+        else 0
+        if selected_entity != "individuals"
+        else UNDER_65_EXEMPTION
+    )
 
     taxable_interest = max(0, sa_interest - sa_local_dividends)
 
@@ -402,12 +421,16 @@ def calculate(
 
     tax_on_foreign_dividends = foreign_dividends * DWT_RATE_LOCAL_NON_REIT
 
-    net_realised_capital_gains_after_annual_exclusion = max(
-        0, gross_realised_capital_gains - ANNUAL_EXCLUSION
+    net_realised_capital_gains_after_annual_exclusion = (
+        max(0, gross_realised_capital_gains - ANNUAL_EXCLUSION)
+        if selected_entity == "individuals"
+        else 0
     )
 
     taxable_portion_of_capital_gains = (
         net_realised_capital_gains_after_annual_exclusion * INCLUSION_RATE
+        if selected_entity == "individuals"
+        else 1
     )
 
     tax_on_capital_gains = (
@@ -753,6 +776,10 @@ def calculate(
         else tfsa_return
     )
 
+    add_for_individuals = {
+        "interestExemption": interest_exemption,
+    }
+
     return jsonify(
         {
             "yieldReductionEnhancement": annual_yield_enhancement_monetary,
@@ -767,7 +794,7 @@ def calculate(
             "grossIncomeTaxPayable": gross_income_tax_payable,
             "applicableRebate": applicable_rate,
             "clientsMarginalIncomeTaxRate": clients_marginal_income_tax_rate,
-            "interestExemption": interest_exemption,
+            **add_for_individuals,
             "taxableInterest": taxable_interest,
             "taxOnInterest": tax_on_interest,
             "taxOnSaLocalDividendsDwt": tax_on_local_dividends_dwt,
