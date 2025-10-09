@@ -103,7 +103,16 @@ export function ChatInterface({ calculationData, aiResponse }) {
         sx={{ flex: 1, display: "flex", flexDirection: "column", p: 2 }}
       >
         {/* Header */}
-        <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 1, mb: 2, fontSize: "1.25rem" }}>
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: 1,
+            mb: 2,
+            fontSize: "1.25rem",
+          }}
+        >
           <SmartToyIcon
             sx={{ color: mode === "dark" ? "#7db3e8" : "#2374bb" }}
           />
@@ -124,7 +133,7 @@ export function ChatInterface({ calculationData, aiResponse }) {
                 mb: 1,
                 opacity: 0.7,
                 textAlign: "center",
-                color: mode === "dark" ? "#e0e0e0" : "#666"
+                color: mode === "dark" ? "#e0e0e0" : "#666",
               }}
             >
               Ask me anything about your investment calculation
@@ -189,20 +198,7 @@ export function ChatInterface({ calculationData, aiResponse }) {
               <Box
                 sx={{
                   maxWidth: "75%",
-                  backgroundColor:
-                    msg.type === "user"
-                      ? mode === "dark"
-                        ? "#2374bb"
-                        : "#2374bb"
-                      : mode === "dark"
-                      ? "rgba(255, 255, 255, 0.1)"
-                      : "white",
-                  color:
-                    msg.type === "user"
-                      ? "white"
-                      : mode === "dark"
-                      ? "#e0e0e0"
-                      : "#333",
+                  backgroundColor: msg.type === "user" ? "#0075c9" : "white",
                   p: 1.5,
                   borderRadius: "12px",
                   border: msg.type === "ai" ? "1px solid" : "none",
@@ -215,6 +211,7 @@ export function ChatInterface({ calculationData, aiResponse }) {
                   sx={{
                     whiteSpace: "pre-wrap",
                     lineHeight: 1.4,
+                    color: msg.type === "user" ? "#e0e0e0" : "#333",
                   }}
                 >
                   {msg.text}
@@ -225,6 +222,7 @@ export function ChatInterface({ calculationData, aiResponse }) {
                     mt: 0.5,
                     opacity: 0.7,
                     fontSize: "0.7rem",
+                    color: msg.type === "user" ? "#d8d8d8ff" : "",
                   }}
                 >
                   {msg.timestamp}
@@ -274,17 +272,20 @@ export function ChatInterface({ calculationData, aiResponse }) {
                 onClick={() => sendMessage(q)}
                 sx={{
                   padding: "8px 12px",
-                  backgroundColor: mode === "dark" ? "rgba(255, 255, 255, 0.1)" : "#f0f4f8",
+                  backgroundColor:
+                    mode === "dark" ? "rgba(255, 255, 255, 0.1)" : "#f0f4f8",
                   border: "1px solid",
-                  borderColor: mode === "dark" ? "rgba(255, 255, 255, 0.2)" : "#e0e4e9",
+                  borderColor:
+                    mode === "dark" ? "rgba(255, 255, 255, 0.2)" : "#e0e4e9",
                   borderRadius: "8px",
                   cursor: "pointer",
                   transition: "all 0.2s ease",
                   "&:hover": {
-                    backgroundColor: mode === "dark" ? "rgba(255, 255, 255, 0.15)" : "#e0f2fe",
+                    backgroundColor:
+                      mode === "dark" ? "rgba(255, 255, 255, 0.15)" : "#e0f2fe",
                     borderColor: mode === "dark" ? "#7db3e8" : "#2374bb",
                     transform: "translateY(-1px)",
-                  }
+                  },
                 }}
               >
                 <Typography
@@ -295,7 +296,7 @@ export function ChatInterface({ calculationData, aiResponse }) {
                     textAlign: "center",
                     "&:hover": {
                       color: mode === "dark" ? "#7db3e8" : "#2374bb",
-                    }
+                    },
                   }}
                 >
                   {q}
