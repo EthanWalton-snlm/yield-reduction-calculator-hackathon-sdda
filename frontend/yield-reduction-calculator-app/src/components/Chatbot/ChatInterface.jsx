@@ -111,7 +111,7 @@ export function ChatInterface({ calculationData, aiResponse }) {
             level="h4"
             sx={{ color: mode === "dark" ? "#7db3e8" : "#2374bb" }}
           >
-            Investment Assistant
+            SanYield
           </Typography>
         </Box>
 

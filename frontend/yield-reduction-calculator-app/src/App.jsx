@@ -148,22 +148,7 @@ function App() {
               className="logo"
             ></img>
           </Box>
-          <Box className="import-csv">
-            <input
-              type="file"
-              accept=".csv"
-              ref={fileInputRef}
-              onChange={importCsv}
-              style={{ display: "none" }}
-            />
-            <Button
-              onClick={() => fileInputRef.current.click()}
-              className="csv-button"
-            >
-              <FileUploadIcon /> LEGACY XLS
-            </Button>
-            <ThemeToggle />
-          </Box>
+          <ThemeToggle />
         </Box>
 
         <Box className="container">
@@ -186,8 +171,23 @@ function App() {
                 style={{ color: mode === "dark" ? "#f0f0f0" : "inherit" }}
               >
                 Calculate potential yield reduction by entering the relevant
-                information below.
+                information below or import a csv file with the relevant information.
               </p>
+            </Box>
+            <Box className="import-csv" sx={{ mt: -2, mb: 2 }}>
+              <input
+                type="file"
+                accept=".csv"
+                ref={fileInputRef}
+                onChange={importCsv}
+                style={{ display: "none" }}
+              />
+              <Button
+                onClick={() => fileInputRef.current.click()}
+                className="csv-button"
+              >
+                <FileUploadIcon /> LEGACY XLS
+              </Button>
             </Box>
             {calculated && (
               <ResultsPage
