@@ -366,3 +366,15 @@ body {
   position: relative;
   font-size: 12px;
 }
+
+.pdf-header {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: nowrap;
+  flex-direction: row;
+  top:0;
+  margin-bottom: 50px;
+}
+.pdf-header img {
+  height: 60px;
+}

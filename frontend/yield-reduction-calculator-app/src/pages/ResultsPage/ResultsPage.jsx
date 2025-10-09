@@ -21,6 +21,9 @@ function ResultsPage({
 }) {
   const [loading, setLoading] = useState(false);
   const [openChatbot, setOpenChatbot] = useState(false);
+  const [downloadTimeStamp, setDownloadTimeStamp] = useState(null);
+  const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
+
 
   const handleDownload = async () => {
     const element = contentRef.current;
@@ -28,17 +31,29 @@ function ResultsPage({
     const isDark = mode === "dark";
     if (isDark) setMode("light");
 
+     setIsGeneratingPdf(true);
+
+    const formattedTime = new Date().toLocaleString("en-ZA", {
+    dateStyle: "medium",
+    timeStyle: "short",
+  });
+
+    setDownloadTimeStamp(formattedTime);
+
+    await new Promise(resolve => setTimeout(resolve, 100));
+
     const options = {
       margin: 1,
-      filename: "yield_calculation.pdf",
+      filename: `yield_calculation_${new Date().toISOString().split('T')[0]}.pdf`,
       image: { type: "jpeg", quality: 0.98 },
       html2canvas: { scale: 2 },
       jsPDF: { unit: "in", format: "a2", orientation: "portrait" },
     };
 
     setLoading(true);
-    const worker = html2pdf().set(options).from(element);
 
+
+    const worker = html2pdf().set(options).from(element);
     const pdfBlob = await worker.outputPdf("blob");
 
     const pdfUrl = URL.createObjectURL(pdfBlob);
@@ -46,6 +61,7 @@ function ResultsPage({
 
     if (isDark) setMode("dark");
     setLoading(false);
+     setIsGeneratingPdf(false);
   };
 
   const scrollRef = useRef(null);
@@ -58,7 +74,7 @@ function ResultsPage({
       />
       <Box className="flex-row">
         <ResultBox
-          title={"Monetary Reduction"}
+          title={"Annual Tax Savings"}
           value={calculationResultRef.current.yieldReductionEnhancement.toFixed(
             2
           )}
@@ -107,14 +123,16 @@ function ResultsPage({
           >
             DOWNLOAD DETAILS{" "}
           </Button>
+          </Box>
         </Box>
-      </Box>
 
       <Box className="flex-column">
         <SummaryTable
           contentRef={contentRef}
           data={calculationResultRef.current}
           mode={mode}
+          downloadTimeStamp={downloadTimeStamp}
+          isGeneratingPdf={isGeneratingPdf}
         />
         <Box ref={scrollRef}>
           <Modal

@@ -10,8 +10,9 @@ import {
   CircularProgress,
 } from "@mui/joy";
 import axios from "axios";
+import logo from './image.png';
 
-export function SummaryTable({ contentRef, data, mode }) {
+export function SummaryTable({ contentRef, data, mode, downloadTimeStamp, isGeneratingPdf }) {
   const [aiResponseData, setAiResponseData] = useState(false);
   const [aiLoading, setAiLoading] = useState(true);
 
@@ -130,8 +131,20 @@ export function SummaryTable({ contentRef, data, mode }) {
   }, []);
 
   return (
-    <Box id="content">
-      <Box ref={contentRef} className="summary-table">
+    <Box id="content" ref={contentRef}>
+      {isGeneratingPdf && downloadTimeStamp && (
+            <Box
+            className="pdf-header"
+             >
+               <img
+              src={logo}
+              alt=""
+              className="logo"
+            ></img>
+              Generated: {downloadTimeStamp}
+            </Box>
+          )}
+      <Box className="summary-table">
         <Sheet
           sx={{
             width: "50%",
