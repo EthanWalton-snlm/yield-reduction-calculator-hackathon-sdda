@@ -133,39 +133,60 @@ def invoke_model(prompt: str, model_id, client):
 @app.route("/calculate")
 def get_calculation():
     # e.g http://127.0.0.1:5000/calculate?client_age=55&total_investment_value=20000000
-    return calculate(
-        DEBUG=False,
-        client_age=float(request.args.get("clientAge", 0)),
-        total_annual_taxable_income=float(
-            request.args.get("totalAnnualTaxableIncome", 0)
-        ),
-        total_investment_value=float(request.args.get("totalInvestmentValue", 0)),
-        gross_annual_portfolio_return=float(
-            request.args.get("grossAnnualPortfolioReturn", 0)
-        ),
-        return_from_sa_interest=float(request.args.get("returnFromSaInterest", 0)),
-        return_from_sa_local_dividends=float(
-            request.args.get("returnFromSaLocalDividends", 0)
-        ),
-        return_from_local_sa_reit_dividends=float(
-            request.args.get("returnFromLocalSaReitDividends", 0)
-        ),
-        return_from_foreign_dividends=float(
-            request.args.get("returnFromForeignDividends", 0)
-        ),
-        return_from_local_capital_growth=float(
-            request.args.get("returnFromLocalCapitalGrowth", 0)
-        ),
-        average_portfolio_turnover=float(
-            request.args.get("averagePortfolioTurnover", 0)
-        ),
-        assumed_realised_gain_on_turnover=float(
-            request.args.get("assumedRealisedGainOnTurnover", 0)
-        ),
-        wrapper_type_to_analyse=request.args.get("wrapperTypeToAnalyse", ""),
-        wrapper_annual_cost_eac=float(request.args.get("wrapperAnnualCostEac", 0)),
-        annual_ra_contribution=float(request.args.get("annualRaContribution", 0)),
-    )
+    try:
+        result = (
+            calculate(
+                DEBUG=False,
+                selected_entity=request.args.get("selectedEntity", "individuals"),
+                client_age=float(request.args.get("clientAge", 0)),
+                total_annual_taxable_income=float(
+                    request.args.get("totalAnnualTaxableIncome", 0)
+                ),
+                total_investment_value=float(
+                    request.args.get("totalInvestmentValue", 0)
+                ),
+                gross_annual_portfolio_return=float(
+                    request.args.get("grossAnnualPortfolioReturn", 0)
+                ),
+                return_from_sa_interest=float(
+                    request.args.get("returnFromSaInterest", 0)
+                ),
+                return_from_sa_local_dividends=float(
+                    request.args.get("returnFromSaLocalDividends", 0)
+                ),
+                return_from_local_sa_reit_dividends=float(
+                    request.args.get("returnFromLocalSaReitDividends", 0)
+                ),
+                return_from_foreign_dividends=float(
+                    request.args.get("returnFromForeignDividends", 0)
+                ),
+                return_from_local_capital_growth=float(
+                    request.args.get("returnFromLocalCapitalGrowth", 0)
+                ),
+                average_portfolio_turnover=float(
+                    request.args.get("averagePortfolioTurnover", 0)
+                ),
+                assumed_realised_gain_on_turnover=float(
+                    request.args.get("assumedRealisedGainOnTurnover", 0)
+                ),
+                wrapper_type_to_analyse=request.args.get("wrapperTypeToAnalyse", ""),
+                wrapper_annual_cost_eac=float(
+                    request.args.get("wrapperAnnualCostEac", 0)
+                ),
+                annual_ra_contribution=float(
+                    request.args.get("annualRaContribution", 0)
+                ),
+            ),
+            200,
+        )
+
+        return result
+
+    except ValueError as e:
+        return jsonify({"error": f"Invalid numeric input: {str(e)}"}), 400
+
+    except Exception as e:
+        return jsonify({"error": f"An unexpected error occurred: {str(e)}"}), 500
 
 
 @app.route("/chat", methods=["POST"])
@@ -268,6 +289,7 @@ Provide a helpful, accurate response:
 
 def calculate(
     DEBUG,
+    selected_entity,
     client_age,
     total_annual_taxable_income,
     total_investment_value,
