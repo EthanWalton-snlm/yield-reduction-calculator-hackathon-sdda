@@ -12,6 +12,7 @@ import FileUploadIcon from "@mui/icons-material/FileUpload";
 import { AgeSpineditInput } from "./components/AgeSpineditInput/AgeSpineditInput";
 import { SpineditInput } from "./components/SpineditInput/SpineditInput";
 import ResultsPage from "./pages/ResultsPage/ResultsPage";
+import * as XLSX from 'xlsx';
 
 function ThemeToggle() {
   const { mode, setMode } = useColorScheme();
@@ -93,43 +94,66 @@ function App() {
     console.log("API response:", calculationResultRef.current);
   };
 
-  const fileInputRef = useRef(null);
-  const importCsv = (e) => {
+const fileInputRef = useRef(null);
+
+const importExcel = (e) => {
   const file = e.target.files[0];
   if (file) {
     const reader = new FileReader();
     reader.onload = (event) => {
-      const lines = event.target.result.split(/\r?\n/).filter(line => line.trim() !== '');
+      const data = new Uint8Array(event.target.result);
+      const workbook = XLSX.read(data, { type: 'array' });
+
+      // Assuming the first sheet contains your data
+      const sheetName = workbook.SheetNames[0];
+      const worksheet = workbook.Sheets[sheetName];
+
+      // Convert sheet to JSON array of rows
+      const rows = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+
       const map = {};
-      lines.forEach(line => {
-        const parts = line.split(',');
-        if (parts.length < 2) return;
-        const key = parts[0];
-        const val = parts.slice(1).join(',');
-        map[key] = val;
+      rows.forEach(([key, val]) => {
+        if (key && val !== undefined) {
+          map[key.trim()] = val;
+        }
       });
 
-      const sanitizeValue = (val) =>
-      Number(val.replace(/[^0-9.-]+/g, "").trim());
+      const sanitizeValue = (val) => {
+        const str = String(val).replace(/[^0-9.-]+/g, "").trim();
+        return Number(str);
+      };
 
       // Set values using the map
       if (map["Client's Age"]) setClientAge(sanitizeValue(map["Client's Age"]));
-      if (map["Client's Total Annual Taxable Income (Before RA)"]) setTotalAnnualTaxableIncome(sanitizeValue(map["Client's Total Annual Taxable Income (Before RA)"].replace(/[^\d.]/g, '').replace(/\.00$/, '')));
-      if (map["Total Investment Value (R)"]) setTotalInvestmentValue(sanitizeValue(map["Total Investment Value (R)"].replace(/[^\d.]/g, '').replace(/\.00$/, '')));
-      if (map["Gross Annual Portfolio Return (%)"]) setGrossAnnualPortfolioReturn(sanitizeValue(map["Gross Annual Portfolio Return (%)"].replace(/%/g, '')) / 100);
-      if (map["- % of Return from SA Interest"]) setReturnFromSaInterest(sanitizeValue(map["- % of Return from SA Interest"].replace(/%/g, '')) / 100);
-      if (map["- % of Return from SA Local Dividends (Non-REIT)"]) setReturnFromSaLocalDividends(sanitizeValue(map["- % of Return from SA Local Dividends (Non-REIT)"].replace(/%/g, '')) / 100);
-      if (map["- % of Return from SA REIT Dividends"]) setReturnFromLocalSaReitDividends(sanitizeValue(map["- % of Return from SA REIT Dividends"].replace(/%/g, '')) / 100);
-      if (map["- % of Return from Foreign Dividends"]) setReturnFromForeignDividends(sanitizeValue(map["- % of Return from Foreign Dividends"].replace(/%/g, '')) / 100);
-      if (map["- % of Return from Capital Growth"]) setReturnFromLocalCapitalGrowth(sanitizeValue(map["- % of Return from Capital Growth"].replace(/%/g, '')) / 100);
-      if (map["Average Portfolio Turnover (%)"]) setAveragePortfolioTurnover(sanitizeValue(map["Average Portfolio Turnover (%)"].replace(/%/g, '')) / 100);
-      if (map["Assumed Realised Gain on Turnover (%)"]) setAssumedRealisedGainOnTurnover(sanitizeValue(map["Assumed Realised Gain on Turnover (%)"].replace(/%/g, '')) / 100);
-      if (map["Wrapper Type to Analyse"]) setWrapperTypeToAnalyse(map["Wrapper Type to Analyse"]);
-      if (map["Wrapper Annual Cost (EAC %)"]) setWrapperAnnualCostEac(sanitizeValue(map["Wrapper Annual Cost (EAC %)"].replace(/%/g, '')) / 100);
-      if (map["Annual RA Contribution (if RA is selected)"]) setAnnualRaContribution(sanitizeValue(map["Annual RA Contribution (if RA is selected)"].replace(/[^\d.]/g, '').replace(/\.00$/, '')));
+      if (map["Client's Total Annual Taxable Income (Before RA)"])
+        setTotalAnnualTaxableIncome(sanitizeValue(map["Client's Total Annual Taxable Income (Before RA)"]));
+      if (map["Total Investment Value (R)"])
+        setTotalInvestmentValue(sanitizeValue(map["Total Investment Value (R)"]));
+      if (map["Gross Annual Portfolio Return (%)"])
+        setGrossAnnualPortfolioReturn(sanitizeValue(map["Gross Annual Portfolio Return (%)"]));
+      if (map["- % of Return from SA Interest"])
+        setReturnFromSaInterest(sanitizeValue(map["- % of Return from SA Interest"]));
+      if (map["- % of Return from SA Local Dividends (Non-REIT)"])
+        setReturnFromSaLocalDividends(sanitizeValue(map["- % of Return from SA Local Dividends (Non-REIT)"]));
+      if (map["- % of Return from SA REIT Dividends"])
+        setReturnFromLocalSaReitDividends(sanitizeValue(map["- % of Return from SA REIT Dividends"]));
+      if (map["- % of Return from Foreign Dividends"])
+        setReturnFromForeignDividends(sanitizeValue(map["- % of Return from Foreign Dividends"]));
+      if (map["- % of Return from Capital Growth"])
+        setReturnFromLocalCapitalGrowth(sanitizeValue(map["- % of Return from Capital Growth"]));
+      if (map["Average Portfolio Turnover (%)"])
+        setAveragePortfolioTurnover(sanitizeValue(map["Average Portfolio Turnover (%)"]));
+      if (map["Assumed Realised Gain on Turnover (%)"])
+        setAssumedRealisedGainOnTurnover(sanitizeValue(map["Assumed Realised Gain on Turnover (%)"]));
+      if (map["Wrapper Type to Analyse"])
+        setWrapperTypeToAnalyse(map["Wrapper Type to Analyse"]);
+      if (map["Wrapper Annual Cost (EAC %)"])
+        setWrapperAnnualCostEac(sanitizeValue(map["Wrapper Annual Cost (EAC %)"]));
+      if (map["Annual RA Contribution (if RA is selected)"])
+        setAnnualRaContribution(sanitizeValue(map["Annual RA Contribution (if RA is selected)"]));
     };
 
-    reader.readAsText(file);
+    reader.readAsArrayBuffer(file); // Changed from readAsText to readAsArrayBuffer
   }
 };
   return (
@@ -177,9 +201,9 @@ function App() {
             <Box className="import-csv" sx={{ mt: -2, mb: 2 }}>
               <input
                 type="file"
-                accept=".csv"
+                 accept=".xlsx,.xls"
                 ref={fileInputRef}
-                onChange={importCsv}
+                onChange={importExcel}
                 style={{ display: "none" }}
               />
               <Button
