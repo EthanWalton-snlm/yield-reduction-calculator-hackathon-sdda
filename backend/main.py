@@ -17,7 +17,9 @@ CORS(app, resources={r"/*": {"origins": "*"}})
 
 # Load environment variables from .env
 load_dotenv()
-ENABLE_AI = os.getenv("ENABLE_AI")
+ENABLE_AI = os.getenv("ENABLE_AI").lower() == "true"
+
+test_payload = ""
 
 
 @app.route("/")
@@ -40,7 +42,13 @@ def table_lookup(value, table, col_index):
     return result
 
 
-def get_ai_response(test_payload):
+@app.route("/ai-overview")
+def get_ai_response():
+    if not ENABLE_AI:
+        return jsonify({"aiResponse": "AI OVERVIEW DISABLED"})
+
+    print("Generating AI Overview...")
+    global test_payload
     # Load environment variables from .env
     load_dotenv()
 
@@ -100,7 +108,9 @@ def get_ai_response(test_payload):
     """
 
     print("Sending payload to Claude...")
-    return invoke_model(prompt=prompt, model_id=MODEL_ID, client=client)
+    return jsonify(
+        {"aiResponse": invoke_model(prompt=prompt, model_id=MODEL_ID, client=client)}
+    )
 
 
 def invoke_model(prompt: str, model_id, client):
@@ -551,6 +561,7 @@ def calculate(
         annual_yield_enhancement_monetary / total_investment_value
     )
 
+    global test_payload
     test_payload = {
         "client": {
             "age": client_age,
@@ -611,17 +622,11 @@ def calculate(
     ############ OUTPUT ############
     ################################
 
-    print(
-        f"Annual Yield Reduction/Enhancement - Monetary = R{annual_yield_enhancement_monetary}\nAnnual Yield Reduction/Enhancement - % of Investment Value = {annual_yield_enhancement_percentage * 100}%"
-    )
-
     # DEBUG: list all variables
     if DEBUG:
         for k, v in list(locals().items()):  # take a static copy of the dictionary
             if not k.startswith("__") and not callable(v):
                 print(f"{k} = {v}")
-
-    ai_response = get_ai_response(test_payload) if ENABLE_AI else "AI OVERVIEW DISABLED"
 
     return jsonify(
         {
@@ -662,7 +667,6 @@ def calculate(
             "netReturnUnwrappedPercentage": net_return_unwrapped_percentage,
             "netReturnWrapped": net_return_wrapped,
             "netReturnWrappedPercentage": net_return_wrapped_percentage,
-            "aiResponse": ai_response,
         }
     )
 

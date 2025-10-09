@@ -1,24 +1,20 @@
+import { useEffect, useState } from "react";
 import {
-  Input,
-  Option,
-  Select,
   Box,
   Typography,
-  Textarea,
-  Button,
-  IconButton,
-  Modal,
-  ModalDialog,
-  ModalClose,
   Sheet,
   Table,
   Card,
   CardContent,
   Divider,
+  CircularProgress,
 } from "@mui/joy";
-import { CssVarsProvider } from "@mui/joy/styles";
+import axios from "axios";
 
 export function SummaryTable({ contentRef, data, mode }) {
+  const [aiResponseData, setAiResponseData] = useState(false);
+  const [aiLoading, setAiLoading] = useState(true);
+
   // Function to format AI response with styled headings
   const formatAIResponse = (text) => {
     return text.split("\n").map((line, index) => {
@@ -110,6 +106,29 @@ export function SummaryTable({ contentRef, data, mode }) {
     });
   };
 
+  useEffect(() => {
+    let mounted = true;
+
+    const fetchAIResponse = async () => {
+      try {
+        const response = await axios.get("http://localhost:5000/ai-overview");
+        if (mounted) {
+          setAiResponseData(response.data.aiResponse || "");
+        }
+      } catch (error) {
+        console.error("Error fetching AI response:", error);
+      } finally {
+        if (mounted) setAiLoading(false);
+      }
+    };
+
+    fetchAIResponse();
+
+    return () => {
+      mounted = false; // cancel if component unmounts
+    };
+  }, []);
+
   return (
     <Box id="content">
       <Box ref={contentRef} className="summary-table">
@@ -172,57 +191,60 @@ export function SummaryTable({ contentRef, data, mode }) {
             </thead>
             <tbody>
               {data &&
-                Object.entries(data)
-                  .filter(([key]) => key !== "aiResponse") // Exclude AI response from table
-                  .map(([key, value], index) => (
-                    <tr key={index}>
-                      <td>{formatKey(key)}</td>
-                      <td>{formatValue(key, value)}</td>
-                    </tr>
-                  ))}
+                Object.entries(data).map(([key, value], index) => (
+                  <tr key={index}>
+                    <td>{formatKey(key)}</td>
+                    <td>{formatValue(key, value)}</td>
+                  </tr>
+                ))}
             </tbody>
           </Table>
         </Sheet>
 
         {/* AI Response Card */}
-        {data?.aiResponse && data.aiResponse !== "AI OVERVIEW DISABLED" && (
-          <Card
-            variant="outlined"
-            sx={{
-              width: "100%",
-              backgroundColor:
-                mode === "dark" ? "rgba(255, 255, 255, 0.05)" : "#f8fafc",
-              borderColor:
-                mode === "dark" ? "rgba(255, 255, 255, 0.2)" : "#f8fafc",
-              border: "1px solid #e0e4e9",
-              borderRadius: "4px",
-            }}
-          >
-            <CardContent>
-              <Typography
-                level="h4"
-                sx={{
-                  mb: 2,
-                  color: mode === "dark" ? "#7db3e8" : "#2374bb",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 1,
-                }}
-              >
-                AI Financial Analysis
-              </Typography>
-              <Divider sx={{ mb: 2 }} />
-              <Box
-                sx={{
-                  "& > *": { lineHeight: 1.6 },
-                  fontSize: "0.95rem",
-                }}
-              >
-                {formatAIResponse(data.aiResponse)}
-              </Box>
-            </CardContent>
-          </Card>
-        )}
+        <Card
+          variant="outlined"
+          sx={{
+            width: "100%",
+            backgroundColor:
+              mode === "dark" ? "rgba(255, 255, 255, 0.05)" : "#f8fafc",
+            borderColor:
+              mode === "dark" ? "rgba(255, 255, 255, 0.2)" : "#f8fafc",
+            border: "1px solid #e0e4e9",
+            borderRadius: "4px",
+          }}
+        >
+          <CardContent>
+            <Typography
+              level="h4"
+              sx={{
+                mb: 2,
+                color: mode === "dark" ? "#7db3e8" : "#2374bb",
+                display: "flex",
+                alignItems: "center",
+                gap: 1,
+              }}
+            >
+              AI Financial Analysis
+            </Typography>
+            <Divider sx={{ mb: 2 }} />
+            <Box
+              sx={{
+                "& > *": { lineHeight: 1.6 },
+                fontSize: "0.95rem",
+              }}
+            >
+              {aiLoading ? (
+                <Box className="loading" sx={{ mt: "3em" }}>
+                  <CircularProgress size="md" />
+                  <Typography>{"Generating AI Overview..."}</Typography>
+                </Box>
+              ) : (
+                formatAIResponse(aiResponseData)
+              )}
+            </Box>
+          </CardContent>
+        </Card>
       </Box>
     </Box>
   );
@@ -262,6 +284,9 @@ function formatValue(key, value) {
     }
   } else {
     const numericValue = Number(value) || 0;
-    return `R ${numericValue.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    return `R ${numericValue.toLocaleString("en-US", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    })}`;
   }
 }

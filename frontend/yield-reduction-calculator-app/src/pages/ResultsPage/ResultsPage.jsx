@@ -18,7 +18,6 @@ function ResultsPage({
   setMode,
   setCalculated,
 }) {
-  const [showSummaryTable, setShowSummaryTable] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const handleDownload = async () => {
@@ -56,14 +55,16 @@ function ResultsPage({
       <Box className="flex-row">
         <ResultBox
           title={"Monetary Reduction"}
-          value={(calculationResultRef.current?.yieldReductionEnhancement).toFixed(2)}
+          value={calculationResultRef.current.yieldReductionEnhancement.toFixed(
+            2
+          )}
           isCurrency
         />
         <ResultBox
           title={"Percentage Reduction"}
-          value={
-            (calculationResultRef.current?.yieldReductionEnhancementPercent * 100)?.toFixed(3)
-          }
+          value={(
+            calculationResultRef.current?.yieldReductionEnhancementPercent * 100
+          )?.toFixed(3)}
           isPercent
         />
       </Box>
@@ -76,41 +77,30 @@ function ResultsPage({
           <RestartAltSharpIcon />
         </IconButton>
         <Button
-          onClick={() => setShowSummaryTable(!showSummaryTable)}
-          endDecorator={
-            showSummaryTable ? <ExpandLessIcon /> : <ExpandMoreIcon />
-          }
-          sx={{ my: 3, color: "#f0f0f0" }}
-          className="sanlam-button"
-        >
-          VIEW DETAILS
-        </Button>
-        <Button
           onClick={handleDownload}
           endDecorator={<PictureAsPdfSharpIcon />}
           sx={{
             my: 3,
             color: "#f0f0f0",
-            display: showSummaryTable ? "flex" : "none",
+            display: "flex",
           }}
           className="sanlam-button-reverse"
         >
           DOWNLOAD DETAILS{" "}
         </Button>
       </Box>
-      {showSummaryTable && (
-        <>
-          <SummaryTable
-            contentRef={contentRef}
-            data={calculationResultRef.current}
-            mode={mode}
-          />
-          <ChatInterface
-            calculationData={calculationResultRef.current}
-            aiResponse={calculationResultRef.current?.aiResponse}
-          />
-        </>
-      )}
+
+      <Box className="flex-column">
+        <SummaryTable
+          contentRef={contentRef}
+          data={calculationResultRef.current}
+          mode={mode}
+        />
+        <ChatInterface
+          calculationData={calculationResultRef.current}
+          aiResponse={calculationResultRef.current?.aiResponse}
+        />
+      </Box>
     </>
   );
 }
