@@ -57,7 +57,7 @@ function ResultsPage({
       filename: `yield_calculation_${new Date().toISOString().split('T')[0]}.pdf`,
       image: { type: "jpeg", quality: 0.98 },
       html2canvas: { scale: 2 },
-      jsPDF: { unit: "in", format: "a2", orientation: "portrait" },
+      jsPDF: { unit: "in", format: [16.54, 25], orientation: "portrait" },
     };
 
     setLoading(true);
