@@ -34,34 +34,34 @@ function ResultsPage({
   const [downloadTimeStamp, setDownloadTimeStamp] = useState(null);
   const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
 
-
   const handleDownload = async () => {
     const element = contentRef.current;
 
     const isDark = mode === "dark";
     if (isDark) setMode("light");
 
-     setIsGeneratingPdf(true);
+    setIsGeneratingPdf(true);
 
     const formattedTime = new Date().toLocaleString("en-ZA", {
-    dateStyle: "medium",
-    timeStyle: "short",
-  });
+      dateStyle: "medium",
+      timeStyle: "short",
+    });
 
     setDownloadTimeStamp(formattedTime);
 
-    await new Promise(resolve => setTimeout(resolve, 100));
+    await new Promise((resolve) => setTimeout(resolve, 100));
 
     const options = {
       margin: 1,
-      filename: `yield_calculation_${new Date().toISOString().split('T')[0]}.pdf`,
+      filename: `yield_calculation_${
+        new Date().toISOString().split("T")[0]
+      }.pdf`,
       image: { type: "jpeg", quality: 0.98 },
       html2canvas: { scale: 2 },
       jsPDF: { unit: "in", format: [16.54, 25], orientation: "portrait" },
     };
 
     setLoading(true);
-
 
     const worker = html2pdf().set(options).from(element);
     const pdfBlob = await worker.outputPdf("blob");
@@ -71,7 +71,7 @@ function ResultsPage({
 
     if (isDark) setMode("dark");
     setLoading(false);
-     setIsGeneratingPdf(false);
+    setIsGeneratingPdf(false);
   };
 
   const scrollRef = useRef(null);
@@ -190,8 +190,8 @@ function ResultsPage({
           >
             DOWNLOAD DETAILS{" "}
           </Button>
-          </Box>
         </Box>
+      </Box>
 
       <Box className="flex-column">
         <SummaryTable
@@ -217,7 +217,7 @@ function ResultsPage({
             >
               <ModalClose
                 variant="plain"
-                sx={{ p: 1, right: 130, zIndex: 1000 }}
+                sx={{ p: 1, right: 130, zIndex: 1000, mr: 2 }}
               />
               <ChatInterface
                 calculationData={calculationResultRef.current}
